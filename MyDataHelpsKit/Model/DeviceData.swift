@@ -1,0 +1,171 @@
+//
+//  DeviceData.swift
+//  MyDataHelpsKit
+//
+//  Created by CareEvolution on 2/25/21.
+//
+
+import Foundation
+
+/// Specifies filtering and page-navigation criteria for device data point queries.
+///
+/// All query properties are optional. Set non-nil/non-default values only for the properties you want to use for filtering.
+public struct DeviceDataQuery: PagedQuery {
+    /// The default and maximum number of results per page.
+    public static let defaultLimit = 100
+    
+    /// Specifies the source framework for the device data.
+    public let namespace: DeviceDataNamespace
+    /// Filter by one or more types/categories within the given namespace, e.g. "HeartRate"
+    public let types: Set<String>?
+    /// Date after which the device data was observed.
+    public let observedAfter: Date?
+    /// Date before which the device data was observed.
+    public let observedBefore: Date?
+    
+    /// Maximum number of results per page. Default and maximum value is 100.
+    public let limit: Int
+    /// Identifies a specific page of data to fetch. Use `nil` to fetch the first page of results. To fetch the page following a given `DeviceDataResultPage` use its `nextPageID`; the other parameters should be the same as the original `DeviceDataQuery`.
+    public let pageID: String?
+    
+    /// Initializes a new query for a page of device data with various filters.
+    /// - Parameters:
+    ///   - namespace: Specifies the source framework for the device data.
+    ///   - types: Filter by one or more types/categories within the given namespace, e.g. "HeartRate".
+    ///   - observedAfter: Date after which the device data was observed.
+    ///   - observedBefore: Date before which the device data was observed.
+    ///   - limit: Maximum number of results per page.
+    ///   - pageID: Identifies a specific page of data to fetch.
+    public init(namespace: DeviceDataNamespace, types: Set<String>? = nil, observedAfter: Date? = nil, observedBefore: Date? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
+        self.namespace = namespace
+        self.types = types
+        self.observedAfter = observedAfter
+        self.observedBefore = observedBefore
+        self.limit = Self.clampedLimit(limit, max: Self.defaultLimit)
+        self.pageID = pageID
+    }
+    
+    /// Initializes a new query for a page of results following the given page, with the same filters as the original query.
+    /// - Parameter page: the previous page of results, which should have been produced with this query.
+    /// - Returns: A query for results following `page`, if page has a `nextPageID`. If there are no additional pages of results available, returns `nil`. The query returned, if any, has the same filters as the original.
+    public func page(after page: DeviceDataResultPage) -> DeviceDataQuery? {
+        guard let nextPageID = page.nextPageID else { return nil }
+        return DeviceDataQuery(namespace: namespace, types: types, observedAfter: observedAfter, observedBefore: observedBefore, limit: limit, pageID: nextPageID)
+    }
+}
+
+/// A page of device data points.
+public struct DeviceDataResultPage: PagedResult, Decodable {
+    /// A list of DeviceDataPoints filtered by the query criteria.
+    public let deviceDataPoints: [DeviceDataPoint]
+    /// An ID to be used with subsequent `DeviceDataQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
+    public let nextPageID: String?
+}
+
+/// Specifies the source framework for the device data.
+public struct DeviceDataNamespace: RawRepresentable, Equatable, Decodable {
+    public typealias RawValue = String
+    
+    /// Data imported from a linked Apple Health account.
+    public static let appleHealth = DeviceDataNamespace(rawValue: "AppleHealth")
+    /// Data imported from a linked Fitbit account.
+    public static let fitbit = DeviceDataNamespace(rawValue: "Fitbit")
+    /// Data imported from a linked Google Fit account.
+    public static let googleFit = DeviceDataNamespace(rawValue: "GoogleFit")
+    /// Data persisted by the Persist Device Data Points operation.
+    public static let project = DeviceDataNamespace(rawValue: "Project")
+    
+    /// The raw value for the namespace as stored in RKStudio.
+    public let rawValue: String
+    
+    /// Initializes a `DeviceDataNamespace` with an arbitrary value. Consider using static members such as `DeviceDataNamespace.project` instead for known values.
+    /// - Parameter rawValue: The raw value for the namespace as stored in RKStudio.
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
+/// A single device data point stored in MyDataHelps.
+public struct DeviceDataPoint: Decodable {
+    /// Auto-generated, globally-unique identifier.
+    public let id: String
+    /// Identifies device data as from a specific source system.
+    public let namespace: DeviceDataNamespace
+    /// Auto-generated, globally-unique identifier for a group of device data points, which share some context.
+    public let deviceDataContextID: String?
+    /// Date when the data point was first added.
+    public let insertedDate: Date
+    /// Date when the data point was last modified.
+    public let modifiedDate: Date
+    /// String used to name a device data point.
+    public let identifier: String?
+    /// The type of device data within its namespace, e.g. "HeartRate".
+    public let type: String
+    /// The value of the recorded device data point.
+    public let value: String
+    /// The units, if any, that the device data was recorded in.
+    public let units: String?
+    /// Properties of the device data point.
+    public let properties: [String: String]
+    /// Identifying information about the device which recorded the data point.
+    public let source: DeviceDataPointSource
+    /// The date at which this device data point began being recorded (for data that is recorded over time).
+    public let startDate: Date?
+    /// The date at which this device data point was completely recorded.
+    public let observationDate: Date?
+}
+
+/// Describes a device data point to create or update.
+public struct DeviceDataPointPersistModel: Encodable {
+    /// String used to name a device data point. Natural Key property.
+    public let identifier: String
+    /// The general category this device data point belongs in, or what the device data represents. Natural Key property.
+    public let type: String
+    /// The value of the recorded data point.
+    public let value: String
+    /// The units, if any, that the data was recorded in.
+    public let units: String?
+    /// Properties of the device data point.
+    public let properties: [String: String]
+    /// Identifying information about the device which recorded the data point.
+    public let source: DeviceDataPointSource
+    /// The date at which this device data point began being recorded (for data that is recorded over time). Natural Key property.
+    public let startDate: Date?
+    /// The date at which this device data point was completely recorded. Natural Key property.
+    public let observationDate: Date?
+    
+    /// Initializes an object describing device data point to create or update.
+    /// - Parameters:
+    ///   - identifier: String used to name a device data point. Natural Key property.
+    ///   - type: The general category this device data point belongs in, or what the device data represents. Natural Key property.
+    ///   - value: The value of the recorded data point.
+    ///   - units: The units, if any, that the data was recorded in.
+    ///   - properties: Properties of the device data point.
+    ///   - source: Identifying information about the device which recorded the data point.
+    ///   - startDate: The date at which this device data point began being recorded (for data that is recorded over time). Natural Key property.
+    ///   - observationDate: The date at which this device data point was completely recorded. Natural Key property.
+    public init(identifier: String, type: String, value: String, units: String?, properties: [String : String], source: DeviceDataPointSource, startDate: Date?, observationDate: Date?) {
+        self.identifier = identifier
+        self.type = type
+        self.value = value
+        self.units = units
+        self.properties = properties
+        self.source = source
+        self.startDate = startDate
+        self.observationDate = observationDate
+    }
+}
+
+/// Identifying information about the device which recorded a data point.
+public struct DeviceDataPointSource: Codable {
+    /// Identifying string for the data source.
+    public let identifier: String
+    /// Properties describing the device data source.
+    public let properties: [String: String]
+    
+    /// Initializes a new DeviceDataPointSource.
+    public init(identifier: String, properties: [String : String]) {
+        self.identifier = identifier
+        self.properties = properties
+    }
+}
