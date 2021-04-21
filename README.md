@@ -35,7 +35,7 @@ session.getParticipantInfo { result in
 }
 ```
 
-For a complete sample app, see the [`example`](https://github.com/CareEvolution/MyDataHelpsKit-iOS/example/) subdirectory.
+For a complete sample app, see the [`example`](https://github.com/CareEvolution/MyDataHelpsKit-iOS/tree/main/example) subdirectory.
 
 ## Installation
 
