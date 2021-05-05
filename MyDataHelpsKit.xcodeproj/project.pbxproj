@@ -200,7 +200,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AC77B4C125E8495C00427294 /* Build configuration list for PBXNativeTarget "MyDataHelpsKit" */;
 			buildPhases = (
-				ACC2EB9326124D3F0080A3B5 /* Set SDKVersion */,
+				ACC2EB9326124D3F0080A3B5 /* Update SDKVersion and podspec */,
 				AC77B4B425E8495C00427294 /* Headers */,
 				AC77B4B525E8495C00427294 /* Sources */,
 				AC77B4B625E8495C00427294 /* Frameworks */,
@@ -288,7 +288,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		ACC2EB9326124D3F0080A3B5 /* Set SDKVersion */ = {
+		ACC2EB9326124D3F0080A3B5 /* Update SDKVersion and podspec */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -297,14 +297,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Set SDKVersion";
+			name = "Update SDKVersion and podspec";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"// Automatically generated\\nlet MyDataHelpsKitVersion = \\\"${MARKETING_VERSION}\\\"\" > \"${PROJECT_DIR}/MyDataHelpsKit/SDKVersion.swift\"\n";
+			shellScript = "# Update SDKVersion.swift constant\n\necho \"// Automatically generated\\nlet MyDataHelpsKitVersion = \\\"${MARKETING_VERSION}\\\"\" > \"${PROJECT_DIR}/MyDataHelpsKit/SDKVersion.swift\"\n\n# Update podspec file\n\npattern='^ *spec.version = .*$'\nsed -I '' -e \"s/${pattern}/  spec.version = '${MARKETING_VERSION}' #auto-generated/g\" MyDataHelpsKit.podspec\n\npattern='^ *spec.swift_version = .*$'\nsed -I '' -e \"s/${pattern}/  spec.swift_version = '${SWIFT_VERSION}' #auto-generated/g\" MyDataHelpsKit.podspec\n\npattern='^ *spec.ios.deployment_target = .*$'\nsed -I '' -e \"s/${pattern}/  spec.ios.deployment_target = '${IPHONEOS_DEPLOYMENT_TARGET}' #auto-generated/g\" MyDataHelpsKit.podspec\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
