@@ -63,8 +63,22 @@ Use the [standard Carthage workflow](https://github.com/Carthage/Carthage#adding
 2. Run `carthage update --use-xcframeworks`
 3. Open your app target's General settings tab in Xcode. In Finder, go to the `Carthage/Build` folder, and drag and drop `MyDataHelpsKit.xcframework` from the `Carthage/Build` folder into the "Frameworks, Libraries, and Embedded Content" section in Xcode
 
+To update MyDataHelpsKit to a newer version, run `carthage update --use-xcframeworks`, optionally appending MyDataHelpsKit-iOS to the command to only update this SDK and not other Carthage dependencies.
+
+### Cocoapods
+
+Use the [standard Cocoapods workflow](https://guides.cocoapods.org/using/using-cocoapods.html):
+
+1. Create a Podfile for your project using `pod init` if needed
+2. Add `pod 'MyDataHelpsKit'` to your Podfile
+3. Run `pod install`
+
+To update MyDataHelpsKit to a newer version, run `pod update`, optionally appending MyDataHelpsKit to the command to only update this SDK and not other Cocoapods dependencies.
+
 ### Manual integration
 
 1. Download and unzip the [latest release](https://github.com/CareEvolution/MyDataHelpsKit-iOS/releases)
 2. From Finder, drag `MyDataHelpsKit.xcodeproj`  into your app's Xcode workspace
 3. Open your app target's General settings tab in Xcode. In the project navigator pane, expand MyDataHelpsKit.xcodeproj > Products and drag MyDataHelpsKit.framework into the "Frameworks, Libraries, and Embedded Content" section 
+
+To update to a newer version of MyDataHelpsKit, download and unzip the [latest release](https://github.com/CareEvolution/MyDataHelpsKit-iOS/releases), and then delete and replace the existing MyDataHelpsKit folder structure in your workspace.
