@@ -3,7 +3,8 @@ Pod::Spec.new do |spec|
   spec.name = "MyDataHelpsKit"
   spec.version = '1.0' #auto-generated
   spec.summary = "An SDK to integrate RKStudio™ with your apps to develop your own participant experiences"
-  spec.homepage = "https://developer.rkstudio.careevolution.com"
+  spec.homepage = "https://github.com/CareEvolution/MyDataHelpsKit-iOS"
+  spec.documentation_url = "https://developer.rkstudio.careevolution.com"
   spec.license = { :type => "Apache", :file => "LICENSE" }
   spec.author = "CareEvolution, LLC"
 
