@@ -18,12 +18,8 @@ struct ContentView: View {
                     .navigationTitle(title)
                     .navigationBarItems(trailing: Button("Log Out", action: logOut))
             } else {
-                VStack(alignment: .leading) {
-                    Text("Log In")
-                        .font(.headline)
-                    TokenView()
-                }.padding()
-                .navigationTitle(title)
+                TokenView()
+                    .navigationTitle(title)
             }
         }
     }
