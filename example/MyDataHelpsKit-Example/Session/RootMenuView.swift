@@ -43,7 +43,7 @@ struct RootMenuView: View {
             }
             
             NavigationLink(
-                destination: DeviceDataPointView.pageView(session: participant.session, namespace: .appleHealth, types: Set(["HeartRate"]))
+                destination: DeviceDataPointView.pageView(session: participant.session, namespace: .appleHealth, types: Set(["StandHourInterval"]))
                     .navigationTitle("Query Device Data")
             ) {
                 Label("Device Data: Apple Health", systemImage: "heart")
