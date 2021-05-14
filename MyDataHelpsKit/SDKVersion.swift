@@ -1,2 +1,2 @@
 // Automatically generated
-let MyDataHelpsKitVersion = "1.0"
+let MyDataHelpsKitVersion = "1.0.0"
