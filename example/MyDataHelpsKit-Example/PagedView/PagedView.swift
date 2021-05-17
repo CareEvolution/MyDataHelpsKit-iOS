@@ -12,27 +12,33 @@ struct PagedView<SourceType, ViewType>: View where SourceType: PagedModelSource,
     @StateObject var model: PagedViewModel<SourceType, ViewType>
     
     var body: some View {
-        Group {
-            switch model.state {
-            case .loading:
-                // TODO actually append this to the last item in the list
-                // PagedViewModel's item array might need to be an enum with cases .loading and .item
-                LoadingView()
-            case .ready, .done:
-                // TODO if zero results, show an EmptyView rather than a List
-                List(model.items) { item in
-                    model.viewProvider(item)
-                        .onAppear {
-                            if model.isLastItem(item) {
-                                model.loadNextPage()
-                            }
-                        }
+        switch model.state {
+        case .empty:
+            Text("No results")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .padding()
+        case let .failure(error):
+            ErrorView(title: "Failed to load", error: error)
+        case let .normal(loadMore):
+            List {
+                Section {
+                    ForEach(model.items) { item in
+                        model.viewProvider(item)
+                            .onAppear(perform: {
+                                if model.isLastItem(item) {
+                                    model.loadNextPage()
+                                }
+                            })
+                    }
                 }
-            case let .failed(error):
-                ErrorView(title: "Failed to load X", error: error)
+                if loadMore {
+                    Section {
+                        ProgressView()
+                    }
+                }
             }
         }
-        .onAppear(perform: model.loadFirstPage)
     }
 }
 

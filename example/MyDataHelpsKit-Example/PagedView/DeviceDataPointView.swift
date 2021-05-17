@@ -10,7 +10,7 @@ import MyDataHelpsKit
 
 struct DeviceDataPointView: View {
     static func pageView(session: ParticipantSessionType, namespace: DeviceDataNamespace, types: Set<String>?) -> PagedView<DeviceDataSource, DeviceDataPointView> {
-        let query = DeviceDataQuery(namespace: namespace, types: types)
+        let query = DeviceDataQuery(namespace: namespace, types: types, limit: 25)
         let source = DeviceDataSource(session: session, query: query)
         return PagedView(model: .init(source: source) { item in
             DeviceDataPointView(model: item)
