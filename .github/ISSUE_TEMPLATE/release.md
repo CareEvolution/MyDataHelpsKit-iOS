@@ -18,4 +18,5 @@ labels: releases
 - [ ] Commit the changes to project.pbxproj and SDKVersion.swift files
 - [ ] Create a pull request with your changes
 - [ ] Regenerate documentation and create a separate PR for publishing the docs
-- [ ] After merging the pull request, create a release tag in GitHub and link back to this issue in the release description. Swift Package Manager requires the tag to be in format X.Y.Z (full semantic version); include the patch number even if it is `.0`
+- [ ] Merge the pull request. Create a release tag in GitHub and link back to this issue in the release description. (Swift Package Manager requires the tag to be in format X.Y.Z (full semantic version); include the patch number even if it is `.0`)
+- [ ] Publish the new release on Cocoapods trunk
