@@ -30,7 +30,7 @@ extension ParticipantSession: ParticipantSessionType {
 
 class ParticipantSessionPreview: ParticipantSessionType {
     func getParticipantInfoViewModel(completion: @escaping (Result<ParticipantInfoViewModel, MyDataHelpsError>) -> Void) {
-        completion(.success(.init(name: "name", email: "email", phone: "phone")))
+        completion(.success(.init(name: "name", email: "email", phone: "phone", enrollmentDate: Date())))
     }
     
     func queryDeviceData(_ query: DeviceDataQuery, completion: @escaping (Result<DeviceDataResultPage, MyDataHelpsError>) -> Void) {

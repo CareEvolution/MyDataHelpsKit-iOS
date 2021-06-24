@@ -19,6 +19,8 @@ public struct ParticipantInfo: Decodable {
     public let demographics: ParticipantDemographics
     /// Key/value pairs representing project-specific custom fields.
     public let customFields: [String: String]
+    /// Date when the participant completed enrollment.
+    public let enrollmentDate: Date?
 }
 
 /// Participant's gender.
