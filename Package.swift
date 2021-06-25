@@ -18,7 +18,8 @@ let package = Package(
     targets: [
         .target(
             name: "MyDataHelpsKit",
-            path: "MyDataHelpsKit"
+            path: "MyDataHelpsKit",
+            exclude: ["Info.plist"]
         ),
         .testTarget(
             name: "MyDataHelpsKitTests",
