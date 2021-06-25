@@ -14,7 +14,7 @@ labels: releases
 
 - [ ] Create a new branch `release/X.Y.Z` off of `main`
 - [ ] In Xcode, select the MyDataHelpsKit target, and set the correct version and build numbers in Project Settings
-- [ ] Compile MyDataHelpsKit, which regenerates SDKVersion.swift
+- [ ] Compile MyDataHelpsKit, which regenerates SDKVersion.swift and MyDataHelpsKit.podspec
 - [ ] Commit the changes to project.pbxproj and SDKVersion.swift files
 - [ ] Create a pull request with your changes
 - [ ] Regenerate documentation and create a separate PR for publishing the docs
