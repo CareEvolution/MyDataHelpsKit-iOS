@@ -6,13 +6,17 @@
 //
 
 import SwiftUI
+import MyDataHelpsKit
 
 struct TokenView: View {
     @EnvironmentObject var sessionModel: SessionModel
     
     var body: some View {
-        VStack {
-            Text("To get started with this example app, you need a participant access token. Paste the participant access token below to initialize the app with a ParticipantSession and access views that demonstracte the functionality provided by MyDataHelpsKit.\n\nSee MyDataHelpsKit documentaion for more information.")
+        VStack(alignment: .leading) {
+            Text("MyDataHelpsKit v\(MyDataHelpsClient.SDKVersion)")
+                .font(.headline)
+                .padding(.bottom)
+            Text("To get started with this example app, you need a participant access token. Paste the participant access token below to initialize the app with a ParticipantSession and access views that demonstrate the functionality provided by MyDataHelpsKit.\n\nSee MyDataHelpsKit documentation for more information.")
                 .font(.subheadline)
             Spacer()
             Text("Participant access token:")
@@ -33,7 +37,10 @@ struct TokenView: View {
 
 struct TokenView_Previews: PreviewProvider {
     static var previews: some View {
-        TokenView()
-            .environmentObject(SessionModel())
+        NavigationView {
+            TokenView()
+                .navigationTitle("Example App")
+                .environmentObject(SessionModel())
+        }
     }
 }
