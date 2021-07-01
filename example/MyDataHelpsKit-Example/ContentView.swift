@@ -16,10 +16,13 @@ struct ContentView: View {
             if let session = sessionModel.session {
                 RootMenuView(participant: .init(session: session))
                     .navigationTitle(title)
+                    .navigationBarTitleDisplayMode(.inline)
                     .navigationBarItems(trailing: Button("Log Out", action: logOut))
             } else {
                 TokenView()
                     .navigationTitle(title)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarItems(trailing: EmptyView())
             }
         }
     }

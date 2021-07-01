@@ -19,7 +19,7 @@ struct PagedView<SourceType, ViewType>: View where SourceType: PagedModelSource,
                 .fontWeight(.semibold)
                 .padding()
         case let .failure(error):
-            ErrorView(title: "Failed to load", error: error)
+            ErrorView(model: .init(title: "Failed to load", error: error))
         case let .normal(loadMore):
             List {
                 Section {

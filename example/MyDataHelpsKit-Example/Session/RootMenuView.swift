@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MyDataHelpsKit
 
 extension View {
     func roundRectComponent() -> some View {
@@ -26,6 +27,9 @@ extension View {
 
 struct RootMenuView: View {
     @StateObject var participant: ParticipantModel
+    @State private var embeddableSurvey: EmbeddableSurveySelection? = nil
+    @State private var embeddableSurveyError: MyDataHelpsError? = nil
+    @State private var errorAlertModel: ErrorView.Model? = nil
     
     var body: some View {
         VStack {
@@ -34,7 +38,7 @@ struct RootMenuView: View {
                 ParticipantInfoView(model: model)
                     .roundRectComponent()
             case let .some(.failure(error)):
-                ErrorView(title: "Error loading participant info", error: error)
+                ErrorView(model: .init(title: "Error loading participant info", error: error))
                     .roundRectComponent()
             case .none:
                 LoadingView()
@@ -64,12 +68,24 @@ struct RootMenuView: View {
                 }
             }.roundRectComponent()
             
-            NavigationLink(
-                destination: SurveyTaskView.pageView(session: participant.session)
-                    .navigationTitle("Query Survey Tasks")
-            ) {
-                Label("Query Survey Tasks", systemImage: "checkmark.square")
-            }.roundRectComponent()
+            if case let .some(.success(info)) = participant.info {
+                NavigationLink(
+                    destination: SurveyTaskView.pageView(session: participant.session, participantInfo: info, embeddableSurveySelection: $embeddableSurvey)
+                        .navigationTitle("Query Survey Tasks")
+                        .sheet(item: $embeddableSurvey, onDismiss: {
+                            // Delay presenting error alert until after sheet is fully dismissed
+                            if let embeddableErrorModel = embeddableSurveyError.map({ ErrorView.Model(title: "Survey error", error: $0) }) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                                    errorAlertModel = embeddableErrorModel
+                                }
+                            }
+                        }) { selection in
+                            EmbeddableSurveyViewRepresentable(model: selection, presentation: $embeddableSurvey, error: $embeddableSurveyError)
+                        }
+                ) {
+                    Label("Query Survey Tasks", systemImage: "checkmark.square")
+                }.roundRectComponent()
+            }
             
             NavigationLink(
                 destination: SurveyAnswerView.pageView(session: participant.session, surveyID: nil)
@@ -84,6 +100,9 @@ struct RootMenuView: View {
             ) {
                 Label("Query Notifications", systemImage: "app.badge")
             }.roundRectComponent()
+        }
+        .alert(item: $errorAlertModel) {
+            Alert(title: Text($0.title), message: Text($0.errorDescription), dismissButton: nil)
         }
     }
     

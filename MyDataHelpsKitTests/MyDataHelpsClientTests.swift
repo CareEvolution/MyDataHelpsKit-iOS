@@ -11,28 +11,38 @@ import XCTest
 class MyDataHelpsClientTests: XCTestCase {
     func testDefaultBaseURL() {
         let sut = MyDataHelpsClient()
-        // Detect accidental base URL changes
-        XCTAssertEqual(sut.baseURL.absoluteString, "https://rkstudio.careevolution.com/ppt/")
+        XCTAssertEqual(sut.baseURL.absoluteString, "https://rkstudio.careevolution.com/ppt/", "Default client uses correct base URL")
     }
     
     func testEndpoint() {
-        let sut = MyDataHelpsClient()
-        let url = sut.endpoint(path: "example")
-        // Detect accidental base URL changes
-        XCTAssertEqual(url.absoluteString, "https://rkstudio.careevolution.com/ppt/example")
+        var sut = MyDataHelpsClient()
+        var url = sut.endpoint(path: "example/path/1")
+        XCTAssertEqual(url.absoluteString, "https://rkstudio.careevolution.com/ppt/example/path/1", "Default client uses correct base URL in endpoint URLs")
+        
+        sut = MyDataHelpsClient(baseURL: URL(string: "https://example.com/api/")!)
+        url = sut.endpoint(path: "example/path/2")
+        XCTAssertEqual(sut.baseURL.absoluteString, "https://example.com/api/", "Custom base URL")
+        XCTAssertEqual(url.absoluteString, "https://example.com/api/example/path/2", "Endpoint with custom base URL")
     }
     
     func testEndpointWithQueryItems() {
         let sut = MyDataHelpsClient()
         var url = try? sut.endpoint(path: "example", queryItems: [])
-        XCTAssertNotNil(url)
-        if let urlString = url?.absoluteString {
-            XCTAssertEqual(urlString, "https://rkstudio.careevolution.com/ppt/example?")
-        }
+        XCTAssertEqual(url?.absoluteString, "https://rkstudio.careevolution.com/ppt/example?")
         
         url = try? sut.endpoint(path: "example/path", queryItems: [.init(name: "a", value: "b")])
-        if let urlString = url?.absoluteString {
-            XCTAssertEqual(urlString, "https://rkstudio.careevolution.com/ppt/example/path?a=b")
-        }
+        XCTAssertEqual(url?.absoluteString, "https://rkstudio.careevolution.com/ppt/example/path?a=b")
+    }
+    
+    func testEmbeddableURLs() {
+        let sut = MyDataHelpsClient()
+        let participantLinkID = UUID().uuidString
+        let surveyName = UUID().uuidString
+        let taskLinkID = UUID().uuidString
+        let languageTag = sut.languageTag
+        var url = try? sut.embeddableSurveyURL(surveyName: surveyName, participantLinkIdentifier: participantLinkID).get()
+        XCTAssertEqual(url?.absoluteString, "https://rkstudio.careevolution.com/ppt/mydatahelps/\(participantLinkID)/surveylink/\(surveyName)?lang=\(languageTag)")
+        url = try? sut.embeddableSurveyURL(taskLinkIdentifier: taskLinkID, participantLinkIdentifier: participantLinkID).get()
+        XCTAssertEqual(url?.absoluteString, "https://rkstudio.careevolution.com/ppt/mydatahelps/\(participantLinkID)/tasklink/\(taskLinkID)?lang=\(languageTag)")
     }
 }

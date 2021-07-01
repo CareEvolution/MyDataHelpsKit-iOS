@@ -89,13 +89,7 @@ extension ParticipantSession {
         request.setValue("Bearer \(accessToken.token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(client.userAgent, forHTTPHeaderField: "User-Agent")
-        
-        var acceptLanguage = Locale.current.languageCode ?? "en"
-        if let regionCode = Locale.current.regionCode {
-            acceptLanguage += "-\(regionCode)"
-        }
-        request.setValue(acceptLanguage, forHTTPHeaderField: "Accept-Language")
-        
+        request.setValue(client.languageTag, forHTTPHeaderField: "Accept-Language")
         return request
     }
 }
