@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import MyDataHelpsKit
 
 struct ContentView: View {
     @EnvironmentObject var sessionModel: SessionModel
@@ -15,20 +14,16 @@ struct ContentView: View {
         NavigationView {
             if let session = sessionModel.session {
                 RootMenuView(participant: .init(session: session))
-                    .navigationTitle(title)
+                    .navigationTitle("Example App")
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationBarItems(trailing: Button("Log Out", action: logOut))
             } else {
                 TokenView()
-                    .navigationTitle(title)
+                    .navigationTitle("Example App")
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationBarItems(trailing: EmptyView())
             }
         }
-    }
-    
-    var title: String {
-        "MyDataHelpsKit v\(MyDataHelpsClient.SDKVersion)"
     }
     
     private func logOut() {
