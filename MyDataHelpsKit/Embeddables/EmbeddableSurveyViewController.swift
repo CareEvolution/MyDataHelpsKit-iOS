@@ -132,6 +132,9 @@ public final class EmbeddableSurveyViewController: UIViewController {
     
     private func checkForLoadingTimeout() {
         if case .loading = viewState {
+            if let webView = view as? WKWebView {
+                webView.stopLoading()
+            }
             complete(.failure(.webContentError(nil)))
         }
     }
