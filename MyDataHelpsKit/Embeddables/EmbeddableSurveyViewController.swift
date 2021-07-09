@@ -10,7 +10,7 @@ import WebKit
 
 /// Presents a MyDataHelps embeddable survey or task inside a web view. This view controller implements the complete user experience for a MyDataHelps survey, including step navigation, sending results to RKStudio, etc., and is intended for modal presentation.
 ///
-/// ## Enabling MyDataHelps embeddable surveys in RKStudio
+/// ### Enabling MyDataHelps embeddable surveys in RKStudio
 ///
 /// In order to use EmbeddableSurveyViewController to present a MyDataHelps embeddable survey, this feature must be enabled for both the project and the survey in RKStudio:
 /// - Enable "Allow Survey Completion Via Link" in project settings
@@ -18,13 +18,13 @@ import WebKit
 ///
 /// See [Completing Surveys with Survey Links](https://rkstudio-support.careevolution.com/hc/en-us/articles/360036515193-Completing-Surveys-with-Survey-Links) for more information.
 ///
-/// ## Initializing and presenting
+/// ### Initializing and presenting
 ///
 /// Create an EmbeddableSurveyViewController using one of its `init` methods, identifying the participant by their `participantLinkIdentifier` and the survey or task by `surveyName` or `taskLinkIdentifier`.
 ///
 /// For the best user experience, present this view controller modally, and do not wrap it in a UINavigationController, etc. The embedded survey content itself will display all of the controls necessary for navigation, such as localized Cancel/Done buttons.
 ///
-/// ## Completion and dismissal
+/// ### Completion and dismissal
 ///
 /// Once the participant has finished interacting with the survey, EmbeddableSurveyViewController will invoke the `completion` callback. The view controller will not dismiss itself. In all cases — success and failure — the completion callback _must_ dismiss the EmbeddableSurveyViewController.
 ///
@@ -85,13 +85,10 @@ public final class EmbeddableSurveyViewController: UIViewController {
         }
     }
     
-    /// Not implemented.
-    /// - Parameter coder: An unarchiver object.
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) is not implemented")
     }
     
-    /// Creates the view that the view controller manages.
     public override func loadView() {
         let contentController = WKUserContentController()
         contentController.add(self, name: "SurveyWindowInitialized")
@@ -112,7 +109,6 @@ public final class EmbeddableSurveyViewController: UIViewController {
         view = webView
     }
     
-    /// Called after the view controller's view is loaded.
     public override func viewDidLoad() {
         super.viewDidLoad()
         guard let webView = view as? WKWebView else { return }
@@ -166,10 +162,6 @@ public struct EmbeddableSurveyCompletionReason: RawRepresentable, Equatable {
 }
 
 extension EmbeddableSurveyViewController: WKScriptMessageHandler {
-    /// Used internally within MyDataHelpsKit. Do not use this directly.
-    /// - Parameters:
-    ///   - userContentController: User content controller.
-    ///   - message: Message object from JavaScript.
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch (message.name, message.body) {
         case ("SurveyWindowInitialized", _):
@@ -194,22 +186,12 @@ extension EmbeddableSurveyViewController: WKScriptMessageHandler {
 }
 
 extension EmbeddableSurveyViewController: WKNavigationDelegate {
-    /// Used internally within MyDataHelpsKit. Do not use this directly.
-    /// - Parameters:
-    ///   - webView: The web view.
-    ///   - navigation: Navigation object.
-    ///   - error: Error associated with the failure.
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         if case .loading(navigation) = viewState {
             complete(.failure(.webContentError(error)))
         }
     }
     
-    /// Used internally within MyDataHelpsKit. Do not use this directly.
-    /// - Parameters:
-    ///   - webView: The web view.
-    ///   - navigation: Navigation object.
-    ///   - error: Error associated with the failure.
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         if case .loading(navigation) = viewState {
             complete(.failure(.webContentError(error)))

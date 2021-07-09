@@ -2,6 +2,8 @@
 
 An SDK to integrate RKStudio™ with your apps to develop your own participant experiences.
 
+See [GitHub releases](https://github.com/CareEvolution/MyDataHelpsKit-iOS/releases) for release notes.
+
 [© CareEvolution, LLC](https://developer.rkstudio.careevolution.com)
 
 ## Getting started

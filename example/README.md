@@ -21,14 +21,13 @@ The headings below describe the functionality you can find in each subview acces
 
 - Demonstrates usage of `ParticipantSession.querySurveyTasks`. Modify the `SurveyTaskView.pageView` function to experiment with different query parameters
 - Demonstrates `ParticipantSession.querySurveyAnswers`, by tapping on completed surveys
-- Demonstrates embeddable survey functionality, by tapping on incomplete surveys. To use this feature, embeddable survey functionality must be enabled in RKStudio for the project and the survey
 
 ### Query Survey Answers
 
 - Demonstrates general usage of `ParticipantSession.querySurveyAnswers`. Modify the `SurveyAnswerView.pageView` function to experiment with different query parameters
 - Demonstrates deleting specific survey results, if deletion is enabled for the survey in RKStudio
 
-### Device data
+### Device Data
 
 - **Device Data: Apple Health** and **Device Data: Project** demonstrates using `ParticipantSession.queryDeviceData` to query and list device data under the Apple Health or Project namespaces. Modify `RootMenuView` and the `DeviceDataPointView.pageView` function to experiment with different query parameters
 - **Persist New Device Data** demonstrates creating and saving new device data in the Project namespace
@@ -36,3 +35,7 @@ The headings below describe the functionality you can find in each subview acces
 ### Query Notifications
 
 - Demonstrates usage of `b`. Modify the `NotificationHistoryView.pageView` function to experiment with different query parameters
+
+### MyDataHelps Embeddable Surveys
+
+To see examples of using `EmbeddableSurveyViewController` to present MyDataHelps embeddable surveys, tap on incomplete surveys in the Survey Tasks screen. To use this feature, embeddable survey functionality must be enabled in RKStudio for the project and the survey. See EmbeddableSurveyViewController's documentation for more info on usage and links to relevant RKStudio documentation.
