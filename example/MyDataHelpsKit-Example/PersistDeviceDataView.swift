@@ -16,7 +16,7 @@ class PersistDeviceDataViewModel: ObservableObject {
     let isNew: Bool
     let identifier: String
     let units: String?
-    let source: DeviceDataPointSource
+    let source: DeviceDataPointSource?
     let startDate: Date?
     let observationDate: Date?
     

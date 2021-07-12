@@ -17,7 +17,7 @@ class DeviceDataSource: PagedModelSource {
         let type: String
         let value: String
         let units: String?
-        let source: DeviceDataPointSource
+        let source: DeviceDataPointSource?
         let startDate: Date?
         let observationDate: Date?
     }
