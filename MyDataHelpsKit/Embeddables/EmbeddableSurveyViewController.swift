@@ -5,6 +5,10 @@
 //  Created by CareEvolution on 5/25/21.
 //
 
+import Foundation
+
+#if canImport(UIKit)
+
 import UIKit
 import WebKit
 
@@ -198,6 +202,8 @@ extension EmbeddableSurveyViewController: WKNavigationDelegate {
         }
     }
 }
+
+#endif
 
 internal extension MyDataHelpsClient {
     func embeddableSurveyURL(taskLinkIdentifier: String, participantLinkIdentifier: String) -> Result<URL, MyDataHelpsError> {

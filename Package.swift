@@ -24,7 +24,8 @@ let package = Package(
         .testTarget(
             name: "MyDataHelpsKitTests",
             dependencies: ["MyDataHelpsKit"],
-            path: "MyDataHelpsKitTests"
+            path: "MyDataHelpsKitTests",
+            exclude: ["Info.plist"]
         )
     ]
 )
