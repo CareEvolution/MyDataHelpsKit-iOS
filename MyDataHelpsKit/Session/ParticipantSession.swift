@@ -10,7 +10,9 @@ import Foundation
 /// Provides a context for performing authenticated actions on behalf of the participant.
 ///
 /// An instance of `ParticipantSession` should be retained for the lifetime of a participant's access token. Callers are responsible for tracking the state of an access token and renewing as needed.
+///
 /// ### Asynchronous behavior
+/// 
 /// Requests to the MyDataHelps platform are typically asynchronous. All asynchronous requests in ParticipantSession are implemented with a completion parameter of type `(Result<ModelType, MyDataHelpsError>) -> Void`, where `ModelType` is the type of the data model object returned upon success. All completion blocks are invoked on the main thread.
 public final class ParticipantSession {
     
@@ -19,7 +21,7 @@ public final class ParticipantSession {
     internal let session: URLSession
     
     /// Initializes a new session using an access token.
-    /// - Parameter client: The MyDataHelps client to use with this session.
+    /// - Parameter client: The client to use for all API access by this session.
     /// - Parameter accessToken: An authentication token. Must be valid and not expired, or all actions performed with this session will fail with authorization failures.
     public init(client: MyDataHelpsClient, accessToken: ParticipantAccessToken) {
         self.client = client

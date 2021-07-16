@@ -74,7 +74,7 @@ public struct SurveyTaskResultPage: PagedResult, Decodable {
     public let nextPageID: String?
 }
 
-/// Describes the status of a survey task.
+/// Describes the status of a survey task assigned to a participant.
 public struct SurveyTaskStatus: RawRepresentable, Equatable, Hashable, Decodable {
     public typealias RawValue = String
     

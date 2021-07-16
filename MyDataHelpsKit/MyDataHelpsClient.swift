@@ -9,7 +9,7 @@ import Foundation
 
 /// Access to the MyDataHelps API endpoints. You can create a single instance of this for the lifetime of your app.
 ///
-/// `MyDataHelpsClient` instances do not track the authentication state or identity of a participant. Use `ParticipantSession` in conjuction with `MyDataHelps` client to perform authenticated actions.
+/// `MyDataHelpsClient` instances do not track the authentication state or identity of a participant. Use `ParticipantSession` in conjunction with `MyDataHelps` client to perform authenticated actions.
 public final class MyDataHelpsClient {
     /// Version number for this release of MyDataHelpsKit.
     public static let SDKVersion = MyDataHelpsKitVersion
@@ -21,7 +21,7 @@ public final class MyDataHelpsClient {
     internal let baseURL: URL
     internal let userAgent: String
     
-    /// Initializes a newly created client with the specifed configuration.
+    /// Initializes a newly created client with the specified configuration.
     /// - Parameter baseURL: Optional. If specified, overrides the base URL to use for MyDataHelps API requests. Production apps should not supply this parameter, and use the default base URL.
     public init(baseURL: URL? = nil) {
         self.baseURL = baseURL ?? Self.defaultBaseURL
@@ -33,6 +33,14 @@ public final class MyDataHelpsClient {
         configuration.timeoutIntervalForRequest = Self.requestTimeoutInterval
         configuration.urlCache = nil
         return URLSession(configuration: configuration, delegate: nil, delegateQueue: .main)
+    }
+    
+    internal var languageTag: String {
+        var acceptLanguage = Locale.current.languageCode ?? "en"
+        if let regionCode = Locale.current.regionCode {
+            acceptLanguage += "-\(regionCode)"
+        }
+        return acceptLanguage
     }
 }
 
@@ -46,7 +54,7 @@ fileprivate func userAgentString() -> String {
     } else {
         appVersionSuffix = ""
     }
-    let sdkInfo = "MyDataHelpsKit/\(MyDataHelpsClient.SDKVersion)"
+    let SDKInfo = "MyDataHelpsKit/\(MyDataHelpsClient.SDKVersion)"
     let deviceInfo = "\(getHardwareModelIdentifier() ?? "UNKNOWN_DEVICE") (\(getOSVersionString()))"
-    return "\(appIdentity)\(appVersionSuffix) \(sdkInfo) \(deviceInfo)"
+    return "\(appIdentity)\(appVersionSuffix) \(SDKInfo) \(deviceInfo)"
 }

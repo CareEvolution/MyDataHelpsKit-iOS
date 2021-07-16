@@ -10,6 +10,7 @@ import MyDataHelpsKit
 
 struct ParticipantInfoViewModel {
     let name: String
+    let linkIdentifier: String?
     let email: String?
     let phone: String?
     let enrollmentDate: Date?
@@ -20,6 +21,7 @@ extension ParticipantInfoViewModel {
         var tokens = [info.demographics.firstName, info.demographics.lastName]
         if tokens.isEmpty { tokens = ["(no name)"] }
         self.name = tokens.compactMap { $0 }.joined(separator: " ")
+        self.linkIdentifier = info.linkIdentifier
         self.email = info.demographics.email
         self.phone = info.demographics.mobilePhone
         self.enrollmentDate = info.enrollmentDate
@@ -59,6 +61,7 @@ struct ParticipantInfoView_Previews: PreviewProvider {
         ParticipantInfoView(
             model: .init(
                 name: "FirstName LastName",
+                linkIdentifier: nil,
                 email: nil,
                 phone: "555-555-1212",
                 enrollmentDate: Date().addingTimeInterval(-86400)))
