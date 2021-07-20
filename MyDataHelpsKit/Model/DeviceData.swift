@@ -72,6 +72,10 @@ public struct DeviceDataNamespace: RawRepresentable, Equatable, Decodable {
     public static let fitbit = DeviceDataNamespace(rawValue: "Fitbit")
     /// Data imported from a linked Google Fit account.
     public static let googleFit = DeviceDataNamespace(rawValue: "GoogleFit")
+    /// Air quality index data imported from AirNow.gov.
+    public static let airNowApi = DeviceDataNamespace(rawValue: "AirNowApi")
+    /// Weather forecast data imported from WeatherBit.io.
+    public static let weatherBit = DeviceDataNamespace(rawValue: "WeatherBit")
     /// Data persisted by the Persist Device Data Points operation.
     public static let project = DeviceDataNamespace(rawValue: "Project")
     
@@ -108,7 +112,7 @@ public struct DeviceDataPoint: Decodable {
     /// Properties of the device data point.
     public let properties: [String: String]
     /// Identifying information about the device which recorded the data point.
-    public let source: DeviceDataPointSource
+    public let source: DeviceDataPointSource?
     /// The date at which this device data point began being recorded (for data that is recorded over time).
     public let startDate: Date?
     /// The date at which this device data point was completely recorded.
@@ -128,7 +132,7 @@ public struct DeviceDataPointPersistModel: Encodable {
     /// Properties of the device data point.
     public let properties: [String: String]
     /// Identifying information about the device which recorded the data point.
-    public let source: DeviceDataPointSource
+    public let source: DeviceDataPointSource?
     /// The date at which this device data point began being recorded (for data that is recorded over time). Natural Key property.
     public let startDate: Date?
     /// The date at which this device data point was completely recorded. Natural Key property.
@@ -144,7 +148,7 @@ public struct DeviceDataPointPersistModel: Encodable {
     ///   - source: Identifying information about the device which recorded the data point.
     ///   - startDate: The date at which this device data point began being recorded (for data that is recorded over time). Natural Key property.
     ///   - observationDate: The date at which this device data point was completely recorded. Natural Key property.
-    public init(identifier: String, type: String, value: String, units: String?, properties: [String : String], source: DeviceDataPointSource, startDate: Date?, observationDate: Date?) {
+    public init(identifier: String, type: String, value: String, units: String?, properties: [String : String], source: DeviceDataPointSource?, startDate: Date?, observationDate: Date?) {
         self.identifier = identifier
         self.type = type
         self.value = value
