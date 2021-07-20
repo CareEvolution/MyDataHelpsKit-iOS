@@ -79,7 +79,7 @@ To update MyDataHelpsKit to a newer version, run `pod update`, optionally append
 
 ### Manual integration
 
-1. Download and unzip the [latest release](https://github.com/CareEvolution/MyDataHelpsKit-iOS/releases)
+1. Download and unzip the [latest release](https://github.com/CareEvolution/MyDataHelpsKit-iOS/releases) from GitHub
 2. From Finder, drag `MyDataHelpsKit.xcodeproj`  into your app's Xcode workspace
 3. Open your app target's General settings tab in Xcode. In the project navigator pane, expand MyDataHelpsKit.xcodeproj > Products and drag MyDataHelpsKit.framework into the "Frameworks, Libraries, and Embedded Content" section 
 
