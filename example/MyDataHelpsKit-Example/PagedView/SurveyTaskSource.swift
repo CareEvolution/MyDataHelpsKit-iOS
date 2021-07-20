@@ -8,7 +8,7 @@
 import Foundation
 import MyDataHelpsKit
 
-class SurveyTaskSource: PagedModelSource {
+class SurveyTaskSource: PagedModelSource, ObservableObject {
     let session: ParticipantSessionType
     private let query: SurveyTaskQuery
     

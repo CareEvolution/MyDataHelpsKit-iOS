@@ -22,6 +22,8 @@ public enum MyDataHelpsError: Error {
     case timedOut(Error)
     /// An API request had a missing or invalid access token. The access token should be refreshed and a new `ParticipantSession` created, if applicable.
     case unauthorizedRequest(HTTPResponseError)
+    /// Web content (e.g. an embeddable survey) unexpectedly failed to load, due to a network, server, or web content failure. Includes any underlying error, if available.
+    case webContentError(Error?)
     /// A wrapper for unexpected errors. Includes the underlying Error object that triggered the unexpected error, if applicable.
     case unknown(Error?)
 }
