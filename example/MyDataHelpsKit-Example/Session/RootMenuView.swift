@@ -100,6 +100,13 @@ struct RootMenuView: View {
             ) {
                 Label("Query Notifications", systemImage: "app.badge")
             }.roundRectComponent()
+            
+            NavigationLink(
+                destination: ExternalAccountsListView(model: ExternalAccountsListViewModel(session: participant.session))
+                    .navigationTitle("External Accounts")
+            ) {
+                Label("External Accounts", systemImage: "link")
+            }.roundRectComponent()
         }
         .alert(item: $errorAlertModel) {
             Alert(title: Text($0.title), message: Text($0.errorDescription), dismissButton: nil)

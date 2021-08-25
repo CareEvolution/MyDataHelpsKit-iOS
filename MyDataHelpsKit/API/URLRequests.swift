@@ -48,7 +48,7 @@ extension JSONEncoder {
 }
 
 extension JSONDecoder {
-    static let myDataHelpsDecoder: JSONDecoder = {
+    public static let myDataHelpsDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
         // Two separate date formatters needed to support ISO 8601 with and without fractional seconds
         decoder.dateDecodingStrategy = .custom({ decoder in

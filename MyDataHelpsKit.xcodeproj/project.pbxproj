@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27AA30DB26D68ECB00AC0D2C /* ExternalAccountsResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA30DA26D68ECB00AC0D2C /* ExternalAccountsResource.swift */; };
 		AC02E68425FA7FCD008A46E4 /* SurveyTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC02E68325FA7FCD008A46E4 /* SurveyTasks.swift */; };
 		AC02E68825FA8056008A46E4 /* SurveyTaskQueryResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC02E68725FA8056008A46E4 /* SurveyTaskQueryResource.swift */; };
 		AC02E69C25FAA979008A46E4 /* Diagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC02E69B25FAA979008A46E4 /* Diagnostics.swift */; };
@@ -32,7 +33,11 @@
 		AC9DC9B62609064800C5D9E4 /* NotificationHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DC9B52609064800C5D9E4 /* NotificationHistory.swift */; };
 		AC9DC9BA2609198700C5D9E4 /* NotificationHistoryQueryResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DC9B92609198700C5D9E4 /* NotificationHistoryQueryResource.swift */; };
 		AC9DC9C0260A876F00C5D9E4 /* MyDataHelpsClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */; };
+		ACA1A86726D5413A00CBD7EA /* ExternalAccountProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA1A86626D5413A00CBD7EA /* ExternalAccountProviders.swift */; };
+		ACA1A86926D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA1A86826D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift */; };
 		ACC2EB9B261252F50080A3B5 /* SDKVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */; };
+		ACEAF44C26D67CE0002F79AB /* ExternalAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */; };
+		ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		27AA30DA26D68ECB00AC0D2C /* ExternalAccountsResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountsResource.swift; sourceTree = "<group>"; };
 		AC02E68325FA7FCD008A46E4 /* SurveyTasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SurveyTasks.swift; sourceTree = "<group>"; };
 		AC02E68725FA8056008A46E4 /* SurveyTaskQueryResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyTaskQueryResource.swift; sourceTree = "<group>"; };
 		AC02E69B25FAA979008A46E4 /* Diagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostics.swift; sourceTree = "<group>"; };
@@ -77,7 +83,11 @@
 		AC9DC9B52609064800C5D9E4 /* NotificationHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistory.swift; sourceTree = "<group>"; };
 		AC9DC9B92609198700C5D9E4 /* NotificationHistoryQueryResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryQueryResource.swift; sourceTree = "<group>"; };
 		AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDataHelpsClientTests.swift; sourceTree = "<group>"; };
+		ACA1A86626D5413A00CBD7EA /* ExternalAccountProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountProviders.swift; sourceTree = "<group>"; };
+		ACA1A86826D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountProvidersQueryResource.swift; sourceTree = "<group>"; };
 		ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKVersion.swift; sourceTree = "<group>"; };
+		ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccounts.swift; sourceTree = "<group>"; };
+		ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +140,7 @@
 				AC77B50625E852EE00427294 /* Model */,
 				AC77B50025E8502000427294 /* MyDataHelpsClient.swift */,
 				AC77B4BC25E8495C00427294 /* MyDataHelpsKit.h */,
+				ACA1A86526D540BA00CBD7EA /* ProviderConnections */,
 				ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */,
 				AC77B50725E852F700427294 /* Session */,
 			);
@@ -164,6 +175,8 @@
 			children = (
 				AC9DC9A92605408600C5D9E4 /* DeleteSurveyResultResource.swift */,
 				AC83ABB825E867E100A668E4 /* DeviceDataQueryResource.swift */,
+				ACA1A86826D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift */,
+				27AA30DA26D68ECB00AC0D2C /* ExternalAccountsResource.swift */,
 				AC83ABB025E85BB900A668E4 /* GetParticipantInfoResource.swift */,
 				AC9DC9B92609198700C5D9E4 /* NotificationHistoryQueryResource.swift */,
 				AC77B51425E8576A00427294 /* ParticipantResource.swift */,
@@ -181,6 +194,7 @@
 				AC83ABDD25F131DA00A668E4 /* Info.plist */,
 				AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */,
 				AC83ABDB25F131DA00A668E4 /* URLRequestsTests.swift */,
+				ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */,
 			);
 			path = MyDataHelpsKitTests;
 			sourceTree = "<group>";
@@ -191,6 +205,15 @@
 				AC932350265D9874007AAF69 /* EmbeddableSurveyViewController.swift */,
 			);
 			path = Embeddables;
+			sourceTree = "<group>";
+		};
+		ACA1A86526D540BA00CBD7EA /* ProviderConnections */ = {
+			isa = PBXGroup;
+			children = (
+				ACA1A86626D5413A00CBD7EA /* ExternalAccountProviders.swift */,
+				ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */,
+			);
+			path = ProviderConnections;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,7 +347,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ACA1A86726D5413A00CBD7EA /* ExternalAccountProviders.swift in Sources */,
 				AC9DC9B62609064800C5D9E4 /* NotificationHistory.swift in Sources */,
+				ACA1A86926D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift in Sources */,
 				AC9DC9AA2605408600C5D9E4 /* DeleteSurveyResultResource.swift in Sources */,
 				AC77B50425E8523500427294 /* ParticipantSession.swift in Sources */,
 				AC83ABCD25E991E300A668E4 /* PagedQuery.swift in Sources */,
@@ -340,6 +365,8 @@
 				AC77B50925E8535B00427294 /* ParticipantAccessToken.swift in Sources */,
 				AC83ABBD25E885D700A668E4 /* PersistDeviceDataResource.swift in Sources */,
 				AC77B51525E8576A00427294 /* ParticipantResource.swift in Sources */,
+				27AA30DB26D68ECB00AC0D2C /* ExternalAccountsResource.swift in Sources */,
+				ACEAF44C26D67CE0002F79AB /* ExternalAccounts.swift in Sources */,
 				ACC2EB9B261252F50080A3B5 /* SDKVersion.swift in Sources */,
 				AC9DC9A42605359300C5D9E4 /* SurveyAnswersQueryResource.swift in Sources */,
 				AC77B50D25E854E600427294 /* ParticipantInfo.swift in Sources */,
@@ -355,6 +382,7 @@
 			files = (
 				AC83ABDC25F131DA00A668E4 /* URLRequestsTests.swift in Sources */,
 				AC9DC9C0260A876F00C5D9E4 /* MyDataHelpsClientTests.swift in Sources */,
+				ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

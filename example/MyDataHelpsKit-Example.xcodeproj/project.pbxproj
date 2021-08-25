@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27AA30DD26D6946500AC0D2C /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA30DC26D6946500AC0D2C /* RemoteImageView.swift */; };
 		AC44F53E261375EE0065075C /* MyDataHelpsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */; };
 		AC44F53F261375EE0065075C /* MyDataHelpsKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AC44F561261610A10065075C /* PersistDeviceDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44F560261610A10065075C /* PersistDeviceDataView.swift */; };
@@ -23,6 +24,7 @@
 		AC9DCA0A260E3BBA00C5D9E4 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DCA09260E3BBA00C5D9E4 /* LoadingView.swift */; };
 		AC9DCA0D260E3CE700C5D9E4 /* ParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DCA0C260E3CE700C5D9E4 /* ParticipantModel.swift */; };
 		AC9DCA14260E3E5700C5D9E4 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DCA13260E3E5700C5D9E4 /* ErrorView.swift */; };
+		ACA1A86C26D5454400CBD7EA /* ProvidersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA1A86B26D5454400CBD7EA /* ProvidersListView.swift */; };
 		ACCD97E6260E492100FF7438 /* PagedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCD97E5260E492100FF7438 /* PagedView.swift */; };
 		ACCD97EA260E4DFE00FF7438 /* DeviceDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCD97E9260E4DFE00FF7438 /* DeviceDataSource.swift */; };
 		ACCD97ED260E58AF00FF7438 /* DeviceDataPointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCD97EC260E58AF00FF7438 /* DeviceDataPointView.swift */; };
@@ -33,6 +35,8 @@
 		ACCD97FE260E667E00FF7438 /* SurveyAnswersSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCD97FD260E667E00FF7438 /* SurveyAnswersSource.swift */; };
 		ACCD9801260E6E3000FF7438 /* NotificationHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCD9800260E6E3000FF7438 /* NotificationHistoryView.swift */; };
 		ACCD9804260E6F7A00FF7438 /* NotificationHistorySource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCD9803260E6F7A00FF7438 /* NotificationHistorySource.swift */; };
+		ACEAF44826D595B0002F79AB /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ACEAF44726D595B0002F79AB /* Settings.bundle */; };
+		ACEAF44A26D67C95002F79AB /* ExternalAccountsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44926D67C95002F79AB /* ExternalAccountsListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +54,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		27AA30DC26D6946500AC0D2C /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
 		AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MyDataHelpsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC44F54126137CBE0065075C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AC44F560261610A10065075C /* PersistDeviceDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistDeviceDataView.swift; sourceTree = "<group>"; };
@@ -68,6 +73,7 @@
 		AC9DCA09260E3BBA00C5D9E4 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		AC9DCA0C260E3CE700C5D9E4 /* ParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantModel.swift; sourceTree = "<group>"; };
 		AC9DCA13260E3E5700C5D9E4 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
+		ACA1A86B26D5454400CBD7EA /* ProvidersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersListView.swift; sourceTree = "<group>"; };
 		ACCD97E5260E492100FF7438 /* PagedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagedView.swift; sourceTree = "<group>"; };
 		ACCD97E9260E4DFE00FF7438 /* DeviceDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDataSource.swift; sourceTree = "<group>"; };
 		ACCD97EC260E58AF00FF7438 /* DeviceDataPointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDataPointView.swift; sourceTree = "<group>"; };
@@ -78,6 +84,8 @@
 		ACCD97FD260E667E00FF7438 /* SurveyAnswersSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyAnswersSource.swift; sourceTree = "<group>"; };
 		ACCD9800260E6E3000FF7438 /* NotificationHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryView.swift; sourceTree = "<group>"; };
 		ACCD9803260E6F7A00FF7438 /* NotificationHistorySource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistorySource.swift; sourceTree = "<group>"; };
+		ACEAF44726D595B0002F79AB /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		ACEAF44926D67C95002F79AB /* ExternalAccountsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountsListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,9 +121,10 @@
 			isa = PBXGroup;
 			children = (
 				AC44F54126137CBE0065075C /* README.md */,
+				ACEAF44726D595B0002F79AB /* Settings.bundle */,
+				AC44F53C261375EE0065075C /* Frameworks */,
 				AC9DC9E0260E374E00C5D9E4 /* MyDataHelpsKit-Example */,
 				AC9DC9DF260E374E00C5D9E4 /* Products */,
-				AC44F53C261375EE0065075C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -140,6 +149,8 @@
 				ACCD97E4260E490E00FF7438 /* PagedView */,
 				AC44F560261610A10065075C /* PersistDeviceDataView.swift */,
 				AC9DC9E7260E374F00C5D9E4 /* Preview Content */,
+				ACA1A86A26D5452900CBD7EA /* ProviderConnections */,
+				27AA30DC26D6946500AC0D2C /* RemoteImageView.swift */,
 				AC9DC9F5260E37B500C5D9E4 /* Session */,
 			);
 			path = "MyDataHelpsKit-Example";
@@ -163,6 +174,15 @@
 				AC9DC9F6260E37C700C5D9E4 /* TokenView.swift */,
 			);
 			path = Session;
+			sourceTree = "<group>";
+		};
+		ACA1A86A26D5452900CBD7EA /* ProviderConnections */ = {
+			isa = PBXGroup;
+			children = (
+				ACEAF44926D67C95002F79AB /* ExternalAccountsListView.swift */,
+				ACA1A86B26D5454400CBD7EA /* ProvidersListView.swift */,
+			);
+			path = ProviderConnections;
 			sourceTree = "<group>";
 		};
 		ACCD97E4260E490E00FF7438 /* PagedView */ = {
@@ -245,6 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC9DC9E9260E374F00C5D9E4 /* Preview Assets.xcassets in Resources */,
+				ACEAF44826D595B0002F79AB /* Settings.bundle in Resources */,
 				AC9DC9E6260E374F00C5D9E4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,6 +280,7 @@
 				AC932355265D9AEB007AAF69 /* EmbeddableSurveyViewRepresentable.swift in Sources */,
 				ACCD97F0260E5A8600FF7438 /* PagedViewModel.swift in Sources */,
 				AC9DCA07260E3BAC00C5D9E4 /* ParticipantInfoView.swift in Sources */,
+				ACEAF44A26D67C95002F79AB /* ExternalAccountsListView.swift in Sources */,
 				ACCD9801260E6E3000FF7438 /* NotificationHistoryView.swift in Sources */,
 				AC9DCA0D260E3CE700C5D9E4 /* ParticipantModel.swift in Sources */,
 				ACCD9804260E6F7A00FF7438 /* NotificationHistorySource.swift in Sources */,
@@ -268,6 +290,7 @@
 				ACCD97F6260E5D0100FF7438 /* SurveyTaskSource.swift in Sources */,
 				ACCD97E6260E492100FF7438 /* PagedView.swift in Sources */,
 				AC9DC9FB260E39AF00C5D9E4 /* SessionModel.swift in Sources */,
+				27AA30DD26D6946500AC0D2C /* RemoteImageView.swift in Sources */,
 				AC9DCA03260E3A7D00C5D9E4 /* RootMenuView.swift in Sources */,
 				ACCD97EA260E4DFE00FF7438 /* DeviceDataSource.swift in Sources */,
 				ACCD97F9260E5F3000FF7438 /* SurveyAnswerView.swift in Sources */,
@@ -275,6 +298,7 @@
 				AC9DCA0A260E3BBA00C5D9E4 /* LoadingView.swift in Sources */,
 				AC9DCA14260E3E5700C5D9E4 /* ErrorView.swift in Sources */,
 				ACCD97F3260E5AE300FF7438 /* SurveyTaskView.swift in Sources */,
+				ACA1A86C26D5454400CBD7EA /* ProvidersListView.swift in Sources */,
 				AC9DC9F7260E37C700C5D9E4 /* TokenView.swift in Sources */,
 				ACCD97ED260E58AF00FF7438 /* DeviceDataPointView.swift in Sources */,
 				ACCD97FE260E667E00FF7438 /* SurveyAnswersSource.swift in Sources */,
