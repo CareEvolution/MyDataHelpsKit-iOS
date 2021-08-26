@@ -8,7 +8,11 @@
 import SwiftUI
 import MyDataHelpsKit
 
-extension ExternalAccount: Identifiable { }
+extension ExternalAccount: Identifiable {
+    var isRefreshable: Bool {
+        status != .fetchingData
+    }
+}
 
 class ExternalAccountsListViewModel: ObservableObject {
     let session: ParticipantSessionType
@@ -34,6 +38,7 @@ class ExternalAccountsListViewModel: ObservableObject {
     }
     
     func refresh(account: ExternalAccount) {
+        guard account.isRefreshable else { return }
         session.refreshExternalAccount(account) { [weak self] _ in
             self?.reload()
         }
@@ -48,6 +53,7 @@ class ExternalAccountsListViewModel: ObservableObject {
 
 struct ExternalAccountsListView: View {
     @StateObject var model: ExternalAccountsListViewModel
+    @State private var selected: ExternalAccount?
     
     var body: some View {
         Group {
@@ -65,14 +71,28 @@ struct ExternalAccountsListView: View {
             case let .some(.success(accounts)):
                 List(accounts) { account in
                     ExternalAccountView(account: account, listModel: model)
+                        .onTapGesture(perform: { self.selected = account })
                 }
             }
+        }
+        .actionSheet(item: $selected) { account in
+            ActionSheet(title: Text(account.provider.name), message: nil, buttons: actionButtons(account: account))
         }
         .navigationBarItems(trailing: NavigationLink(destination:
             ProvidersListView(model: ProvidersListViewModel(session: model.session))
                 .navigationTitle("External Account Providers"), label: {
             Image(systemName: "plus")
         }))
+    }
+    
+    private func actionButtons(account: ExternalAccount) -> [ActionSheet.Button] {
+        var buttons: [ActionSheet.Button] = []
+        if account.isRefreshable {
+            buttons.append(.default(Text("Refresh"), action: { model.refresh(account: account) }))
+        }
+        buttons.append(.destructive(Text("Delete"), action: { model.delete(account: account) }))
+        buttons.append(.cancel())
+        return buttons
     }
 }
 
@@ -105,16 +125,6 @@ struct ExternalAccountView: View {
                         .font(.caption)
                 }
             }
-            Button(action: {
-                listModel.refresh(account: account)
-            }, label: {
-                Image(systemName: "arrow.clockwise")
-            }).disabled(account.status == .fetchingData)
-            Button(action: {
-                listModel.delete(account: account)
-            }, label: {
-                Image(systemName: "trash")
-            }).accentColor(.red)
         }
     }
 }

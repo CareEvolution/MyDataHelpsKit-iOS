@@ -118,7 +118,7 @@ enum PreviewData {
     
     static let accountsJSON = """
     [
-        { "id": 100, "status": "FetchComplete", "provider": \(provider1JSONText), "lastRefreshDate": "2021-08-01T12:34:56.000Z" }
+        { "id": 100, "status": "fetchComplete", "provider": \(provider1JSONText), "lastRefreshDate": "2021-08-01T12:34:56.000Z" }
     ]
     """.data(using: .utf8)!
 }

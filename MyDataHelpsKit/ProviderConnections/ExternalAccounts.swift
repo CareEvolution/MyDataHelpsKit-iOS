@@ -41,13 +41,13 @@ public struct ExternalAccountStatus: RawRepresentable, Equatable, Hashable, Deco
     public typealias RawValue = String
     
     /// An error occurred while fetching data.
-    public static let error = ExternalAccountStatus(rawValue: "Error")
+    public static let error = ExternalAccountStatus(rawValue: "error")
     /// The connected external account has successfully retrieved data.
-    public static let fetchComplete = ExternalAccountStatus(rawValue: "FetchComplete")
+    public static let fetchComplete = ExternalAccountStatus(rawValue: "fetchComplete")
     /// The connected external account is in the process of fetching data.
-    public static let fetchingData = ExternalAccountStatus(rawValue: "FetchingData")
+    public static let fetchingData = ExternalAccountStatus(rawValue: "fetchingData")
     /// The external account connection was attempted, but not yet authorized.
-    public static let unauthorized = ExternalAccountStatus(rawValue: "Unauthorized")
+    public static let unauthorized = ExternalAccountStatus(rawValue: "unauthorized")
     
     /// The raw value for the provider category as stored in RKStudio.
     public let rawValue: String
