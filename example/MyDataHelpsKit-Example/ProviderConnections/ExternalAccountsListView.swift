@@ -17,9 +17,7 @@ class ExternalAccountsListViewModel: ObservableObject {
     init(session: ParticipantSessionType) {
         self.session = session
         self.accounts = nil
-        session.listExternalAccounts {
-            self.accounts = $0
-        }
+        self.reload()
     }
     
     #if DEBUG
@@ -28,6 +26,24 @@ class ExternalAccountsListViewModel: ObservableObject {
         self.accounts = result
     }
     #endif
+    
+    func reload() {
+        session.listExternalAccounts {
+            self.accounts = $0
+        }
+    }
+    
+    func refresh(account: ExternalAccount) {
+        session.refreshExternalAccount(account) { [weak self] _ in
+            self?.reload()
+        }
+    }
+    
+    func delete(account: ExternalAccount) {
+        session.deleteExternalAccount(account) { [weak self] _ in
+            self?.reload()
+        }
+    }
 }
 
 struct ExternalAccountsListView: View {
@@ -48,7 +64,7 @@ struct ExternalAccountsListView: View {
                 }
             case let .some(.success(accounts)):
                 List(accounts) { account in
-                    ExternalAccountView(account: account)
+                    ExternalAccountView(account: account, listModel: model)
                 }
             }
         }
@@ -62,6 +78,7 @@ struct ExternalAccountsListView: View {
 
 struct ExternalAccountView: View {
     let account: ExternalAccount
+    let listModel: ExternalAccountsListViewModel
     
     static let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -88,13 +105,23 @@ struct ExternalAccountView: View {
                         .font(.caption)
                 }
             }
+            Button(action: {
+                listModel.refresh(account: account)
+            }, label: {
+                Image(systemName: "arrow.clockwise")
+            }).disabled(account.status == .fetchingData)
+            Button(action: {
+                listModel.delete(account: account)
+            }, label: {
+                Image(systemName: "trash")
+            }).accentColor(.red)
         }
     }
 }
 
 struct ExternalAccountsListView_Previews: PreviewProvider {
     static var previews: some View {
-        ExternalAccountView(account: ExternalAccount.previewList[0])
+        ExternalAccountView(account: ExternalAccount.previewList[0], listModel: ExternalAccountsListViewModel(session: ParticipantSessionPreview(), result: .success([])))
             .padding()
             .previewLayout(.sizeThatFits)
             .environmentObject(RemoteImageCache())

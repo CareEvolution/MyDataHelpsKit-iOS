@@ -17,8 +17,10 @@ protocol ParticipantSessionType {
     func queryNotifications(_ query: NotificationHistoryQuery, completion: @escaping (Result<NotificationHistoryPage, MyDataHelpsError>) -> Void)
     func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel], completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
     func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<[ExternalAccountProvider], MyDataHelpsError>) -> Void)
-    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<URL, MyDataHelpsError>) -> Void)
+    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void)
     func listExternalAccounts(completion: @escaping (Result<[ExternalAccount], MyDataHelpsError>) -> Void)
+    func refreshExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
+    func deleteExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
 }
 
 extension ParticipantSession: ParticipantSessionType {
@@ -66,7 +68,7 @@ class ParticipantSessionPreview: ParticipantSessionType {
         delayedSuccess(data: PreviewData.providersJSON, completion: completion)
     }
     
-    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<URL, MyDataHelpsError>) -> Void) {
+    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void) {
     }
     
     func listExternalAccounts(completion: @escaping (Result<[ExternalAccount], MyDataHelpsError>) -> Void) {
@@ -75,6 +77,14 @@ class ParticipantSessionPreview: ParticipantSessionType {
         } else {
             delayedSuccess(data: PreviewData.accountsJSON, completion: completion)
         }
+    }
+    
+    func refreshExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
+        completion(.success(()))
+    }
+    
+    func deleteExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
+        completion(.success(()))
     }
     
     private func delayedSuccess<T: Decodable>(data: Data, completion: @escaping (Result<T, MyDataHelpsError>) -> Void) {

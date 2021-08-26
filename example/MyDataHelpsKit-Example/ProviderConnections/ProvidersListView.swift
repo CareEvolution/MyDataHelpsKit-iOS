@@ -11,71 +11,83 @@ import MyDataHelpsKit
 extension ExternalAccountProvider: Identifiable {
 }
 
+extension ExternalAccountAuthorization: Identifiable {
+    public var id: Int { provider.id }
+}
+
 class ProvidersListViewModel: ObservableObject {
-    struct NewConnection: Identifiable {
-        let id: Int
-        let authorizationURL: URL
-        let finalRedirectURL: URL
-    }
-    
     private let session: ParticipantSessionType
     let query: ExternalAccountProvidersQuery
-    @Published var providers: [ExternalAccountProvider]
+    @Published var providers: Result<[ExternalAccountProvider], MyDataHelpsError>?
     
-    @AppStorage("settings_redirectURL") private var finalRedirectURLPreference: String = ""
+    @AppStorage("settings_redirectURL") private var finalRedirectURLPreference: String = "linkprovideraccounts://sandbox"
     
     init(session: ParticipantSessionType) {
         self.session = session
-        self.query = .init()
-        self.providers = []
+        /// EXERCISE: Set non-nil `search` and `category` values to test filtering external providers.
+        self.query = ExternalAccountProvidersQuery(search: nil, category: nil)
+        self.providers = nil
         session.queryExternalAccountProviders(query) {
-            switch $0 {
-            case let .success(list):
-                self.providers = list.sorted(by: { $0.name < $1.name })
-            case let .failure(error):
-                print("error \(error)")
-            }
+            self.providers = $0
         }
     }
     
-    func connect(_ provider: ExternalAccountProvider, completion: @escaping (Result<ProvidersListViewModel.NewConnection, MyDataHelpsError>) -> Void) {
+    func connect(_ provider: ExternalAccountProvider, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void) {
         guard let finalRedirectURL = URL(string: finalRedirectURLPreference) else {
             return
         }
-
-        session.connectExternalAccount(provider: provider, finalRedirectURL: finalRedirectURL) {
-            switch $0 {
-            case let .success(url):
-                completion(.success(.init(id: provider.id, authorizationURL: url, finalRedirectURL: finalRedirectURL)))
-            case let .failure(error):
-                completion(.failure(error))
-            }
-        }
+        session.connectExternalAccount(provider: provider, finalRedirectURL: finalRedirectURL, completion: completion)
     }
 }
 
 struct ProvidersListView: View {
     @StateObject var model: ProvidersListViewModel
-    @State private var newConnection: ProvidersListViewModel.NewConnection?
+    @State private var newConnection: ExternalAccountAuthorization?
+    @State private var errorModel: ErrorView.Model?
     
     var body: some View {
-        List(model.providers) { provider in
-            ExternalAccountProviderView(provider: provider)
-                .onTapGesture {
-                    model.connect(provider) {
-                        if case let .success(connection) = $0 {
-                            newConnection = connection
-                        }
-                    }
+        Group {
+            switch model.providers {
+            case .none:
+                ProgressView()
+            case let .some(.failure(error)):
+                List {
+                    ErrorView(model: .init(title: "Failed to load providers", error: error))
                 }
+            case let .some(.success(providers)) where providers.isEmpty:
+                List {
+                    Text("No providers found")
+                }
+            case let .some(.success(providers)):
+                List(providers) { provider in
+                    ExternalAccountProviderView(provider: provider)
+                        .onTapGesture { connect(provider) }
+                }
+            }
         }
         .sheet(item: $newConnection) { connection in
-            ProviderConnectionViewRepresentable(url: connection.authorizationURL, presentation: $newConnection)
+            ProviderConnectionAuthViewRepresentable(url: connection.authorizationURL, presentation: $newConnection)
         }
+        .alert(item: $errorModel, content: {
+            Alert(title: Text($0.errorDescription))
+        })
         .onOpenURL { url in
             if url.scheme == newConnection?.finalRedirectURL.scheme,
                url.path == newConnection?.finalRedirectURL.path {
                 newConnection = nil
+            }
+        }
+    }
+    
+    private func connect(_ provider: ExternalAccountProvider) {
+        guard newConnection == nil else { return }
+        errorModel = nil
+        model.connect(provider) {
+            switch $0 {
+            case let .success(connection):
+                newConnection = connection
+            case let .failure(error):
+                errorModel = .init(title: "Error", error: error)
             }
         }
     }
