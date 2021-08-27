@@ -14,23 +14,23 @@ import WebKit
 
 /// Presents a MyDataHelps embeddable survey or task inside a web view. This view controller implements the complete user experience for a MyDataHelps survey, including step navigation, sending results to RKStudio, etc., and is intended for modal presentation.
 ///
-/// ### Enabling MyDataHelps embeddable surveys in RKStudio
+/// ### Enabling MyDataHelps Embeddable Surveys in RKStudio
 ///
 /// In order to use EmbeddableSurveyViewController to present a MyDataHelps embeddable survey, this feature must be enabled for both the project and the survey in RKStudio:
-/// - Enable "Allow Survey Completion Via Link" in project settings
-/// - Enable "Allow Task Completion Via Link" and/or "Allow Survey Completion Via Link" in survey settings
+/// - Enable "Allow Survey Completion Via Link" in project settings.
+/// - Enable "Allow Task Completion Via Link" and/or "Allow Survey Completion Via Link" in survey settings.
 ///
 /// See [Completing Surveys with Survey Links](https://rkstudio-support.careevolution.com/hc/en-us/articles/360036515193-Completing-Surveys-with-Survey-Links) for more information.
 ///
-/// ### Initializing and presenting
+/// ### Initializing and Presenting
 ///
 /// Create an EmbeddableSurveyViewController using one of its `init` methods, identifying the participant by their `participantLinkIdentifier` and the survey or task by `surveyName` or `taskLinkIdentifier`.
 ///
 /// For the best user experience, present this view controller modally, and do not wrap it in a UINavigationController, etc. The embedded survey content itself will display all of the controls necessary for navigation, such as localized Cancel/Done buttons.
 ///
-/// ### Completion and dismissal
+/// ### Completion and Dismissal
 ///
-/// Once the participant has finished interacting with the survey, EmbeddableSurveyViewController will invoke the `completion` callback. The view controller will not dismiss itself. In all cases — success and failure — the completion callback _must_ dismiss the EmbeddableSurveyViewController.
+/// Once the participant has finished interacting with the survey, EmbeddableSurveyViewController will invoke the `completion` callback. The view controller will not dismiss itself. In all cases—success and failure—the completion callback _must_ dismiss the EmbeddableSurveyViewController.
 ///
 /// Use the `Result` object sent to the completion callback to determine whether the survey interaction was successful or failed. If the result is a `failure`, consider displaying an error alert to the user.
 public final class EmbeddableSurveyViewController: UIViewController {
@@ -152,7 +152,7 @@ public struct EmbeddableSurveyCompletionReason: RawRepresentable, Equatable {
     
     /// Participant completed the survey, and the result was saved to RKStudio.
     public static let completed = EmbeddableSurveyCompletionReason(rawValue: "Completed")
-    /// Participant is dismissing the survey without completing it.
+    /// Participant dismissed the survey without completing it.
     public static let closed = EmbeddableSurveyCompletionReason(rawValue: "Closed")
     
     /// The raw value for the completion reason.
