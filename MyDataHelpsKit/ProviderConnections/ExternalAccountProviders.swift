@@ -20,7 +20,7 @@ public extension ParticipantSession {
     ///
     /// Upon receiving the completion callback, you must present an `SFSafariViewController` to the user using the secure URL in the callback's result object to complete the provider authorization flow.
     ///
-    /// Upon completion of the connection flow in the Safari view, the participant is sent to the `finalRedirectURL` to indicate that the browser can be dismissed. Your app should intercept this URL via the AppDelegate's `application(_:open:options:)` or the SwiftUI `onOpenURL` modifier, and programmatically dismiss the SFSafariViewController when the URL is opened. Your app can use a specific path in this URL in order to differentiate it from other URLs your app may support.
+    /// Upon completion of the connection flow in the Safari view, the participant is sent to the `finalRedirectURL` to indicate that the browser can be dismissed. Your app should intercept this URL via the AppDelegate's `application(_:open:options:)` or `application(_:continue:restorationHandler:)` or the SwiftUI `onOpenURL` modifier, and programmatically dismiss the SFSafariViewController when the URL is opened. Your app can use a specific path in this URL in order to differentiate it from other URLs your app may support.
     ///
     /// The user should also be allowed to manually dismiss the Safari view at any time to cancel the authorization or escape if there is an error. In these cases the finalRedirectURL will not be invoked, but you can use `SFSafariViewControllerDelegate` to be notified of manual dismissal if needed.
     ///

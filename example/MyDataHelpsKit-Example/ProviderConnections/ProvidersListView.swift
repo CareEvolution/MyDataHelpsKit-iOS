@@ -71,6 +71,7 @@ struct ProvidersListView: View {
         .alert(item: $errorModel, content: {
             Alert(title: Text($0.errorDescription))
         })
+        // In a UIKit app, implement this in AppDelegate as part of `application(_:open:options:)` (for custom scheme URLs) or `application(_:continue:restorationHandler:)` (for Universal Links).
         .onOpenURL { url in
             if url.scheme == newConnection?.finalRedirectURL.scheme,
                url.path == newConnection?.finalRedirectURL.path {

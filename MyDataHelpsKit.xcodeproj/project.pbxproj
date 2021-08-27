@@ -191,10 +191,10 @@
 		AC83ABDA25F131DA00A668E4 /* MyDataHelpsKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */,
 				AC83ABDD25F131DA00A668E4 /* Info.plist */,
 				AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */,
 				AC83ABDB25F131DA00A668E4 /* URLRequestsTests.swift */,
-				ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */,
 			);
 			path = MyDataHelpsKitTests;
 			sourceTree = "<group>";
