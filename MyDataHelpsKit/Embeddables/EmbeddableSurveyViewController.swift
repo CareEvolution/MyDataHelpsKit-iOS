@@ -30,7 +30,7 @@ import WebKit
 ///
 /// ### Completion and Dismissal
 ///
-/// Once the participant has finished interacting with the survey, EmbeddableSurveyViewController will invoke the `completion` callback. The view controller will not dismiss itself. In all cases—success and failure—the completion callback _must_ dismiss the EmbeddableSurveyViewController.
+/// Once the participant has finished interacting with the survey, EmbeddableSurveyViewController will invoke the `completion` callback. The view controller will not dismiss itself. In all cases—success and failure—your completion callback _must_ dismiss the EmbeddableSurveyViewController.
 ///
 /// Use the `Result` object sent to the completion callback to determine whether the survey interaction was successful or failed. If the result is a `failure`, consider displaying an error alert to the user.
 public final class EmbeddableSurveyViewController: UIViewController {
@@ -147,12 +147,14 @@ public final class EmbeddableSurveyViewController: UIViewController {
 }
 
 /// Describes how a participant completed interaction with an embeddable survey.
+///
+/// See `EmbeddableSurveyViewController` for usage; note that your app must dismiss the EmbeddableSurveyViewController in _all_ EmbeddableSurveyCompletionReason cases.
 public struct EmbeddableSurveyCompletionReason: RawRepresentable, Equatable {
     public typealias RawValue = String
     
     /// Participant completed the survey, and the result was saved to RKStudio.
     public static let completed = EmbeddableSurveyCompletionReason(rawValue: "Completed")
-    /// Participant dismissed the survey without completing it.
+    /// Participant did not complete the survey.
     public static let closed = EmbeddableSurveyCompletionReason(rawValue: "Closed")
     
     /// The raw value for the completion reason.
