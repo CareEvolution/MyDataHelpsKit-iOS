@@ -38,6 +38,7 @@
 		ACEAF44826D595B0002F79AB /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ACEAF44726D595B0002F79AB /* Settings.bundle */; };
 		ACEAF44A26D67C95002F79AB /* ExternalAccountsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44926D67C95002F79AB /* ExternalAccountsListView.swift */; };
 		ACEAF45126D81BDD002F79AB /* ProviderConnectionAuthViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF45026D81BDD002F79AB /* ProviderConnectionAuthViewRepresentable.swift */; };
+		ACEAF45726D91B9B002F79AB /* ParticipantSessionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF45626D91B9B002F79AB /* ParticipantSessionType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -88,6 +89,7 @@
 		ACEAF44726D595B0002F79AB /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		ACEAF44926D67C95002F79AB /* ExternalAccountsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountsListView.swift; sourceTree = "<group>"; };
 		ACEAF45026D81BDD002F79AB /* ProviderConnectionAuthViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderConnectionAuthViewRepresentable.swift; sourceTree = "<group>"; };
+		ACEAF45626D91B9B002F79AB /* ParticipantSessionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantSessionType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +173,7 @@
 			children = (
 				AC9DCA06260E3BAC00C5D9E4 /* ParticipantInfoView.swift */,
 				AC9DCA0C260E3CE700C5D9E4 /* ParticipantModel.swift */,
+				ACEAF45626D91B9B002F79AB /* ParticipantSessionType.swift */,
 				AC9DCA02260E3A7D00C5D9E4 /* RootMenuView.swift */,
 				AC9DC9FA260E39AF00C5D9E4 /* SessionModel.swift */,
 				AC9DC9F6260E37C700C5D9E4 /* TokenView.swift */,
@@ -286,6 +289,7 @@
 				ACEAF44A26D67C95002F79AB /* ExternalAccountsListView.swift in Sources */,
 				ACCD9801260E6E3000FF7438 /* NotificationHistoryView.swift in Sources */,
 				AC9DCA0D260E3CE700C5D9E4 /* ParticipantModel.swift in Sources */,
+				ACEAF45726D91B9B002F79AB /* ParticipantSessionType.swift in Sources */,
 				ACCD9804260E6F7A00FF7438 /* NotificationHistorySource.swift in Sources */,
 				AC44F561261610A10065075C /* PersistDeviceDataView.swift in Sources */,
 				AC9DC9E4260E374E00C5D9E4 /* ContentView.swift in Sources */,
