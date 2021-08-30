@@ -38,6 +38,7 @@
 		ACC2EB9B261252F50080A3B5 /* SDKVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */; };
 		ACEAF44C26D67CE0002F79AB /* ExternalAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */; };
 		ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */; };
+		ACEAF45926DD7E76002F79AB /* ConnectExternalAccountResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF45826DD7E76002F79AB /* ConnectExternalAccountResource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +56,6 @@
 		AC02E68325FA7FCD008A46E4 /* SurveyTasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SurveyTasks.swift; sourceTree = "<group>"; };
 		AC02E68725FA8056008A46E4 /* SurveyTaskQueryResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyTaskQueryResource.swift; sourceTree = "<group>"; };
 		AC02E69B25FAA979008A46E4 /* Diagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostics.swift; sourceTree = "<group>"; };
-		AC0E6E392602381A00FA6C7E /* make-docs.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "make-docs.sh"; sourceTree = "<group>"; };
 		AC77B4B925E8495C00427294 /* MyDataHelpsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MyDataHelpsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC77B4BC25E8495C00427294 /* MyDataHelpsKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyDataHelpsKit.h; sourceTree = "<group>"; };
 		AC77B4BD25E8495C00427294 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -88,6 +88,7 @@
 		ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKVersion.swift; sourceTree = "<group>"; };
 		ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccounts.swift; sourceTree = "<group>"; };
 		ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountsTests.swift; sourceTree = "<group>"; };
+		ACEAF45826DD7E76002F79AB /* ConnectExternalAccountResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectExternalAccountResource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,7 +113,6 @@
 		AC77B4AF25E8495C00427294 = {
 			isa = PBXGroup;
 			children = (
-				AC0E6E392602381A00FA6C7E /* make-docs.sh */,
 				AC77B4BB25E8495C00427294 /* MyDataHelpsKit */,
 				AC83ABDA25F131DA00A668E4 /* MyDataHelpsKitTests */,
 				AC9DC9782604EFF700C5D9E4 /* Package.swift */,
@@ -173,6 +173,7 @@
 		AC77B51325E8575A00427294 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				ACEAF45826DD7E76002F79AB /* ConnectExternalAccountResource.swift */,
 				AC9DC9A92605408600C5D9E4 /* DeleteSurveyResultResource.swift */,
 				AC83ABB825E867E100A668E4 /* DeviceDataQueryResource.swift */,
 				ACA1A86826D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift */,
@@ -360,6 +361,7 @@
 				AC9DC9BA2609198700C5D9E4 /* NotificationHistoryQueryResource.swift in Sources */,
 				AC932351265D9874007AAF69 /* EmbeddableSurveyViewController.swift in Sources */,
 				AC77B50125E8502000427294 /* MyDataHelpsClient.swift in Sources */,
+				ACEAF45926DD7E76002F79AB /* ConnectExternalAccountResource.swift in Sources */,
 				AC83ABB925E867E100A668E4 /* DeviceDataQueryResource.swift in Sources */,
 				AC83ABB125E85BB900A668E4 /* GetParticipantInfoResource.swift in Sources */,
 				AC77B50925E8535B00427294 /* ParticipantAccessToken.swift in Sources */,

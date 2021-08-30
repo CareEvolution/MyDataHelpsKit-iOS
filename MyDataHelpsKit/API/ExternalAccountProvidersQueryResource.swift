@@ -7,17 +7,6 @@
 
 import Foundation
 
-struct ConnectExternalAccountResource: ParticipantResource {
-    typealias ResponseType = URL
-    
-    let providerID: Int
-    let finalRedirectURL: URL
-
-    func urlRequest(session: ParticipantSession) throws -> URLRequest {
-        return session.authenticatedRequest(.POST, url: try session.client.endpoint(path: "api/v1/delegated/externalaccountproviders/\(providerID)/connect", queryItems: [.init(name: "finalRedirectPath", value: finalRedirectURL.absoluteString)]))
-    }
-}
-
 struct ExternalAccountProvidersQueryResource: ParticipantResource {
     typealias ResponseType = [ExternalAccountProvider]
     

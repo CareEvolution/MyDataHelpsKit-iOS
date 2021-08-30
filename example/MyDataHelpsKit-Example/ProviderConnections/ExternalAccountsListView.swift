@@ -66,7 +66,7 @@ struct ExternalAccountsListView: View {
                 }
             case let .some(.success(accounts)) where accounts.isEmpty:
                 List {
-                    Text("No connected accounts")
+                    Text("No connected accounts. Tap + to connect to a provider.")
                 }
             case let .some(.success(accounts)):
                 List(accounts) { account in
