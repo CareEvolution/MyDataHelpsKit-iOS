@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		27AA30DD26D6946500AC0D2C /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA30DC26D6946500AC0D2C /* RemoteImageView.swift */; };
 		AC44F53E261375EE0065075C /* MyDataHelpsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */; };
-		AC44F53F261375EE0065075C /* MyDataHelpsKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AC44F561261610A10065075C /* PersistDeviceDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44F560261610A10065075C /* PersistDeviceDataView.swift */; };
 		AC8E0BB626694D830072A9C1 /* EmbeddableSurveySelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC8E0BB526694D830072A9C1 /* EmbeddableSurveySelection.swift */; };
 		AC932355265D9AEB007AAF69 /* EmbeddableSurveyViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC932354265D9AEB007AAF69 /* EmbeddableSurveyViewRepresentable.swift */; };
@@ -40,20 +39,6 @@
 		ACEAF45126D81BDD002F79AB /* ProviderConnectionAuthViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF45026D81BDD002F79AB /* ProviderConnectionAuthViewRepresentable.swift */; };
 		ACEAF45726D91B9B002F79AB /* ParticipantSessionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF45626D91B9B002F79AB /* ParticipantSessionType.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		AC44F540261375EE0065075C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				AC44F53F261375EE0065075C /* MyDataHelpsKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		27AA30DC26D6946500AC0D2C /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
@@ -218,7 +203,6 @@
 				AC9DC9DA260E374E00C5D9E4 /* Sources */,
 				AC9DC9DB260E374E00C5D9E4 /* Frameworks */,
 				AC9DC9DC260E374E00C5D9E4 /* Resources */,
-				AC44F540261375EE0065075C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
