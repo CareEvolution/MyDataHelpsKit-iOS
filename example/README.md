@@ -10,11 +10,11 @@ There are several ParticipantSession APIs that take query objects and produce pa
 
 ## Using this app to learn about MyDataHelpsKit
 
-Browse the example app source code to see how a real app might use the MyDataHelpsKit SDK. Search the example code for `/// triple-slash comments` for inline explanation of how MyDataHelpsKit is being used. Try customizing the example app's code to experiment with different ways to call various APIs: search for code comments labeled `EXAMPLE` for suggested customization points.
+Browse the example app source code to see how a real app might use the MyDataHelpsKit SDK. Search the example code for `/// triple-slash comments` for inline explanation of how MyDataHelpsKit is being used. Try customizing the example app's code to experiment with different ways to call various APIs: search for code comments labeled `EXERCISE` for suggested customization points.
 
 ## Example app features
 
-The headings below describe the functionality you can find in each subview accessed from the example app's main menu (`RootMenuView`):
+The headings below describe the functionality you can find in each subview accessed from the example app's main menu (RootMenuView):
 
 ### Participant Info
 
