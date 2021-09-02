@@ -8,6 +8,7 @@
 import SwiftUI
 import MyDataHelpsKit
 
+/// Implements the paging idiom common to various list/query APIs in MyDataHelpsKit. Various `PagedModelSource` implementations in this example app perform the actual MyDataHelpsKit queries and produce the paged result objects. PagedView uses this source object to fetch data when it's first displayed, and to fetch the next page when scrolling to the bottom of the list view (infinite scrolling). PagedView uses a corresponding `PagedViewModel` implementation to produce appropriate SwiftUI views for individual items shown in the list view.
 struct PagedView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
     @StateObject var model: PagedViewModel<SourceType, ViewType>
     

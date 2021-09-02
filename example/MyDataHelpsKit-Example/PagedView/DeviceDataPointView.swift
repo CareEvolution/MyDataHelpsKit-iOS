@@ -28,6 +28,7 @@ struct DeviceDataPointView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
+            /// EXERCISE: Add or modify `Text` views here to see the values of other `DeviceDataPoint` properties.
             if let date = model.observationDate {
                 Text("\(model.value) at \(Self.dateFormatter.string(from: date))")
             } else {

@@ -10,6 +10,7 @@ import MyDataHelpsKit
 
 struct NotificationHistoryView: View {
     static func pageView(session: ParticipantSessionType) -> PagedView<NotificationHistorySource, NotificationHistoryView> {
+        /// EXERCISE: add parameters to the query passed to NotificationHistorySource to filter by a specific notification identifier from your project's Notification Library, or try other filtering criteria.
         let source = NotificationHistorySource(session: session, query: .init())
         return PagedView(model: .init(source: source) { item in
             NotificationHistoryView(model: item)
@@ -36,6 +37,7 @@ struct NotificationHistoryView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(model.content ?? "(no content)")
+            /// EXERCISE: Add or modify `Text` views here to see the values of other `NotificationHistoryModel` properties.
             Text(model.identifier).font(.footnote)
             HStack {
                 Text(model.statusCode.rawValue)
@@ -54,14 +56,19 @@ extension NotificationHistoryView.Model {
         self.sentDate = item.sentDate
         self.statusCode = item.statusCode
         
-        // Demonstrating various ways to access the type and content of the notification model
+        /// Demonstrating various ways to access the type and content of the notification model. Each switch case is written differently to show different Swift idioms for working with the NotificationContent enum. Your app can use whatever level of complexity is appropriate.
+        /// EXERCISE: modify this switch statement to customize `self.content` with the NotificationContent details your project uses.
         switch item.content {
+        /// The simplest option if you just need to know the type of notification.
         case .sms:
             self.content = "Text notification"
+        /// Handle inner `content` var may or may not be nil, depending on whether the notification sent successfully.
         case let .push(content):
             self.content = "\(item.content.type.rawValue): \(content?.title ?? "(no title)")"
+        /// This pattern requires a specific notification type, _and_ a successfully sent notification (non-nil content).
         case let .email(.some(content)):
             self.content = "Email: \(content.subject ?? "(no subject)")"
+        /// Matches a specific type with _nil_ content (notification not sent).
         case .email(.none):
             self.content = "Email (unsent)"
         }

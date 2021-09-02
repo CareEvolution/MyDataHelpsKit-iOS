@@ -24,7 +24,7 @@ class ProvidersListViewModel: ObservableObject {
     
     init(session: ParticipantSessionType) {
         self.session = session
-        /// EXERCISE: Set non-nil `search` and `category` values to test filtering external providers.
+        /// EXERCISE: Set non-nil `search` and `category` values to customize filtering providers.
         self.query = ExternalAccountProvidersQuery(search: nil, category: nil)
         self.providers = nil
         session.queryExternalAccountProviders(query) {

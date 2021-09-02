@@ -8,7 +8,7 @@
 import SwiftUI
 import MyDataHelpsKit
 
-// SwiftUI wrapper for MyDataHelpsKit.EmbeddableSurveyViewController
+/// SwiftUI wrapper for MyDataHelpsKit.EmbeddableSurveyViewController.
 struct EmbeddableSurveyViewRepresentable: UIViewControllerRepresentable {
     typealias UIViewControllerType = UIViewController
     

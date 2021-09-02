@@ -20,6 +20,7 @@ class PersistDeviceDataViewModel: ObservableObject {
     let startDate: Date?
     let observationDate: Date?
     
+    /// EXERCISE: Some `DeviceDataPoint` properties are hard-coded here; set different values as appropriate for your project.
     init(session: ParticipantSessionType) {
         self.session = session
         self.isNew = true

@@ -8,6 +8,10 @@ Once you enter a participant token, the example app initializes a `ParticipantSe
 
 There are several ParticipantSession APIs that take query objects and produce paged arrays of results. These are all implemented in the example app with a generic `PagedView` SwiftUI view, and appropriate data source objects that perform the actual queries against ParticipantSession and construct individual SwiftUI views for each item in the results.
 
+## Using this app to learn about MyDataHelpsKit
+
+Browse the example app source code to see how a real app might use the MyDataHelpsKit SDK. Search the example code for `/// triple-slash comments` for inline explanation of how MyDataHelpsKit is being used. Try customizing the example app's code to experiment with different ways to call various APIs: search for code comments labeled `EXAMPLE` for suggested customization points.
+
 ## Example app features
 
 The headings below describe the functionality you can find in each subview accessed from the example app's main menu (`RootMenuView`):
