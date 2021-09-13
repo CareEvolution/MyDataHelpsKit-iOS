@@ -99,8 +99,8 @@ struct ExternalAccountProviderView: View {
     
     var body: some View {
         HStack(alignment: .center) {
-            if let logoUrl = provider.logoUrl {
-                RemoteImageView(url: logoUrl, placeholderImageName: "providerLogoPlaceholder")
+            if let logoURL = provider.logoURL {
+                RemoteImageView(url: logoURL, placeholderImageName: "providerLogoPlaceholder")
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 45, height: 45)
             }

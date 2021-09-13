@@ -26,7 +26,7 @@ public final class ParticipantSession {
     public init(client: MyDataHelpsClient, accessToken: ParticipantAccessToken) {
         self.client = client
         self.accessToken = accessToken
-        self.session = client.newUrlSession()
+        self.session = client.newURLSession()
     }
     
     // MARK: Participant info

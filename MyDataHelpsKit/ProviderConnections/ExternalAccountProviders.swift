@@ -84,6 +84,13 @@ public struct ExternalAccountProviderCategory: RawRepresentable, Equatable, Hash
 ///
 /// Use `ParticipantSession.connectExternalAccount` to initiate a connected account between the participant and this provider.
 public struct ExternalAccountProvider: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case name = "name"
+        case category = "category"
+        case logoURL = "logoUrl"
+    }
+    
     /// Assigned identifier for this external account provider.
     public let id: Int
     /// Name of the external account provider.
@@ -91,7 +98,9 @@ public struct ExternalAccountProvider: Decodable {
     /// Type of account provider.
     public let category: ExternalAccountProviderCategory
     /// Full URL from which the logo can be retrieved, if one is available for the provider.
-    public let logoUrl: URL?
+    ///
+    /// This URL returns image data, e.g. `image/png`, suitable for decoding directly into a `UIImage` object and presenting in image views. It is a public URL with no authentication required. Image dimensions may vary, so it is recommended to display these images with aspect-fit scaling.
+    public let logoURL: URL?
 }
 
 /// Information for presenting a provider connection authorization UI to the participant.

@@ -28,7 +28,7 @@ class ExternalAccountsTests: XCTestCase {
             XCTAssertEqual(first.id, 100)
             XCTAssertEqual(first.status, .fetchComplete)
             XCTAssertEqual(first.provider.name, "RKStudio Demo Provider")
-            XCTAssertEqual(first.provider.logoUrl?.absoluteString, "https://careevolution.com/images/rkstudio-logo.png")
+            XCTAssertEqual(first.provider.logoURL?.absoluteString, "https://careevolution.com/images/rkstudio-logo.png")
             XCTAssertNotNil(first.lastRefreshDate)
         }
     }
@@ -39,7 +39,7 @@ class ExternalAccountsTests: XCTestCase {
         if let first = list.first {
             XCTAssertEqual(first.id, 1)
             XCTAssertEqual(first.category, .provider)
-            XCTAssertEqual(first.logoUrl?.absoluteString, "https://careevolution.com/images/rkstudio-logo.png")
+            XCTAssertEqual(first.logoURL?.absoluteString, "https://careevolution.com/images/rkstudio-logo.png")
         }
     }
 }
