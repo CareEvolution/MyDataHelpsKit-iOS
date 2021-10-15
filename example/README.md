@@ -8,9 +8,13 @@ Once you enter a participant token, the example app initializes a `ParticipantSe
 
 There are several ParticipantSession APIs that take query objects and produce paged arrays of results. These are all implemented in the example app with a generic `PagedView` SwiftUI view, and appropriate data source objects that perform the actual queries against ParticipantSession and construct individual SwiftUI views for each item in the results.
 
+## Using this app to learn about MyDataHelpsKit
+
+Browse the example app source code to see how a real app might use the MyDataHelpsKit SDK. Search the example code for `/// triple-slash comments` for inline explanation of how MyDataHelpsKit is being used. Try customizing the example app's code to experiment with different ways to call various APIs: search for code comments labeled `EXERCISE` for suggested customization points.
+
 ## Example app features
 
-The headings below describe the functionality you can find in each subview accessed from the example app's main menu (`RootMenuView`):
+The headings below describe the functionality you can find in each subview accessed from the example app's main menu (RootMenuView):
 
 ### Participant Info
 
@@ -34,8 +38,14 @@ The headings below describe the functionality you can find in each subview acces
 
 ### Query Notifications
 
-- Demonstrates usage of `b`. Modify the `NotificationHistoryView.pageView` function to experiment with different query parameters
+- Demonstrates usage of `ParticipantSession.queryNotifications`. Modify the `NotificationHistoryView.pageView` function to experiment with different query parameters. `NotificationHistoryView.Model` demonstrates various ways to access the different types of notification content available
 
 ### MyDataHelps Embeddable Surveys
 
 To see examples of using `EmbeddableSurveyViewController` to present MyDataHelps embeddable surveys, tap on incomplete surveys in the Survey Tasks screen. To use this feature, embeddable survey functionality must be enabled in RKStudio for the project and the survey. See EmbeddableSurveyViewController's documentation for more info on usage and links to relevant RKStudio documentation.
+
+### External Accounts
+
+- The top level External Accounts screen demonstrates usage of `ParticipantSession.listExternalAccounts` to view, update, and delete connected external account providers
+- Tap the `+` button on that screen to view available external account providers via `ParticipantSession.queryExternalAccountProviders`. Modify `ProvidersListViewModel` to experiment with different query parameters
+- Selecting an external account provider demonstrates the provider connection authorization flow, using `ParticipantSession.connectExternalAccount` to initiate the connection, and `SFSafariViewController` to present the UI. Note that MyDataHelpsKit only supplies a URL to present, your app (as demonstrated by the example app) is responsible for presenting a Safari view with that URL to the participant, and dismissing the Safari view by intercepting a special link. See `ParticipantSession.connectExternalAccount` documentation for details

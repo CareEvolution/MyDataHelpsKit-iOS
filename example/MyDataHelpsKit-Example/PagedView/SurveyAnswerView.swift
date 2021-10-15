@@ -10,6 +10,7 @@ import MyDataHelpsKit
 
 struct SurveyAnswerView: View {
     static func pageView(session: ParticipantSessionType, surveyID: String?) -> PagedView<SurveyAnswersSource, SurveyAnswerView> {
+        /// EXERCISE: Add parameters to this `SurveyAnswersQuery` to further customize filtering.
         let query = SurveyAnswersQuery(surveyID: surveyID)
         let source = SurveyAnswersSource(session: session, query: query)
         return PagedView(model: .init(source: source) { item in
@@ -60,6 +61,7 @@ struct SurveyAnswerView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(model.value)
+                /// EXERCISE: Add or modify `Text` views here to see the values of other `SurveyAnswer` properties.
                 Text(model.surveyDisplayName)
                     .font(.footnote)
                     .foregroundColor(Color.gray)

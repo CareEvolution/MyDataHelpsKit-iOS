@@ -11,7 +11,7 @@ import Foundation
 ///
 /// An instance of `ParticipantSession` should be retained for the lifetime of a participant's access token. Callers are responsible for tracking the state of an access token and renewing as needed.
 ///
-/// ### Asynchronous behavior
+/// ### Asynchronous Behavior
 /// 
 /// Requests to the MyDataHelps platform are typically asynchronous. All asynchronous requests in ParticipantSession are implemented with a completion parameter of type `(Result<ModelType, MyDataHelpsError>) -> Void`, where `ModelType` is the type of the data model object returned upon success. All completion blocks are invoked on the main thread.
 public final class ParticipantSession {
@@ -26,7 +26,7 @@ public final class ParticipantSession {
     public init(client: MyDataHelpsClient, accessToken: ParticipantAccessToken) {
         self.client = client
         self.accessToken = accessToken
-        self.session = client.newUrlSession()
+        self.session = client.newURLSession()
     }
     
     // MARK: Participant info

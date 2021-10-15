@@ -25,6 +25,9 @@ extension View {
     }
 }
 
+/// Links to sub-views that demonstrate the capabilities of MyDataHelpsKit.
+///
+/// EXERCISE: This view configures the query objects for the content of various sub-views. Modify the query objects passed to various `pageView` functions here to see how filtering and sorting works in data queries.
 struct RootMenuView: View {
     @StateObject var participant: ParticipantModel
     @State private var embeddableSurvey: EmbeddableSurveySelection? = nil
@@ -46,6 +49,7 @@ struct RootMenuView: View {
                     .roundRectComponent()
             }
             
+            /// EXERCISE: Modify the `types` set to filter for different types of HealthKit data used by your project, or add additional optional parameters to the `DeviceDataQuery` to further customize filtering.
             NavigationLink(
                 destination: DeviceDataPointView.pageView(session: participant.session, namespace: .appleHealth, types: Set(["StandHourInterval"]))
                     .navigationTitle("Query Device Data")
@@ -54,6 +58,7 @@ struct RootMenuView: View {
             }.roundRectComponent()
             
             VStack {
+                /// EXERCISE: Modify the `types` set to filter by the identifiers of project-scoped data used by your project, or add additional optional parameters to the `DeviceDataQuery` to further customize filtering.
                 NavigationLink(
                     destination: DeviceDataPointView.pageView(session: participant.session, namespace: .project, types: nil)
                         .navigationTitle("Query Device Data")
@@ -80,6 +85,7 @@ struct RootMenuView: View {
                                 }
                             }
                         }) { selection in
+                            /// RootView is responsible for modally presenting any Embeddable Survey that the user selects from the `SurveyTaskView`. See `EmbeddableSurveyViewController` documentation.
                             EmbeddableSurveyViewRepresentable(model: selection, presentation: $embeddableSurvey, error: $embeddableSurveyError)
                         }
                 ) {
@@ -87,6 +93,7 @@ struct RootMenuView: View {
                 }.roundRectComponent()
             }
             
+            /// This presents a list of all of the participant's survey answers.  See SurveyAnswerView.swift to further customize the query. The SurveyTaskView above also presents SurveyAnswerViews filtered to specific surveys.
             NavigationLink(
                 destination: SurveyAnswerView.pageView(session: participant.session, surveyID: nil)
                     .navigationTitle("Query Survey Answers")
@@ -94,11 +101,20 @@ struct RootMenuView: View {
                 Label("Query Survey Answers", systemImage: "square.and.pencil")
             }.roundRectComponent()
             
+            /// Modify NotificationHistoryView.swift to customize the notifications shown here.
             NavigationLink(
                 destination: NotificationHistoryView.pageView(session: participant.session)
                     .navigationTitle("Query Notifications")
             ) {
                 Label("Query Notifications", systemImage: "app.badge")
+            }.roundRectComponent()
+            
+            /// ExternalAccountsListView lists all of the participant's connected accounts, and has a button to query external account providers and establish new connected accounts.
+            NavigationLink(
+                destination: ExternalAccountsListView(model: ExternalAccountsListViewModel(session: participant.session))
+                    .navigationTitle("External Accounts")
+            ) {
+                Label("External Accounts", systemImage: "link")
             }.roundRectComponent()
         }
         .alert(item: $errorAlertModel) {

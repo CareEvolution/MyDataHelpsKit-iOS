@@ -21,7 +21,7 @@ struct ErrorView: View {
             case let .encodingError(underlying):
                 return "Encoding error: \(underlying.localizedDescription)"
             case let .serverError(underlying):
-                return "Server error: \(underlying.localizedDescription)"
+                return "Server error: HTTP \(underlying.statusCode): \(underlying.message ?? underlying.localizedDescription)"
             case let .timedOut(underlying):
                 return "Timed out: \(underlying.localizedDescription)"
             case let .unauthorizedRequest(underlying):

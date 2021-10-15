@@ -28,7 +28,7 @@ public final class MyDataHelpsClient {
         self.userAgent = userAgentString()
     }
     
-    internal func newUrlSession() -> URLSession {
+    internal func newURLSession() -> URLSession {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.timeoutIntervalForRequest = Self.requestTimeoutInterval
         configuration.urlCache = nil

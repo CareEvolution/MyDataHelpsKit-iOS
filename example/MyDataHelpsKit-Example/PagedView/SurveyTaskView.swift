@@ -10,6 +10,7 @@ import MyDataHelpsKit
 
 struct SurveyTaskView: View {
     static func pageView(session: ParticipantSessionType, participantInfo: ParticipantInfoViewModel, embeddableSurveySelection: Binding<EmbeddableSurveySelection?>) -> PagedView<SurveyTaskSource, SurveyTaskView> {
+        /// EXERCISE: Add parameters to this `SurveyTaskQuery` to customize filtering.
         let query = SurveyTaskQuery()
         let source = SurveyTaskSource(session: session, query: query)
         return PagedView(model: .init(source: source) { item in
@@ -57,6 +58,7 @@ struct SurveyTaskView: View {
             }
             VStack(alignment: .leading) {
                 Text(model.surveyDisplayName)
+                /// EXERCISE: Add or modify `Text` views here to see the values of other `SurveyTask` properties.
                 if let dueDate = model.dueDate {
                     Text(Self.dateFormatter.string(from: dueDate))
                         .font(.footnote)
@@ -85,7 +87,8 @@ struct SurveyTaskView: View {
         }
         return .init(survey: model.embeddableSurveyID, participantLinkIdentifier: participantLinkIdentifier)
     }
-    
+
+    /// For completed surveys, shows a SurveyAnswerView (via the NavigationLink bound to `$showingAnswers`) filtered to the selected survey task. For incomplete tasks, presents an `EmbeddableSurveyViewController` (via a binding in RootView) if the task is configured to support it.
     private func selected() {
         if model.status == .complete {
             showingAnswers = true
