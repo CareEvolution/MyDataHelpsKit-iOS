@@ -9,6 +9,10 @@ import Foundation
 
 /// Information about a participant.
 public struct ParticipantInfo: Decodable {
+    /// Auto-generated internal ID for the participant.
+    public let participantID: String
+    /// Auto-generated internal ID for the project.
+    public let projectID: String
     /// Project-specific participant identifier.
     public let participantIdentifier: String
     /// Project-specific secondary identifier.

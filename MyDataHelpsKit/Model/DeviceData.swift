@@ -61,23 +61,31 @@ public struct DeviceDataResultPage: PagedResult, Decodable {
     /// An ID to be used with subsequent `DeviceDataQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
     public let nextPageID: String?
 }
-
-/// Specifies the source framework for the device data.
+    
+/// Device data is grouped into namespaces, which represent the source frameworks that generate the data. There is also a separate `project` namespace, where projects can persist their own data. The static members of DeviceDataNamespace identify all supported namespace values.
 public struct DeviceDataNamespace: RawRepresentable, Equatable, Decodable {
     public typealias RawValue = String
     
-    /// Data imported from a linked Apple Health account.
-    public static let appleHealth = DeviceDataNamespace(rawValue: "AppleHealth")
-    /// Data imported from a linked Fitbit account.
-    public static let fitbit = DeviceDataNamespace(rawValue: "Fitbit")
-    /// Data imported from a linked Google Fit account.
-    public static let googleFit = DeviceDataNamespace(rawValue: "GoogleFit")
-    /// Air quality index data imported from AirNow.gov.
-    public static let airNowApi = DeviceDataNamespace(rawValue: "AirNowApi")
-    /// Weather forecast data imported from WeatherBit.io.
-    public static let weatherBit = DeviceDataNamespace(rawValue: "WeatherBit")
     /// Data persisted by the Persist Device Data Points operation.
     public static let project = DeviceDataNamespace(rawValue: "Project")
+    
+    /// Data imported from a linked Fitbit account.
+    public static let fitbit = DeviceDataNamespace(rawValue: "Fitbit")
+    
+    /// Data imported from a linked Apple Health account.
+    public static let appleHealth = DeviceDataNamespace(rawValue: "AppleHealth")
+    
+    /// Data imported from a linked Google Fit account.
+    public static let googleFit = DeviceDataNamespace(rawValue: "GoogleFit")
+    
+    /// Air quality index data imported from AirNow.gov.
+    public static let airNowApi = DeviceDataNamespace(rawValue: "AirNowApi")
+    
+    /// Weather forecast data imported from WeatherBit.io.
+    public static let weatherBit = DeviceDataNamespace(rawValue: "WeatherBit")
+    
+    /// Data imported from Omron wellness products.
+    public static let omron = DeviceDataNamespace(rawValue: "Omron")
     
     /// The raw value for the namespace as stored in RKStudio.
     public let rawValue: String
