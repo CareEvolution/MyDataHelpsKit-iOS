@@ -22,6 +22,14 @@ struct ErrorView: View {
                 return "Encoding error: \(underlying.localizedDescription)"
             case let .serverError(underlying):
                 return "Server error: HTTP \(underlying.statusCode): \(underlying.message ?? underlying.localizedDescription)"
+            case let .tooManyRequests(limit, underlying):
+                let resetDate: String
+                if #available(iOS 15.0, *) {
+                    resetDate = limit.nextReset.formatted(.dateTime.hour().minute().second())
+                } else {
+                    resetDate = "\(limit.nextReset)"
+                }
+                return "Too many requests: exceeded \(limit.maxRequestsPerHour), reset at \(resetDate) [\(underlying.message ?? "")]"
             case let .timedOut(underlying):
                 return "Timed out: \(underlying.localizedDescription)"
             case let .unauthorizedRequest(underlying):

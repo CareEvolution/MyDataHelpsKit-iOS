@@ -18,6 +18,8 @@ public enum MyDataHelpsError: Error {
     case encodingError(Error)
     /// Unexpected server error, e.g. an HTTP 500 error.
     case serverError(HTTPResponseError)
+    /// API request limit exceeded. The associated `APIRateLimit` indicates when throttling will reset, and the `HTTPResponseError` may include an error message (non-localized) suitable for debugging.
+    case tooManyRequests(APIRateLimit, HTTPResponseError)
     /// A server request timed out.
     case timedOut(Error)
     /// An API request had a missing or invalid access token. The access token should be refreshed and a new `ParticipantSession` created, if applicable.

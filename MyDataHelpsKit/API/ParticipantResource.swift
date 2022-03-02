@@ -52,7 +52,11 @@ extension ParticipantSession {
         }
         guard response.statusCode >= 200, response.statusCode < 300 else {
             let responseError = HTTPResponseError(response: response, data: data, error: error)
-            if response.statusCode == 401 {
+            
+            if response.statusCode == 429,
+               let limit = APIRateLimit(response: response) {
+                return .failure(.tooManyRequests(limit, responseError))
+            } else if response.statusCode == 401 {
                 return .failure(.unauthorizedRequest(responseError))
             } else {
                 return .failure(.serverError(responseError))
