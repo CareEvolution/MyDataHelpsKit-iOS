@@ -20,10 +20,14 @@ public struct SurveyAnswersQuery: PagedQuery {
     public let surveyID: String?
     /// Filter by one or more internal names of the surveys in RKStudio which have the answers.
     public let surveyNames: Set<String>?
-    /// Date before which survey answers were submitted.
+    /// Date after which individual survey answers were recorded by the participant.
     public let after: Date?
-    /// Date after which survey answers were submitted.
+    /// Date before which individual survey answers were recorded by the participant
     public let before: Date?
+    /// Date after which the entire survey was submitted.
+    public let insertedAfter: Date?
+    /// Date before which the entire survey was submitted.
+    public let insertedBefore: Date?
     /// Filter by one or more identifiers for the survey steps for which answers were submitted.
     public let stepIdentifiers: Set<String>?
     /// Filter by one or more identifiers for the result provided to a survey step, and which contain survey answers.
@@ -41,19 +45,23 @@ public struct SurveyAnswersQuery: PagedQuery {
     ///   - surveyResultID: Auto-generated, globally-unique identifier for the survey submission containing the answer.
     ///   - surveyID: Auto-generated, globally-unique identifier for the survey containing the step the answer was provided for.
     ///   - surveyNames: Filter by one or more internal names of the surveys in RKStudio which have the answers.
-    ///   - after: Date before which survey answers were submitted.
-    ///   - before: Date after which survey answers were submitted.
+    ///   - after: Date after which individual survey answers were recorded by the participant.
+    ///   - before: Date before which individual survey answers were recorded by the participant.
+    ///   - insertedAfter: Date after which the entire survey was submitted.
+    ///   - insertedBefore: Date before which the entire survey was submitted.
     ///   - stepIdentifiers: Filter by one or more identifiers for the survey steps for which answers were submitted.
     ///   - resultIdentifiers: Filter by one or more identifiers for the result provided to a survey step, and which contain survey answers.
     ///   - answers: Filter by one or more specific text values the answer contains.
     ///   - limit: Maximum number of results per page.
     ///   - pageID: Identifies a specific page of survey answers to fetch.
-    public init(surveyResultID: String? = nil, surveyID: String? = nil, surveyNames: Set<String>? = nil, after: Date? = nil, before: Date? = nil, stepIdentifiers: Set<String>? = nil, resultIdentifiers: Set<String>? = nil, answers: Set<String>? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
+    public init(surveyResultID: String? = nil, surveyID: String? = nil, surveyNames: Set<String>? = nil, after: Date? = nil, before: Date? = nil, insertedAfter: Date? = nil, insertedBefore: Date? = nil, stepIdentifiers: Set<String>? = nil, resultIdentifiers: Set<String>? = nil, answers: Set<String>? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
         self.surveyResultID = surveyResultID
         self.surveyID = surveyID
         self.surveyNames = surveyNames
         self.after = after
         self.before = before
+        self.insertedAfter = insertedAfter
+        self.insertedBefore = insertedBefore
         self.stepIdentifiers = stepIdentifiers
         self.resultIdentifiers = resultIdentifiers
         self.answers = answers
@@ -66,7 +74,7 @@ public struct SurveyAnswersQuery: PagedQuery {
     /// - Returns: A query for results following `page`, if page has a `nextPageID`. If there are no additional pages of results available, returns `nil`. The query returned, if any, has the same filters as the original.
     public func page(after page: SurveyAnswersPage) -> SurveyAnswersQuery? {
         guard let nextPageID = page.nextPageID else { return nil }
-        return SurveyAnswersQuery(surveyResultID: surveyResultID, surveyID: surveyID, surveyNames: surveyNames, after: after, before: before, stepIdentifiers: stepIdentifiers, resultIdentifiers: resultIdentifiers, answers: answers, limit: limit, pageID: nextPageID)
+        return SurveyAnswersQuery(surveyResultID: surveyResultID, surveyID: surveyID, surveyNames: surveyNames, after: after, before: before, insertedAfter: insertedAfter, insertedBefore: insertedBefore, stepIdentifiers: stepIdentifiers, resultIdentifiers: resultIdentifiers, answers: answers, limit: limit, pageID: nextPageID)
     }
 }
 
@@ -94,8 +102,10 @@ public struct SurveyAnswer: Decodable {
     public let surveyName: String
     /// Name of the survey displayed to the participant.
     public let surveyDisplayName: String
-    /// Date and time at which the survey answer was submitted. Different from the time at which the whole survey was submitted.
+    /// Date and time at which the survey answer was recorded by the participant.
     public let date: Date?
+    /// Date and time at which the entire survey was submitted.
+    public let insertedDate: Date
     /// Identifier for the survey step for which the answer was submitted.
     public let stepIdentifier: String
     /// Identifier for the result provided to a survey step, and which contains this survey answer.
