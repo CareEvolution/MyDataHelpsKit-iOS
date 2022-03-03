@@ -22,6 +22,10 @@ public struct DeviceDataQuery: PagedQuery {
     public let observedAfter: Date?
     /// Date before which the device data was observed.
     public let observedBefore: Date?
+    /// Date after which the device data was modified.
+    public let modifiedAfter: Date?
+    /// Date before which the device data was modified.
+    public let modifiedBefore: Date?
     
     /// Maximum number of results per page. Default and maximum value is 100.
     public let limit: Int
@@ -34,13 +38,17 @@ public struct DeviceDataQuery: PagedQuery {
     ///   - types: Filter by one or more types/categories within the given namespace, e.g. "HeartRate".
     ///   - observedAfter: Date after which the device data was observed.
     ///   - observedBefore: Date before which the device data was observed.
+    ///   - modifiedAfter: Date after which the device data was observed.
+    ///   - modifiedBefore: Date before which the device data was observed.
     ///   - limit: Maximum number of results per page.
     ///   - pageID: Identifies a specific page of data to fetch.
-    public init(namespace: DeviceDataNamespace, types: Set<String>? = nil, observedAfter: Date? = nil, observedBefore: Date? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
+    public init(namespace: DeviceDataNamespace, types: Set<String>? = nil, observedAfter: Date? = nil, observedBefore: Date? = nil, modifiedAfter: Date? = nil, modifiedBefore: Date? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
         self.namespace = namespace
         self.types = types
         self.observedAfter = observedAfter
         self.observedBefore = observedBefore
+        self.modifiedAfter = modifiedAfter
+        self.modifiedBefore = modifiedBefore
         self.limit = Self.clampedLimit(limit, max: Self.defaultLimit)
         self.pageID = pageID
     }
@@ -50,7 +58,7 @@ public struct DeviceDataQuery: PagedQuery {
     /// - Returns: A query for results following `page`, if page has a `nextPageID`. If there are no additional pages of results available, returns `nil`. The query returned, if any, has the same filters as the original.
     public func page(after page: DeviceDataResultPage) -> DeviceDataQuery? {
         guard let nextPageID = page.nextPageID else { return nil }
-        return DeviceDataQuery(namespace: namespace, types: types, observedAfter: observedAfter, observedBefore: observedBefore, limit: limit, pageID: nextPageID)
+        return DeviceDataQuery(namespace: namespace, types: types, observedAfter: observedAfter, observedBefore: observedBefore, modifiedAfter: modifiedAfter, modifiedBefore: modifiedBefore, limit: limit, pageID: nextPageID)
     }
 }
 

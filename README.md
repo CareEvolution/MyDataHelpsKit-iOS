@@ -14,7 +14,7 @@ See [GitHub releases](https://github.com/CareEvolution/MyDataHelpsKit-iOS/releas
 4. Create a `ParticipantSession` using the access token. This is the primary interface for interacting with MyDataHelps. It can be retained for as long as the participant's acess token is valid; create a new `ParticipantSession` when you renew the access token or when a different participant logs in
 5. Use `ParticipantSession` functions to perform MyDataHelps operations and requests for the participant
 
-See [online documentation](https://developer.rkstudio.careevolution.com/ios) or integrated Xcode symbol documentation for details about specfic operations and model types.
+See [online documentation](https://developer.rkstudio.careevolution.com/ios) or integrated Xcode symbol documentation for details about specific operations and model types.
 
 Example:
 
