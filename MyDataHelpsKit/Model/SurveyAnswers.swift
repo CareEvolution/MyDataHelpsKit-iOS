@@ -22,7 +22,7 @@ public struct SurveyAnswersQuery: PagedQuery {
     public let surveyNames: Set<String>?
     /// Date after which individual survey answers were recorded by the participant.
     public let after: Date?
-    /// Date before which individual survey answers were recorded by the participant
+    /// Date before which individual survey answers were recorded by the participant.
     public let before: Date?
     /// Date after which the entire survey was submitted.
     public let insertedAfter: Date?

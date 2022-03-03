@@ -22,9 +22,9 @@ public struct DeviceDataQuery: PagedQuery {
     public let observedAfter: Date?
     /// Date before which the device data was observed.
     public let observedBefore: Date?
-    /// Date after which the device data was modified.
+    /// Date after which the device data was last modified.
     public let modifiedAfter: Date?
-    /// Date before which the device data was modified.
+    /// Date before which the device data was last modified.
     public let modifiedBefore: Date?
     
     /// Maximum number of results per page. Default and maximum value is 100.
@@ -38,8 +38,8 @@ public struct DeviceDataQuery: PagedQuery {
     ///   - types: Filter by one or more types/categories within the given namespace, e.g. "HeartRate".
     ///   - observedAfter: Date after which the device data was observed.
     ///   - observedBefore: Date before which the device data was observed.
-    ///   - modifiedAfter: Date after which the device data was observed.
-    ///   - modifiedBefore: Date before which the device data was observed.
+    ///   - modifiedAfter: Date after which the device data was last modified.
+    ///   - modifiedBefore: Date before which the device data was last modified.
     ///   - limit: Maximum number of results per page.
     ///   - pageID: Identifies a specific page of data to fetch.
     public init(namespace: DeviceDataNamespace, types: Set<String>? = nil, observedAfter: Date? = nil, observedBefore: Date? = nil, modifiedAfter: Date? = nil, modifiedBefore: Date? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
