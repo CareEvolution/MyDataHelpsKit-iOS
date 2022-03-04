@@ -83,7 +83,7 @@ public struct ParticipantDemographics: Decodable {
     /// The raw decodable value: "true" or "false".
     private let unsubscribedFromEmails: String?
     
-    /// Indicates that the participant has unsubscribed from email notifications.
+    /// Indicates that the participant has unsubscribed from MyDataHelps email notifications.
     public var isUnsubscribedFromEmails: Bool {
         unsubscribedFromEmails == "true"
     }
