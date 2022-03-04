@@ -77,4 +77,14 @@ public struct ParticipantDemographics: Decodable {
     public let gender: ParticipantGender?
     /// Participant's local time zone represented as a UTC offset, e.g., "-04:00:00".
     public let utcOffset: String?
+    /// Participant's local time zone identifier, e.g. `"America/New_York"`.
+    public let timeZone: String?
+    
+    /// The raw decodable value: "true" or "false".
+    private let unsubscribedFromEmails: String?
+    
+    /// Indicates that the participant has unsubscribed from email notifications.
+    public var isUnsubscribedFromEmails: Bool {
+        unsubscribedFromEmails == "true"
+    }
 }
