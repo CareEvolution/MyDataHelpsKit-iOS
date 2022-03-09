@@ -10,6 +10,8 @@ import Foundation
 /// Specifies filtering and page-navigation criteria for survey answers.
 ///
 /// All query properties are optional. Set non-nil/non-default values only for the properties you want to use for filtering.
+///
+/// You can filter survey answers by two different types of dates: `before/after` and `insertedBefore/After`. The former properties use the date the answer was recorded by the participant; the latter ones use the date the answer was submitted to the system. The dates may be appreciably different if the participant started a survey, answered a few questions, and then submitted it much later. There may also be minor variations due to the participant's device time compared to the server time. Use the `insertedAfter` property to search for new answers since a prior query.
 public struct SurveyAnswersQuery: PagedQuery {
     /// The default and maximum number of results per page.
     public static let defaultLimit = 100
@@ -20,13 +22,13 @@ public struct SurveyAnswersQuery: PagedQuery {
     public let surveyID: String?
     /// Filter by one or more internal names of the surveys in RKStudio which have the answers.
     public let surveyNames: Set<String>?
-    /// Date after which individual survey answers were recorded by the participant.
+    /// Search for answers recorded by the participant after a specific date.
     public let after: Date?
-    /// Date before which individual survey answers were recorded by the participant.
+    /// Search for answers recorded by the participant before a specific date.
     public let before: Date?
-    /// Date after which the entire survey was submitted.
+    /// Search for answers submitted to the system after a specific date.
     public let insertedAfter: Date?
-    /// Date before which the entire survey was submitted.
+    /// Search for answers submitted to the system before a specific date.
     public let insertedBefore: Date?
     /// Filter by one or more identifiers for the survey steps for which answers were submitted.
     public let stepIdentifiers: Set<String>?
@@ -45,10 +47,10 @@ public struct SurveyAnswersQuery: PagedQuery {
     ///   - surveyResultID: Auto-generated, globally-unique identifier for the survey submission containing the answer.
     ///   - surveyID: Auto-generated, globally-unique identifier for the survey containing the step the answer was provided for.
     ///   - surveyNames: Filter by one or more internal names of the surveys in RKStudio which have the answers.
-    ///   - after: Date after which individual survey answers were recorded by the participant.
-    ///   - before: Date before which individual survey answers were recorded by the participant.
-    ///   - insertedAfter: Date after which the entire survey was submitted.
-    ///   - insertedBefore: Date before which the entire survey was submitted.
+    ///   - after: Search for answers recorded by the participant after a specific date.
+    ///   - before: Search for answers recorded by the participant before a specific date.
+    ///   - insertedAfter: Search for answers submitted to the system after a specific date.
+    ///   - insertedBefore: Search for answers submitted to the system before a specific date.
     ///   - stepIdentifiers: Filter by one or more identifiers for the survey steps for which answers were submitted.
     ///   - resultIdentifiers: Filter by one or more identifiers for the result provided to a survey step, and which contain survey answers.
     ///   - answers: Filter by one or more specific text values the answer contains.
@@ -104,7 +106,7 @@ public struct SurveyAnswer: Decodable {
     public let surveyDisplayName: String
     /// Date and time at which the survey answer was recorded by the participant.
     public let date: Date?
-    /// Date and time at which the entire survey was submitted.
+    /// Date and time at which the was submitted to the system.
     public let insertedDate: Date
     /// Identifier for the survey step for which the answer was submitted.
     public let stepIdentifier: String

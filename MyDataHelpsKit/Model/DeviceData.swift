@@ -10,6 +10,8 @@ import Foundation
 /// Specifies filtering and page-navigation criteria for device data point queries.
 ///
 /// All query properties are optional. Set non-nil/non-default values only for the properties you want to use for filtering.
+///
+/// You can filter device data by two different type of dates: `modifiedBefore/After` and `observedBefore/After`. Due to variations and limitations in device data synchronization, it is possible for older data points to turn up in the system unpredictably. Using the "observed" query parameters will search based on the date the data was observed or recorded by the device, while the "modified" parameters will search based on the date it arrived in the system. Use the `modifiedAfter` property to search for data that has arrived since a prior query.
 public struct DeviceDataQuery: PagedQuery {
     /// The default and maximum number of results per page.
     public static let defaultLimit = 100
@@ -18,13 +20,13 @@ public struct DeviceDataQuery: PagedQuery {
     public let namespace: DeviceDataNamespace
     /// Filter by one or more types/categories within the given namespace, e.g. "HeartRate"
     public let types: Set<String>?
-    /// Date after which the device data was observed.
+    /// Search for device data points observed after this date.
     public let observedAfter: Date?
-    /// Date before which the device data was observed.
+    /// Search for device data points observed before this date.
     public let observedBefore: Date?
-    /// Date after which the device data was last modified.
+    /// Search for device data points updated in the system after this date.
     public let modifiedAfter: Date?
-    /// Date before which the device data was last modified.
+    /// Search for device data points updated in the system before this date.
     public let modifiedBefore: Date?
     
     /// Maximum number of results per page. Default and maximum value is 100.
@@ -36,10 +38,10 @@ public struct DeviceDataQuery: PagedQuery {
     /// - Parameters:
     ///   - namespace: Specifies the source framework for the device data.
     ///   - types: Filter by one or more types/categories within the given namespace, e.g. "HeartRate".
-    ///   - observedAfter: Date after which the device data was observed.
-    ///   - observedBefore: Date before which the device data was observed.
-    ///   - modifiedAfter: Date after which the device data was last modified.
-    ///   - modifiedBefore: Date before which the device data was last modified.
+    ///   - observedAfter: Search for device data points observed after this date.
+    ///   - observedBefore: Search for device data points observed before this date.
+    ///   - modifiedAfter: Search for device data points updated in the system after this date.
+    ///   - modifiedBefore: Search for device data points updated in the system before this date.
     ///   - limit: Maximum number of results per page.
     ///   - pageID: Identifies a specific page of data to fetch.
     public init(namespace: DeviceDataNamespace, types: Set<String>? = nil, observedAfter: Date? = nil, observedBefore: Date? = nil, modifiedAfter: Date? = nil, modifiedBefore: Date? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
@@ -115,7 +117,7 @@ public struct DeviceDataPoint: Decodable {
     public let deviceDataContextID: String?
     /// Date when the data point was first added.
     public let insertedDate: Date
-    /// Date when the data point was last modified.
+    /// Date when the data point was last updated in the system.
     public let modifiedDate: Date
     /// String used to name a device data point.
     public let identifier: String?

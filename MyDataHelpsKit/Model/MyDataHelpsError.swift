@@ -16,9 +16,9 @@ public enum MyDataHelpsError: Error {
     case decodingError(Error)
     /// Failure to encode a model object.
     case encodingError(Error)
-    /// Unexpected server error, e.g. an HTTP 500 error.
+    /// Unexpected server error, e.g. an HTTP 500 error. Check the included `HTTPResponseError` for details, and [contact support](https://developer.rkstudio.careevolution.com/help.html) if you need help determining the problem.
     case serverError(HTTPResponseError)
-    /// Server request limit exceeded. The associated `APIRateLimit` indicates when throttling will reset, and the `HTTPResponseError` may include an error message (non-localized) suitable for debugging.
+    /// Server request limit exceeded. The associated `APIRateLimit` indicates when throttling will reset, and the `HTTPResponseError` may include an error message (non-localized) suitable for debugging. [Contact support](https://developer.rkstudio.careevolution.com/help.html) with any questions.
     case tooManyRequests(APIRateLimit, HTTPResponseError)
     /// A server request timed out.
     case timedOut(Error)

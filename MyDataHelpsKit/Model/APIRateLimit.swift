@@ -9,11 +9,11 @@ import Foundation
 
 /// Information about MyDataHelps API request limits (throttling).
 ///
-/// MyDataHelps API endpoints may limit the frequency of incoming requests, counting the cumulative number of requests in hourly intervals per project or similar scope, and resetting the counter at the end of each interval. If the limit is exceeded, requests will fail until the next scheduled reset time. Failures due to rate limiting are indicated by the `MyDataHelpsError.tooManyRequests` error case.
+/// The MyDataHelps API has a rate limiting feature to preserve stability for all customers. The API counts the cumulative number of requests in hourly intervals per participant or similar scope, resetting the counter at the end of each interval. If the limit is exceeded within a short timeframe, requests will fail until the next scheduled reset. Failures due to rate limiting are indicated by the `MyDataHelpsError.tooManyRequests` error case.
 ///
 /// The properties of APIRateLimit should be considered approximate and may have changed before your app reads them, for example due to other clients making concurrent requests.
 public struct APIRateLimit {
-    /// Maximum number of requests allowed per hour for this client or MyDataHelps project.
+    /// Maximum number of requests allowed per hour for this client or MyDataHelps project. Exact rate limits will vary based on project licensing and scope.
     public let maxRequestsPerHour: Int
     /// Approximate number of API requests remaining until the limit is exceeded.
     public let remainingRequests: Int
