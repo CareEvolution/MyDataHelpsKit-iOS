@@ -7,17 +7,15 @@
 
 import Foundation
 
-/// Information about MyDataHelps API request limits (throttling).
+/// Information about MyDataHelps API request limits (throttling). The MyDataHelps API has a rate limiting feature to preserve stability for all customers. Failures due to rate limiting are indicated by the `MyDataHelpsError.tooManyRequests` error case.
 ///
-/// The MyDataHelps API has a rate limiting feature to preserve stability for all customers. The API counts the cumulative number of requests in hourly intervals per participant or similar scope, resetting the counter at the end of each interval. If the limit is exceeded within a short timeframe, requests will fail until the next scheduled reset. Failures due to rate limiting are indicated by the `MyDataHelpsError.tooManyRequests` error case.
-///
-/// The properties of APIRateLimit should be considered approximate and may have changed before your app reads them, for example due to other clients making concurrent requests.
+/// The properties of APIRateLimit help you understand your rate limits and usage, which may vary based on project licensing and scope. See [Rate Limits documentation](https://developer.rkstudio.careevolution.com/api/limits.html) for additional information.
 public struct APIRateLimit {
-    /// Maximum number of requests allowed per hour for this client or MyDataHelps project. Exact rate limits will vary based on project licensing and scope.
+    /// Number of requests allowed per hour (total) for this scope.
     public let maxRequestsPerHour: Int
-    /// Approximate number of API requests remaining until the limit is exceeded.
+    /// Number of requests remaining this hour for this scope.
     public let remainingRequests: Int
-    /// Indicates the approximate time the request limit counter will be reset. If your API interactions are failing with the `tooManyRequests` error, they should work again if you retry after the `nextReset` date.
+    /// When the rate limit will be reset. If your API interactions are failing with the `tooManyRequests` error, they should work again if you retry after the `nextReset` date.
     public let nextReset: Date
     
     init?(response: HTTPURLResponse) {

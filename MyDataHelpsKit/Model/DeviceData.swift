@@ -76,7 +76,7 @@ public struct DeviceDataResultPage: PagedResult, Decodable {
 public struct DeviceDataNamespace: RawRepresentable, Equatable, Decodable {
     public typealias RawValue = String
     
-    /// Data persisted by the Persist Device Data Points operation.
+    /// Project-specific device data.
     public static let project = DeviceDataNamespace(rawValue: "Project")
     
     /// Data imported from a linked Fitbit account.
