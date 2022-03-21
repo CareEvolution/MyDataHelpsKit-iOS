@@ -29,6 +29,12 @@ struct SurveyAnswersQueryResource: ParticipantResource {
         if let before = query.before?.queryStringEncoded {
             queryItems.append(.init(name: "before", value: before))
         }
+        if let insertedAfter = query.insertedAfter?.queryStringEncoded {
+            queryItems.append(.init(name: "insertedAfter", value: insertedAfter))
+        }
+        if let insertedBefore = query.insertedBefore?.queryStringEncoded {
+            queryItems.append(.init(name: "insertedBefore", value: insertedBefore))
+        }
         if let stepIdentifiers = query.stepIdentifiers?.commaDelimitedQueryValue {
             queryItems.append(.init(name: "stepIdentifier", value: stepIdentifiers))
         }

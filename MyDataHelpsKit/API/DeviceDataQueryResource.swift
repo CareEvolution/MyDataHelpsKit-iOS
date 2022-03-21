@@ -24,6 +24,12 @@ struct DeviceDataQueryResource: ParticipantResource {
         if let observedBefore = query.observedBefore?.queryStringEncoded {
             queryItems.append(.init(name: "observedBefore", value: observedBefore))
         }
+        if let modifiedAfter = query.modifiedAfter?.queryStringEncoded {
+            queryItems.append(.init(name: "modifiedAfter", value: modifiedAfter))
+        }
+        if let modifiedBefore = query.modifiedBefore?.queryStringEncoded {
+            queryItems.append(.init(name: "modifiedBefore", value: modifiedBefore))
+        }
         
         queryItems.append(.init(name: "limit", value: "\(query.limit)"))
         if let pageID = query.pageID {

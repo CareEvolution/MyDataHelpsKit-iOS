@@ -101,6 +101,18 @@ extension URLRequest {
     }
 }
 
+extension HTTPURLResponse {
+    /// Shim for `value(forHTTPHeaderField:)` which is iOS 13-only.
+    func headerValue(field: String) -> String? {
+        if #available(iOS 13.0, *) {
+            return value(forHTTPHeaderField: field)
+        } else {
+            // Cast to NSDictionary so key lookup is case-insensitive
+            return (allHeaderFields as NSDictionary)[field] as? String
+        }
+    }
+}
+
 extension Collection where Element == String {
     var commaDelimitedQueryValue: String? {
         guard !isEmpty else { return nil }

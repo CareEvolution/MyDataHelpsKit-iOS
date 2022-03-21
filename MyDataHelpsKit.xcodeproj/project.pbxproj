@@ -35,6 +35,8 @@
 		AC9DC9C0260A876F00C5D9E4 /* MyDataHelpsClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */; };
 		ACA1A86726D5413A00CBD7EA /* ExternalAccountProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA1A86626D5413A00CBD7EA /* ExternalAccountProviders.swift */; };
 		ACA1A86926D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA1A86826D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift */; };
+		ACBF66C427CFD37200BC6945 /* APIRateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBF66C327CFD37200BC6945 /* APIRateLimit.swift */; };
+		ACBF66C627CFE18800BC6945 /* APIRateLimitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBF66C527CFE18800BC6945 /* APIRateLimitTests.swift */; };
 		ACC2EB9B261252F50080A3B5 /* SDKVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */; };
 		ACEAF44C26D67CE0002F79AB /* ExternalAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */; };
 		ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */; };
@@ -85,6 +87,8 @@
 		AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDataHelpsClientTests.swift; sourceTree = "<group>"; };
 		ACA1A86626D5413A00CBD7EA /* ExternalAccountProviders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountProviders.swift; sourceTree = "<group>"; };
 		ACA1A86826D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountProvidersQueryResource.swift; sourceTree = "<group>"; };
+		ACBF66C327CFD37200BC6945 /* APIRateLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRateLimit.swift; sourceTree = "<group>"; };
+		ACBF66C527CFE18800BC6945 /* APIRateLimitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRateLimitTests.swift; sourceTree = "<group>"; };
 		ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKVersion.swift; sourceTree = "<group>"; };
 		ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccounts.swift; sourceTree = "<group>"; };
 		ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountsTests.swift; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 		AC77B50625E852EE00427294 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				ACBF66C327CFD37200BC6945 /* APIRateLimit.swift */,
 				AC83ABB525E864DC00A668E4 /* DeviceData.swift */,
 				AC77B50F25E856D000427294 /* MyDataHelpsError.swift */,
 				AC9DC9B52609064800C5D9E4 /* NotificationHistory.swift */,
@@ -192,6 +197,7 @@
 		AC83ABDA25F131DA00A668E4 /* MyDataHelpsKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				ACBF66C527CFE18800BC6945 /* APIRateLimitTests.swift */,
 				ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */,
 				AC83ABDD25F131DA00A668E4 /* Info.plist */,
 				AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */,
@@ -275,7 +281,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1320;
 				TargetAttributes = {
 					AC77B4B825E8495C00427294 = {
 						CreatedOnToolsVersion = 12.4;
@@ -366,6 +372,7 @@
 				AC83ABB125E85BB900A668E4 /* GetParticipantInfoResource.swift in Sources */,
 				AC77B50925E8535B00427294 /* ParticipantAccessToken.swift in Sources */,
 				AC83ABBD25E885D700A668E4 /* PersistDeviceDataResource.swift in Sources */,
+				ACBF66C427CFD37200BC6945 /* APIRateLimit.swift in Sources */,
 				AC77B51525E8576A00427294 /* ParticipantResource.swift in Sources */,
 				27AA30DB26D68ECB00AC0D2C /* ExternalAccountsResource.swift in Sources */,
 				ACEAF44C26D67CE0002F79AB /* ExternalAccounts.swift in Sources */,
@@ -384,6 +391,7 @@
 			files = (
 				AC83ABDC25F131DA00A668E4 /* URLRequestsTests.swift in Sources */,
 				AC9DC9C0260A876F00C5D9E4 /* MyDataHelpsClientTests.swift in Sources */,
+				ACBF66C627CFE18800BC6945 /* APIRateLimitTests.swift in Sources */,
 				ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

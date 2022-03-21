@@ -10,6 +10,8 @@ import Foundation
 /// Specifies filtering and page-navigation criteria for device data point queries.
 ///
 /// All query properties are optional. Set non-nil/non-default values only for the properties you want to use for filtering.
+///
+/// You can filter device data by two different type of dates: `modifiedBefore/After` and `observedBefore/After`. Due to variations and limitations in device data synchronization, it is possible for older data points to turn up in the system unpredictably. Using the "observed" query parameters will search based on the date the data was observed or recorded by the device, while the "modified" parameters will search based on the date it arrived in the system. Use the `modifiedAfter` property to search for data that has arrived since a prior query.
 public struct DeviceDataQuery: PagedQuery {
     /// The default and maximum number of results per page.
     public static let defaultLimit = 100
@@ -18,10 +20,14 @@ public struct DeviceDataQuery: PagedQuery {
     public let namespace: DeviceDataNamespace
     /// Filter by one or more types/categories within the given namespace, e.g. "HeartRate"
     public let types: Set<String>?
-    /// Date after which the device data was observed.
+    /// Search for device data points observed after this date.
     public let observedAfter: Date?
-    /// Date before which the device data was observed.
+    /// Search for device data points observed before this date.
     public let observedBefore: Date?
+    /// Search for device data points updated in the system after this date.
+    public let modifiedAfter: Date?
+    /// Search for device data points updated in the system before this date.
+    public let modifiedBefore: Date?
     
     /// Maximum number of results per page. Default and maximum value is 100.
     public let limit: Int
@@ -32,15 +38,19 @@ public struct DeviceDataQuery: PagedQuery {
     /// - Parameters:
     ///   - namespace: Specifies the source framework for the device data.
     ///   - types: Filter by one or more types/categories within the given namespace, e.g. "HeartRate".
-    ///   - observedAfter: Date after which the device data was observed.
-    ///   - observedBefore: Date before which the device data was observed.
+    ///   - observedAfter: Search for device data points observed after this date.
+    ///   - observedBefore: Search for device data points observed before this date.
+    ///   - modifiedAfter: Search for device data points updated in the system after this date.
+    ///   - modifiedBefore: Search for device data points updated in the system before this date.
     ///   - limit: Maximum number of results per page.
     ///   - pageID: Identifies a specific page of data to fetch.
-    public init(namespace: DeviceDataNamespace, types: Set<String>? = nil, observedAfter: Date? = nil, observedBefore: Date? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
+    public init(namespace: DeviceDataNamespace, types: Set<String>? = nil, observedAfter: Date? = nil, observedBefore: Date? = nil, modifiedAfter: Date? = nil, modifiedBefore: Date? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
         self.namespace = namespace
         self.types = types
         self.observedAfter = observedAfter
         self.observedBefore = observedBefore
+        self.modifiedAfter = modifiedAfter
+        self.modifiedBefore = modifiedBefore
         self.limit = Self.clampedLimit(limit, max: Self.defaultLimit)
         self.pageID = pageID
     }
@@ -50,7 +60,7 @@ public struct DeviceDataQuery: PagedQuery {
     /// - Returns: A query for results following `page`, if page has a `nextPageID`. If there are no additional pages of results available, returns `nil`. The query returned, if any, has the same filters as the original.
     public func page(after page: DeviceDataResultPage) -> DeviceDataQuery? {
         guard let nextPageID = page.nextPageID else { return nil }
-        return DeviceDataQuery(namespace: namespace, types: types, observedAfter: observedAfter, observedBefore: observedBefore, limit: limit, pageID: nextPageID)
+        return DeviceDataQuery(namespace: namespace, types: types, observedAfter: observedAfter, observedBefore: observedBefore, modifiedAfter: modifiedAfter, modifiedBefore: modifiedBefore, limit: limit, pageID: nextPageID)
     }
 }
 
@@ -61,23 +71,31 @@ public struct DeviceDataResultPage: PagedResult, Decodable {
     /// An ID to be used with subsequent `DeviceDataQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
     public let nextPageID: String?
 }
-
-/// Specifies the source framework for the device data.
+    
+/// Device data is grouped into namespaces, which represent the source frameworks that generate the data. There is also a separate `project` namespace, where projects can persist their own data. The static members of DeviceDataNamespace identify all supported namespace values.
 public struct DeviceDataNamespace: RawRepresentable, Equatable, Decodable {
     public typealias RawValue = String
     
-    /// Data imported from a linked Apple Health account.
-    public static let appleHealth = DeviceDataNamespace(rawValue: "AppleHealth")
+    /// Project-specific device data.
+    public static let project = DeviceDataNamespace(rawValue: "Project")
+    
     /// Data imported from a linked Fitbit account.
     public static let fitbit = DeviceDataNamespace(rawValue: "Fitbit")
+    
+    /// Data imported from a linked Apple Health account.
+    public static let appleHealth = DeviceDataNamespace(rawValue: "AppleHealth")
+    
     /// Data imported from a linked Google Fit account.
     public static let googleFit = DeviceDataNamespace(rawValue: "GoogleFit")
+    
     /// Air quality index data imported from AirNow.gov.
     public static let airNowApi = DeviceDataNamespace(rawValue: "AirNowApi")
+    
     /// Weather forecast data imported from WeatherBit.io.
     public static let weatherBit = DeviceDataNamespace(rawValue: "WeatherBit")
-    /// Data persisted by the Persist Device Data Points operation.
-    public static let project = DeviceDataNamespace(rawValue: "Project")
+    
+    /// Data imported from Omron wellness products.
+    public static let omron = DeviceDataNamespace(rawValue: "Omron")
     
     /// The raw value for the namespace as stored in RKStudio.
     public let rawValue: String
@@ -99,7 +117,7 @@ public struct DeviceDataPoint: Decodable {
     public let deviceDataContextID: String?
     /// Date when the data point was first added.
     public let insertedDate: Date
-    /// Date when the data point was last modified.
+    /// Date when the data point was last updated in the system.
     public let modifiedDate: Date
     /// String used to name a device data point.
     public let identifier: String?
