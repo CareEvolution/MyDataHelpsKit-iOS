@@ -15,7 +15,7 @@ public final class MyDataHelpsClient {
     public static let SDKVersion = MyDataHelpsKitVersion
     
     /// Default base URL to use for MyDataHelps API requests.
-    private static let defaultBaseURL = URL(string: "https://rkstudio.careevolution.com/ppt/")!
+    private static let defaultBaseURL = URL(string: "https://mydatahelps.org/")!
     private static let requestTimeoutInterval: TimeInterval = 30
     
     internal let baseURL: URL

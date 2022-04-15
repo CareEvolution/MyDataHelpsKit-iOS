@@ -11,13 +11,13 @@ import XCTest
 class MyDataHelpsClientTests: XCTestCase {
     func testDefaultBaseURL() {
         let sut = MyDataHelpsClient()
-        XCTAssertEqual(sut.baseURL.absoluteString, "https://rkstudio.careevolution.com/ppt/", "Default client uses correct base URL")
+        XCTAssertEqual(sut.baseURL.absoluteString, "https://mydatahelps.org/", "Default client uses correct base URL")
     }
     
     func testEndpoint() {
         var sut = MyDataHelpsClient()
         var url = sut.endpoint(path: "example/path/1")
-        XCTAssertEqual(url.absoluteString, "https://rkstudio.careevolution.com/ppt/example/path/1", "Default client uses correct base URL in endpoint URLs")
+        XCTAssertEqual(url.absoluteString, "https://mydatahelps.org/example/path/1", "Default client uses correct base URL in endpoint URLs")
         
         sut = MyDataHelpsClient(baseURL: URL(string: "https://example.com/api/")!)
         url = sut.endpoint(path: "example/path/2")
@@ -28,10 +28,10 @@ class MyDataHelpsClientTests: XCTestCase {
     func testEndpointWithQueryItems() {
         let sut = MyDataHelpsClient()
         var url = try? sut.endpoint(path: "example", queryItems: [])
-        XCTAssertEqual(url?.absoluteString, "https://rkstudio.careevolution.com/ppt/example?")
+        XCTAssertEqual(url?.absoluteString, "https://mydatahelps.org/example?")
         
         url = try? sut.endpoint(path: "example/path", queryItems: [.init(name: "a", value: "b")])
-        XCTAssertEqual(url?.absoluteString, "https://rkstudio.careevolution.com/ppt/example/path?a=b")
+        XCTAssertEqual(url?.absoluteString, "https://mydatahelps.org/example/path?a=b")
     }
     
     func testEmbeddableURLs() {
@@ -41,8 +41,8 @@ class MyDataHelpsClientTests: XCTestCase {
         let taskLinkID = UUID().uuidString
         let languageTag = sut.languageTag
         var url = try? sut.embeddableSurveyURL(surveyName: surveyName, participantLinkIdentifier: participantLinkID).get()
-        XCTAssertEqual(url?.absoluteString, "https://rkstudio.careevolution.com/ppt/mydatahelps/\(participantLinkID)/surveylink/\(surveyName)?lang=\(languageTag)")
+        XCTAssertEqual(url?.absoluteString, "https://mydatahelps.org/mydatahelps/\(participantLinkID)/surveylink/\(surveyName)?lang=\(languageTag)")
         url = try? sut.embeddableSurveyURL(taskLinkIdentifier: taskLinkID, participantLinkIdentifier: participantLinkID).get()
-        XCTAssertEqual(url?.absoluteString, "https://rkstudio.careevolution.com/ppt/mydatahelps/\(participantLinkID)/tasklink/\(taskLinkID)?lang=\(languageTag)")
+        XCTAssertEqual(url?.absoluteString, "https://mydatahelps.org/mydatahelps/\(participantLinkID)/tasklink/\(taskLinkID)?lang=\(languageTag)")
     }
 }
