@@ -10,13 +10,13 @@ import XCTest
 
 private let accountsJSON = """
     [
-        { "id": 100, "status": "fetchComplete", "provider": { "id": 1, "name": "RKStudio Demo Provider", "category": "Provider", "logoUrl": "https://careevolution.com/images/rkstudio-logo.png" }, "lastRefreshDate": "2021-08-01T12:34:56.000Z" }
+        { "id": 100, "status": "fetchComplete", "provider": { "id": 1, "name": "MyDataHelps Demo Provider", "category": "Provider", "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png" }, "lastRefreshDate": "2021-08-01T12:34:56.000Z" }
     ]
     """.data(using: .utf8)!
 
 private let providersJSON = """
     [
-        { "id": 1, "name": "RKStudio Demo Provider", "category": "Provider", "logoUrl": "https://careevolution.com/images/rkstudio-logo.png" }
+        { "id": 1, "name": "MyDataHelps Demo Provider", "category": "Provider", "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png" }
     ]
     """.data(using: .utf8)!
 
@@ -27,8 +27,8 @@ class ExternalAccountsTests: XCTestCase {
         if let first = list.first {
             XCTAssertEqual(first.id, 100)
             XCTAssertEqual(first.status, .fetchComplete)
-            XCTAssertEqual(first.provider.name, "RKStudio Demo Provider")
-            XCTAssertEqual(first.provider.logoURL?.absoluteString, "https://careevolution.com/images/rkstudio-logo.png")
+            XCTAssertEqual(first.provider.name, "MyDataHelps Demo Provider")
+            XCTAssertEqual(first.provider.logoURL?.absoluteString, "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")
             XCTAssertNotNil(first.lastRefreshDate)
         }
     }
@@ -39,7 +39,7 @@ class ExternalAccountsTests: XCTestCase {
         if let first = list.first {
             XCTAssertEqual(first.id, 1)
             XCTAssertEqual(first.category, .provider)
-            XCTAssertEqual(first.logoURL?.absoluteString, "https://careevolution.com/images/rkstudio-logo.png")
+            XCTAssertEqual(first.logoURL?.absoluteString, "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")
         }
     }
 }

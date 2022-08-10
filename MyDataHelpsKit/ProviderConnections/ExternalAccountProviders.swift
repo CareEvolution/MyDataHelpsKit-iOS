@@ -8,7 +8,7 @@
 import Foundation
 
 public extension ParticipantSession {
-    /// Query the list of external account providers supported by RKStudio.
+    /// Query the list of external account providers supported by MyDataHelps.
     /// - Parameters:
     ///   - query: Specifies how to filter the providers.
     ///   - completion: Called when the request is complete, with an array of `ExternalAccountProvider` on success or an error on failure.
@@ -28,7 +28,7 @@ public extension ParticipantSession {
     /// - [Universal Link](https://developer.apple.com/library/archive/documentation/General/Conceptual/AppSearch/UniversalLinks.html), e.g. `https://my.app/linkprovidercompletion`. The Universal Link domain and path must be fully configured in your app's entitlements file, the apple-app-site-association file hosted at the `my.app` domain, etc.
     /// - [Custom scheme](https://developer.apple.com/documentation/xcode/defining-a-custom-url-scheme-for-your-app), e.g. `myapp://linkprovidercompletion`. Your app's Info.plist file must register the scheme `myapp` in the URL Types list.
     ///
-    /// Contact [CareEvolution support](https://developer.rkstudio.careevolution.com/help.html) to have your `finalRedirectURL` added to the list of allowed URLs in RKStudio. If the URL is not in the allow list, this API will produce an error result.
+    /// Contact [CareEvolution support](https://developer.mydatahelps.org/help.html) to have your `finalRedirectURL` added to the list of allowed URLs in MyDataHelps. If the URL is not in the allow list, this API will produce an error result.
     /// - Parameters:
     ///   - provider: The external account provider to connect.
     ///   - finalRedirectURL: A URL that is configured to open your app via a custom scheme or Universal Link.
@@ -70,17 +70,17 @@ public struct ExternalAccountProviderCategory: RawRepresentable, Equatable, Hash
     /// A provider that represents a device manufacturer.
     public static let deviceManufacturer = ExternalAccountProviderCategory(rawValue: "Device Manufacturer")
     
-    /// The raw value for the provider category as stored in RKStudio.
+    /// The raw value for the provider category as stored in MyDataHelps.
     public let rawValue: String
     
     /// Initializes an `ExternalAccountProviderCategory` with an arbitrary value. Consider using static members such as `ExternalAccountProviderCategory.provider` instead for known values.
-    /// - Parameter rawValue: The raw value for the provider category as stored in RKStudio.
+    /// - Parameter rawValue: The raw value for the provider category as stored in MyDataHelps.
     public init(rawValue: String) {
         self.rawValue = rawValue
     }
 }
 
-/// An external account provider supported by RKStudio.
+/// An external account provider supported by MyDataHelps.
 ///
 /// Use `ParticipantSession.connectExternalAccount` to initiate a connected account between the participant and this provider.
 public struct ExternalAccountProvider: Decodable {

@@ -93,11 +93,11 @@ public struct NotificationSendStatusCode: RawRepresentable, Equatable, Decodable
     /// The notification was not sent due to an error.
     public static let serviceError = NotificationSendStatusCode(rawValue: "serviceError")
     
-    /// The raw value for the status code as stored in RKStudio.
+    /// The raw value for the status code as stored in MyDataHelps.
     public let rawValue: String
     
     /// Initializes a `NotificationSendStatusCode` with an arbitrary value. Consider using static members such as `NotificationSendStatusCode.succeeded` instead for known values.
-    /// - Parameter rawValue: The raw value for the status code as stored in RKStudio.
+    /// - Parameter rawValue: The raw value for the status code as stored in MyDataHelps.
     public init(rawValue: String) {
         self.rawValue = rawValue
     }

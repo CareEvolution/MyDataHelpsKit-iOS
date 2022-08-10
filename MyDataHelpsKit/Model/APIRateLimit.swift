@@ -9,7 +9,7 @@ import Foundation
 
 /// Information about MyDataHelps API request limits (throttling). The MyDataHelps API has a rate limiting feature to preserve stability for all customers. Failures due to rate limiting are indicated by the `MyDataHelpsError.tooManyRequests` error case.
 ///
-/// The properties of APIRateLimit help you understand your rate limits and usage, which may vary based on project licensing and scope. See [Rate Limits documentation](https://developer.rkstudio.careevolution.com/api/limits.html) for additional information.
+/// The properties of APIRateLimit help you understand your rate limits and usage, which may vary based on project licensing and scope. See [Rate Limits documentation](https://developer.mydatahelps.org/api/limits.html) for additional information.
 public struct APIRateLimit {
     /// Number of requests allowed per hour (total) for this scope.
     public let maxRequestsPerHour: Int

@@ -20,7 +20,7 @@ public struct SurveyAnswersQuery: PagedQuery {
     public let surveyResultID: String?
     /// Auto-generated, globally-unique identifier for the survey containing the step the answer was provided for.
     public let surveyID: String?
-    /// Filter by one or more internal names of the surveys in RKStudio which have the answers.
+    /// Filter by one or more internal names of the surveys which have the answers.
     public let surveyNames: Set<String>?
     /// Search for answers recorded by the participant after a specific date.
     public let after: Date?
@@ -46,7 +46,7 @@ public struct SurveyAnswersQuery: PagedQuery {
     /// - Parameters:
     ///   - surveyResultID: Auto-generated, globally-unique identifier for the survey submission containing the answer.
     ///   - surveyID: Auto-generated, globally-unique identifier for the survey containing the step the answer was provided for.
-    ///   - surveyNames: Filter by one or more internal names of the surveys in RKStudio which have the answers.
+    ///   - surveyNames: Filter by one or more internal names of the surveys which have the answers.
     ///   - after: Search for answers recorded by the participant after a specific date.
     ///   - before: Search for answers recorded by the participant before a specific date.
     ///   - insertedAfter: Search for answers submitted to the system after a specific date.
@@ -100,7 +100,7 @@ public struct SurveyAnswer: Decodable {
     public let surveyVersion: Int
     /// Auto-generated, globally-unique identifier for the task which prompted the participant to complete the survey, if any.
     public let taskID: String?
-    /// Internal name for the survey in RKStudio.
+    /// Internal name for the survey in MyDataHelps.
     public let surveyName: String
     /// Name of the survey displayed to the participant.
     public let surveyDisplayName: String
