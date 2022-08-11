@@ -79,3 +79,28 @@ public struct Organization: Decodable {
     /// The organization's brand color, expressed as a hexadecimal string. For example, `"#000000"`.
     public let color: String
 }
+
+public struct ProjectDataCollectionSettings: Decodable {
+    /// Indicates whether Fitbit data collection is enabled for this project.
+    public let fitbitEnabled: Bool
+    /// Indicates whether Electronic Health Record data collection is enabled for this project.
+    public let ehrEnabled: Bool
+    /// Indicates whether Air Quality data collection is enabled for this project.
+    public let airQualityEnabled: Bool
+    /// Indicates whether Weather data collection is enabled for this project.
+    public let weatherEnabled: Bool
+    /// A collection of device data types that are supported by the current project configuration and can be queried using `ParticipantSession.queryDeviceData`. A participant may not have data available for all data types.
+    public let queryableDeviceDataTypes: Set<QueryableDeviceDataType>
+    /// Date when sensor data collection ended or will end for this participant.
+    ///
+    /// More Info: [Stopping Device Data Collection](https://support.mydatahelps.org/hc/en-us/articles/4404704688915-Defining-End-of-Project-for-Participants#h_01FMARCJ1S5T80A6X4M115E551).
+    public let sensorDataCollectionEndDate: Date?
+}
+
+/// Information about a single device data type that is supported by the current project configuration and can be queried using the Device Data API.
+public struct QueryableDeviceDataType: Decodable, Equatable, Hashable {
+    /// The namespace to use when querying for device data.
+    public let namespace: DeviceDataNamespace
+    /// The type to use when querying for device data.
+    public let type: String
+}

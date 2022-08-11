@@ -2,7 +2,7 @@
 //  ProjectModelTests.swift
 //  MyDataHelpsKitTests
 //
-//  Created by Mike Mertsock on 8/11/22.
+//  Created by CareEvolution on 8/11/22.
 //
 
 import XCTest
@@ -114,5 +114,44 @@ class ProjectModelTests: XCTestCase {
         
         let project = try decoder.decode(ProjectInfo.self, from: json)
         XCTAssertNil(project.learnMoreURL)
+    }
+    
+    func testDecodeDataCollectionSettingsWithAllKeysPresent() throws {
+        let decoder = JSONDecoder.myDataHelpsDecoder
+        let json = """
+{
+    "fitbitEnabled": true,
+    "ehrEnabled": false,
+    "airQualityEnabled": true,
+    "weatherEnabled": false,
+    "queryableDeviceDataTypes": [
+        {
+            "namespace": "GoogleFit",
+            "type": "HeartRate"
+        },
+        {
+            "namespace": "AppleHealth",
+            "type": "Steps"
+        }
+    ],
+    "sensorDataCollectionEndDate": "2022-08-11T12:00:00Z"
+}
+""".data(using: .utf8)!
+        
+        let settings = try decoder.decode(ProjectDataCollectionSettings.self, from: json)
+        XCTAssertTrue(settings.fitbitEnabled, "fitbitEnabled")
+        XCTAssertFalse(settings.ehrEnabled, "!ehrEnabled")
+        XCTAssertTrue(settings.airQualityEnabled, "airQualityEnabled")
+        XCTAssertFalse(settings.weatherEnabled, "!weatherEnabled")
+        XCTAssertEqual(settings.queryableDeviceDataTypes.count, 2)
+        XCTAssertTrue(settings.queryableDeviceDataTypes.contains(.init(namespace: .googleFit, type: "HeartRate")), "queryableDeviceDataTypes contains HeartRate")
+        XCTAssertTrue(settings.queryableDeviceDataTypes.contains(.init(namespace: .appleHealth, type: "Steps")), "queryableDeviceDataTypes contains Steps")
+        XCTAssertNotNil(settings.sensorDataCollectionEndDate, "sensorDataCollectionEndDate not nil")
+        
+        if let sensorDataCollectionEndDate = settings.sensorDataCollectionEndDate {
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = .init(secondsFromGMT: 0)!
+            XCTAssertTrue(calendar.date(sensorDataCollectionEndDate, matchesComponents: .init(year: 2022, month: 8, day: 11, hour: 12, minute: 0, second: 0)), "sensorDataCollectionEndDate is correct")
+        }
     }
 }

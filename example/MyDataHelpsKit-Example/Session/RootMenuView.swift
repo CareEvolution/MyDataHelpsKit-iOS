@@ -49,8 +49,9 @@ struct RootMenuView: View {
                     .roundRectComponent()
             }
             
-            if case let .some(.success(project)) = participant.project {
-                ProjectInfoView(project: project)
+            if case let .some(.success(project)) = participant.project,
+               case let .some(.success(dataCollectionSettings)) = participant.dataCollectionSettings {
+                ProjectInfoView(project: project, dataCollectionSettings: dataCollectionSettings)
                     .roundRectComponent()
             }
             
@@ -130,6 +131,7 @@ struct RootMenuView: View {
     func loadParticipantInfo() {
         participant.loadInfo()
         participant.loadProject()
+        participant.loadDataCollectionSettings()
     }
 }
 

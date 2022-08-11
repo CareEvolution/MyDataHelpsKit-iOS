@@ -12,6 +12,7 @@ import MyDataHelpsKit
 protocol ParticipantSessionType {
     func getParticipantInfoViewModel(completion: @escaping (Result<ParticipantInfoViewModel, MyDataHelpsError>) -> Void)
     func getProjectInfo(completion: @escaping (Result<ProjectInfo, MyDataHelpsError>) -> Void)
+    func getDataCollectionSettings(completion: @escaping (Result<ProjectDataCollectionSettings, MyDataHelpsError>) -> Void)
     func queryDeviceData(_ query: DeviceDataQuery, completion: @escaping (Result<DeviceDataResultPage, MyDataHelpsError>) -> Void)
     func querySurveyTasks(_ query: SurveyTaskQuery, completion: @escaping (Result<SurveyTaskResultPage, MyDataHelpsError>) -> Void)
     func querySurveyAnswers(_ query: SurveyAnswersQuery, completion: @escaping (Result<SurveyAnswersPage, MyDataHelpsError>) -> Void)
@@ -49,6 +50,10 @@ class ParticipantSessionPreview: ParticipantSessionType {
     
     func getProjectInfo(completion: @escaping (Result<ProjectInfo, MyDataHelpsError>) -> Void) {
         completion(.success(ProjectInfoView_Previews.project))
+    }
+    
+    func getDataCollectionSettings(completion: @escaping (Result<ProjectDataCollectionSettings, MyDataHelpsError>) -> Void) {
+        completion(.success(ProjectInfoView_Previews.projectDataCollectionSettings))
     }
     
     func queryDeviceData(_ query: DeviceDataQuery, completion: @escaping (Result<DeviceDataResultPage, MyDataHelpsError>) -> Void) {

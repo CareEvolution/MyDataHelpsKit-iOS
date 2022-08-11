@@ -43,6 +43,12 @@ public final class ParticipantSession {
         load(resource: GetProjectInfoResource(), completion: completion)
     }
     
+    /// Retrieves settings related to data collection for the participant and their project.
+    /// - Parameter completion: Called when the request is complete, with a ``ProjectDataCollectionSettings`` instance on success or an error on failure.
+    public func getDataCollectionSettings(completion: @escaping (Result<ProjectDataCollectionSettings, MyDataHelpsError>) -> Void) {
+        load(resource: GetProjectDataCollectionSettingsResource(), completion: completion)
+    }
+    
     // MARK: Device data
     
     /// Queries device data for the participant.

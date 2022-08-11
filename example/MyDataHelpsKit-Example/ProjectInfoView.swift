@@ -10,6 +10,7 @@ import MyDataHelpsKit
 
 struct ProjectInfoView: View {
     let project: ProjectInfo
+    let dataCollectionSettings: ProjectDataCollectionSettings
     
     var body: some View {
         HStack(alignment: .top) {
@@ -23,11 +24,14 @@ struct ProjectInfoView: View {
                     .font(.footnote)
                 Text(project.code)
                     .font(.caption)
+                Text("Queryable data types: \(dataCollectionSettings.queryableDeviceDataTypes.count)")
+                    .font(.caption)
                 if let learnMoreURL = project.learnMoreURL,
                    let learnMoreTitle = project.learnMoreTitle {
                     Link(learnMoreTitle, destination: learnMoreURL)
                         .font(.caption)
                 }
+                
             }
         }
     }
@@ -55,11 +59,35 @@ struct ProjectInfoView_Previews: PreviewProvider {
 }
 """.data(using: .utf8)!
     
+    private static let projectDataCollectionSettingsJSON: Data = """
+{
+    "fitbitEnabled": true,
+    "ehrEnabled": true,
+    "airQualityEnabled": true,
+    "weatherEnabled": true,
+    "queryableDeviceDataTypes": [
+        {
+            "namespace": "GoogleFit",
+            "type": "HeartRate"
+        },
+        {
+            "namespace": "AppleHealth",
+            "type": "Steps"
+        }
+    ],
+    "sensorDataCollectionEndDate": null
+}
+""".data(using: .utf8)!
+    
     static var project: ProjectInfo {
         try! JSONDecoder.myDataHelpsDecoder.decode(ProjectInfo.self, from: projectJSON)
     }
     
+    static var projectDataCollectionSettings: ProjectDataCollectionSettings {
+        try! JSONDecoder.myDataHelpsDecoder.decode(ProjectDataCollectionSettings.self, from: projectDataCollectionSettingsJSON)
+    }
+    
     static var previews: some View {
-        ProjectInfoView(project: project)
+        ProjectInfoView(project: project, dataCollectionSettings: projectDataCollectionSettings)
     }
 }
