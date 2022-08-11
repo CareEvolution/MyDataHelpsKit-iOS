@@ -49,6 +49,11 @@ struct RootMenuView: View {
                     .roundRectComponent()
             }
             
+            if case let .some(.success(project)) = participant.project {
+                ProjectInfoView(project: project)
+                    .roundRectComponent()
+            }
+            
             /// EXERCISE: Modify the `types` set to filter for different types of HealthKit data used by your project, or add additional optional parameters to the `DeviceDataQuery` to further customize filtering.
             NavigationLink(
                 destination: DeviceDataPointView.pageView(session: participant.session, namespace: .appleHealth, types: Set(["StandHourInterval"]))
@@ -124,6 +129,7 @@ struct RootMenuView: View {
     
     func loadParticipantInfo() {
         participant.loadInfo()
+        participant.loadProject()
     }
 }
 

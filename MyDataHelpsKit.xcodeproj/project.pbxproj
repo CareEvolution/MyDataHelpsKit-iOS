@@ -11,6 +11,9 @@
 		AC02E68425FA7FCD008A46E4 /* SurveyTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC02E68325FA7FCD008A46E4 /* SurveyTasks.swift */; };
 		AC02E68825FA8056008A46E4 /* SurveyTaskQueryResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC02E68725FA8056008A46E4 /* SurveyTaskQueryResource.swift */; };
 		AC02E69C25FAA979008A46E4 /* Diagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC02E69B25FAA979008A46E4 /* Diagnostics.swift */; };
+		AC0D4E6B28A55E4300FE145B /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0D4E6A28A55E4300FE145B /* Project.swift */; };
+		AC2DAB0628A566040023035E /* ProjectResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2DAB0528A566040023035E /* ProjectResource.swift */; };
+		AC2DAB0E28A57BF70023035E /* ProjectModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2DAB0D28A57BF70023035E /* ProjectModelTests.swift */; };
 		AC77B4BE25E8495C00427294 /* MyDataHelpsKit.h in Headers */ = {isa = PBXBuildFile; fileRef = AC77B4BC25E8495C00427294 /* MyDataHelpsKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AC77B50125E8502000427294 /* MyDataHelpsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC77B50025E8502000427294 /* MyDataHelpsClient.swift */; };
 		AC77B50425E8523500427294 /* ParticipantSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC77B50325E8523500427294 /* ParticipantSession.swift */; };
@@ -58,6 +61,9 @@
 		AC02E68325FA7FCD008A46E4 /* SurveyTasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SurveyTasks.swift; sourceTree = "<group>"; };
 		AC02E68725FA8056008A46E4 /* SurveyTaskQueryResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyTaskQueryResource.swift; sourceTree = "<group>"; };
 		AC02E69B25FAA979008A46E4 /* Diagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostics.swift; sourceTree = "<group>"; };
+		AC0D4E6A28A55E4300FE145B /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		AC2DAB0528A566040023035E /* ProjectResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectResource.swift; sourceTree = "<group>"; };
+		AC2DAB0D28A57BF70023035E /* ProjectModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectModelTests.swift; sourceTree = "<group>"; };
 		AC77B4B925E8495C00427294 /* MyDataHelpsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MyDataHelpsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC77B4BC25E8495C00427294 /* MyDataHelpsKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyDataHelpsKit.h; sourceTree = "<group>"; };
 		AC77B4BD25E8495C00427294 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -160,6 +166,7 @@
 				AC9DC9B52609064800C5D9E4 /* NotificationHistory.swift */,
 				AC83ABCC25E991E300A668E4 /* PagedQuery.swift */,
 				AC77B50C25E854E600427294 /* ParticipantInfo.swift */,
+				AC0D4E6A28A55E4300FE145B /* Project.swift */,
 				AC9DC99F26052AEA00C5D9E4 /* SurveyAnswers.swift */,
 				AC02E68325FA7FCD008A46E4 /* SurveyTasks.swift */,
 			);
@@ -187,6 +194,7 @@
 				AC9DC9B92609198700C5D9E4 /* NotificationHistoryQueryResource.swift */,
 				AC77B51425E8576A00427294 /* ParticipantResource.swift */,
 				AC83ABBC25E885D700A668E4 /* PersistDeviceDataResource.swift */,
+				AC2DAB0528A566040023035E /* ProjectResource.swift */,
 				AC9DC9A32605359300C5D9E4 /* SurveyAnswersQueryResource.swift */,
 				AC02E68725FA8056008A46E4 /* SurveyTaskQueryResource.swift */,
 				AC77B51925E857A900427294 /* URLRequests.swift */,
@@ -202,6 +210,7 @@
 				AC83ABDD25F131DA00A668E4 /* Info.plist */,
 				AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */,
 				AC83ABDB25F131DA00A668E4 /* URLRequestsTests.swift */,
+				AC2DAB0D28A57BF70023035E /* ProjectModelTests.swift */,
 			);
 			path = MyDataHelpsKitTests;
 			sourceTree = "<group>";
@@ -281,7 +290,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1320;
+				LastUpgradeCheck = 1340;
 				TargetAttributes = {
 					AC77B4B825E8495C00427294 = {
 						CreatedOnToolsVersion = 12.4;
@@ -359,6 +368,7 @@
 				ACA1A86926D5442800CBD7EA /* ExternalAccountProvidersQueryResource.swift in Sources */,
 				AC9DC9AA2605408600C5D9E4 /* DeleteSurveyResultResource.swift in Sources */,
 				AC77B50425E8523500427294 /* ParticipantSession.swift in Sources */,
+				AC2DAB0628A566040023035E /* ProjectResource.swift in Sources */,
 				AC83ABCD25E991E300A668E4 /* PagedQuery.swift in Sources */,
 				AC77B51025E856D000427294 /* MyDataHelpsError.swift in Sources */,
 				AC77B51A25E857A900427294 /* URLRequests.swift in Sources */,
@@ -368,6 +378,7 @@
 				AC932351265D9874007AAF69 /* EmbeddableSurveyViewController.swift in Sources */,
 				AC77B50125E8502000427294 /* MyDataHelpsClient.swift in Sources */,
 				ACEAF45926DD7E76002F79AB /* ConnectExternalAccountResource.swift in Sources */,
+				AC0D4E6B28A55E4300FE145B /* Project.swift in Sources */,
 				AC83ABB925E867E100A668E4 /* DeviceDataQueryResource.swift in Sources */,
 				AC83ABB125E85BB900A668E4 /* GetParticipantInfoResource.swift in Sources */,
 				AC77B50925E8535B00427294 /* ParticipantAccessToken.swift in Sources */,
@@ -393,6 +404,7 @@
 				AC9DC9C0260A876F00C5D9E4 /* MyDataHelpsClientTests.swift in Sources */,
 				ACBF66C627CFE18800BC6945 /* APIRateLimitTests.swift in Sources */,
 				ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */,
+				AC2DAB0E28A57BF70023035E /* ProjectModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

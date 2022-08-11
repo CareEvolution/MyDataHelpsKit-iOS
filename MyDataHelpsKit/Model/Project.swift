@@ -1,0 +1,81 @@
+//
+//  Project.swift
+//  MyDataHelpsKit
+//
+//  Created by CareEvolution on 8/11/22.
+//
+
+import Foundation
+
+/// Information about the project and its settings.
+public struct ProjectInfo: Decodable {
+    /// Unique project identifier.
+    public let id: String
+    /// Project's display name, localized based on participant's language settings.
+    public let name: String
+    /// Project's display description, localized based on participant's language settings.
+    public var description: String?
+    /// Code used by participants to enroll in this project, if code enrollment is allowed.
+    public let code: String
+    /// Project type, displayed to participants and used to filter search results.
+    public let type: ProjectType
+    /// Information about the organization for this project.
+    public let organization: Organization
+    /// Contact email for project support displayed to participants.
+    public var supportEmail: String?
+    /// Contact number for project support displayed to participants.
+    public var supportPhone: String?
+    /// A URL where participants can learn more about the project.
+    public var learnMoreURL: URL? {
+        learnMoreLink.flatMap { URL(string: $0) }
+    }
+    /// Site name or title to use as a label for the ``learnMoreURL``, localized based on participant's language settings.
+    public let learnMoreTitle: String?
+    
+    /// The raw decodable value, which may be an empty string or invalid URL.
+    private var learnMoreLink: String?
+}
+
+/// Describes the type of a MyDataHelps project.
+/// May be one of: Research Study, Wellness Program, or Clinical Program.
+public struct ProjectType: RawRepresentable, Equatable, Decodable {
+    /// The raw value for the project type as stored in MyDataHelps.
+    public let rawValue: String
+    
+    /// A research study.
+    public static let researchStudy = ProjectType(rawValue: "Research Study")
+    /// A wellness program.
+    public static let wellnessProgram = ProjectType(rawValue: "Wellness Program")
+    /// A clinical program.
+    public static let clinicalProgram = ProjectType(rawValue: "Clinical Program")
+    
+    /// Initializes a `ProjectType` with an arbitrary value. Consider using static members such as `ProjectType.researchStudy` instead for known values.
+    /// - Parameter rawValue: The raw value for the project type as stored in MyDataHelps.
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
+/// Information about an organization.
+public struct Organization: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case description
+        case logoURL = "logoUrl"
+        case color
+    }
+    
+    /// Unique organization identifier.
+    public let id: String
+    /// Organization name.
+    public let name: String
+    /// Organization description.
+    public let description: String?
+    /// Full URL to the organization's logo image.
+    ///
+    /// This URL returns image data, e.g. `image/png`, suitable for decoding directly into a `UIImage` object and presenting in image views. It is a public URL with no authentication required. Image dimensions may vary, so it is recommended to display these images with aspect-fit scaling.
+    public let logoURL: URL
+    /// The organization's brand color, expressed as a hexadecimal string. For example, `"#000000"`.
+    public let color: String
+}

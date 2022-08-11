@@ -29,12 +29,18 @@ public final class ParticipantSession {
         self.session = client.newURLSession()
     }
     
-    // MARK: Participant info
+    // MARK: Participant and project info
     
     /// Retrieves basic information about the participant.
     /// - Parameter completion: Called when the request is complete, with a `ParticipantInfo` instance on success or an error on failure.
     public func getParticipantInfo(completion: @escaping (Result<ParticipantInfo, MyDataHelpsError>) -> Void) {
         load(resource: GetParticipantInfoResource(), completion: completion)
+    }
+    
+    /// Retrieves general project information.
+    /// - Parameter completion: Called when the request is complete, with a ``ProjectInfo`` instance on success or an error on failure.
+    public func getProjectInfo(completion: @escaping (Result<ProjectInfo, MyDataHelpsError>) -> Void) {
+        load(resource: GetProjectInfoResource(), completion: completion)
     }
     
     // MARK: Device data
