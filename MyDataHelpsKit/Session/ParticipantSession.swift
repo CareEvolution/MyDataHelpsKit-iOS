@@ -83,7 +83,7 @@ public final class ParticipantSession {
         load(resource: SurveyAnswersQueryResource(query: query), completion: completion)
     }
     
-    /// Deletes a survey result for a participant. This feature is only available for surveys with “Results Can Be Deleted” enabled. This option can be enabled from the Settings pane in RKStudio’s Survey Editor.
+    /// Deletes a survey result for a participant. This feature is only available for surveys with “Results Can Be Deleted” enabled. This option can be enabled from the survey editor Settings pane in MyDataHelps Designer.
     ///
     /// This operation CANNOT be undone.
     /// - Parameters:
