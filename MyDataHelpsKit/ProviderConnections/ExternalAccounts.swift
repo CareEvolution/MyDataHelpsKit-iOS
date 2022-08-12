@@ -49,11 +49,11 @@ public struct ExternalAccountStatus: RawRepresentable, Equatable, Hashable, Deco
     /// The external account connection was attempted, but not yet authorized.
     public static let unauthorized = ExternalAccountStatus(rawValue: "unauthorized")
     
-    /// The raw value for the provider category as stored in RKStudio.
+    /// The raw value for the provider category as stored in MyDataHelps.
     public let rawValue: String
     
     /// Initializes an `ExternalAccountProviderCategory` with an arbitrary value. Consider using static members such as `ExternalAccountProviderCategory.provider` instead for known values.
-    /// - Parameter rawValue: The raw value for the provider category as stored in RKStudio.
+    /// - Parameter rawValue: The raw value for the provider category as stored in MyDataHelps.
     public init(rawValue: String) {
         self.rawValue = rawValue
     }

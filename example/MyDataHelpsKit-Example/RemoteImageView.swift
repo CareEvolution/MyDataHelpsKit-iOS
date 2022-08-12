@@ -87,7 +87,7 @@ struct RemoteImageView: View {
 
 struct RemoteImageView_Previews: PreviewProvider {
     static var previews: some View {
-        RemoteImageView(url: URL(string: "https://careevolution.com/images/rkstudio-logo.png")!, placeholderImageName: "providerLogoPlaceholder")
+        RemoteImageView(url: URL(string: "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")!, placeholderImageName: "providerLogoPlaceholder")
             .environmentObject(RemoteImageCache())
             .aspectRatio(contentMode: .fit)
             .previewLayout(.fixed(width: 48, height: 48))

@@ -26,7 +26,7 @@ public struct SurveyTaskQuery: PagedQuery {
     public let statuses: Set<SurveyTaskStatus>?
     /// Auto-generated, globally-unique identifier for the survey which this task assigns.
     public let surveyID: String?
-    /// Internal name for the survey in RKStudio which this task assigns. Filter by one or more values.
+    /// Internal name for the survey in MyDataHelps which this task assigns. Filter by one or more values.
     public let surveyNames: Set<String>?
     /// Secure and unique identifier for the task, to be used publicly when providing links to a survey.
     public let linkIdentifier: String?
@@ -42,7 +42,7 @@ public struct SurveyTaskQuery: PagedQuery {
     /// - Parameters:
     ///   - statuses: Filter by one or more survey task status values.
     ///   - surveyID: Auto-generated, globally-unique identifier for the survey which this task assigns.
-    ///   - surveyNames: Internal name for the survey in RKStudio which this task assigns.
+    ///   - surveyNames: Internal name for the survey in MyDataHelps which this task assigns.
     ///   - linkIdentifier: Secure and unique identifier for the task, to be used publicly when providing links to a survey.
     ///   - sortOrder: Return results in the specified order.
     ///   - limit: Maximum number of results per page.
@@ -85,11 +85,11 @@ public struct SurveyTaskStatus: RawRepresentable, Equatable, Hashable, Decodable
     /// Task was closed without being completed.
     public static let closed = SurveyTaskStatus(rawValue: "closed")
     
-    /// The raw value for the task status as stored in RKStudio.
+    /// The raw value for the task status as stored in MyDataHelps.
     public let rawValue: String
     
     /// Initializes a `SurveyTaskStatus` with an arbitrary value. Consider using static members such as `SurveyTaskStatus.incomplete` instead for known values.
-    /// - Parameter rawValue: The raw value for the task status as stored in RKStudio.
+    /// - Parameter rawValue: The raw value for the task status as stored in MyDataHelps.
     public init(rawValue: String) {
         self.rawValue = rawValue
     }
@@ -103,7 +103,7 @@ public struct SurveyTask: Decodable {
     public let linkIdentifier: String?
     /// Auto-generated, globally-unique identifier for the survey which this task assigns.
     public let surveyID: String
-    /// Internal name for the survey in RKStudio which this task assigns.
+    /// Internal name for the survey in MyDataHelps which this task assigns.
     public let surveyName: String
     /// Name of the survey displayed to the participant, which this task assigns.
     public let surveyDisplayName: String

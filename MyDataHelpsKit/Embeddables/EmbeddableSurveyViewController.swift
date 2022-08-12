@@ -12,15 +12,15 @@ import Foundation
 import UIKit
 import WebKit
 
-/// Presents a MyDataHelps embeddable survey or task inside a web view. This view controller implements the complete user experience for a MyDataHelps survey, including step navigation, sending results to RKStudio, etc., and is intended for modal presentation.
+/// Presents a MyDataHelps embeddable survey or task inside a web view. This view controller implements the complete user experience for a MyDataHelps survey, including step navigation, sending results to MyDataHelps, etc., and is intended for modal presentation.
 ///
-/// ### Enabling MyDataHelps Embeddable Surveys in RKStudio
+/// ### Enabling MyDataHelps Embeddable Surveys
 ///
-/// In order to use EmbeddableSurveyViewController to present a MyDataHelps embeddable survey, this feature must be enabled for both the project and the survey in RKStudio:
+/// In order to use EmbeddableSurveyViewController to present a MyDataHelps embeddable survey, this feature must be enabled for both the project and the survey in MyDataHelps Designer:
 /// - Enable "Allow Survey Completion Via Link" in project settings.
 /// - Enable "Allow Task Completion Via Link" and/or "Allow Survey Completion Via Link" in survey settings.
 ///
-/// See [Completing Surveys with Survey Links](https://rkstudio-support.careevolution.com/hc/en-us/articles/360036515193-Completing-Surveys-with-Survey-Links) for more information.
+/// See [Completing Surveys with Survey Links](https://support.mydatahelps.org/hc/en-us/articles/360036515193-Completing-Surveys-with-Survey-Links) for more information.
 ///
 /// ### Initializing and Presenting
 ///
@@ -152,7 +152,7 @@ public final class EmbeddableSurveyViewController: UIViewController {
 public struct EmbeddableSurveyCompletionReason: RawRepresentable, Equatable {
     public typealias RawValue = String
     
-    /// Participant completed the survey, and the result was saved to RKStudio.
+    /// Participant completed the survey, and the result was saved to MyDataHelps.
     public static let completed = EmbeddableSurveyCompletionReason(rawValue: "Completed")
     /// Participant did not complete the survey.
     public static let closed = EmbeddableSurveyCompletionReason(rawValue: "Closed")
