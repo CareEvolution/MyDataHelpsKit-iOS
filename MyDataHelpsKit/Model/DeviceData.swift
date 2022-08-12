@@ -97,11 +97,11 @@ public struct DeviceDataNamespace: RawRepresentable, Equatable, Hashable, Decoda
     /// Data imported from Omron wellness products.
     public static let omron = DeviceDataNamespace(rawValue: "Omron")
     
-    /// The raw value for the namespace as stored in RKStudio.
+    /// The raw value for the namespace as stored in MyDataHelps.
     public let rawValue: String
     
     /// Initializes a `DeviceDataNamespace` with an arbitrary value. Consider using static members such as `DeviceDataNamespace.project` instead for known values.
-    /// - Parameter rawValue: The raw value for the namespace as stored in RKStudio.
+    /// - Parameter rawValue: The raw value for the namespace as stored in MyDataHelps.
     public init(rawValue: String) {
         self.rawValue = rawValue
     }

@@ -1,20 +1,20 @@
 # MyDataHelpsKit
 
-An SDK to integrate RKStudio™ with your apps to develop your own participant experiences.
+An SDK to integrate [MyDataHelps™](https://careevolution.com/mydatahelps/) with your apps to develop your own participant experiences.
 
 See [GitHub releases](https://github.com/CareEvolution/MyDataHelpsKit-iOS/releases) for release notes.
 
-[© CareEvolution, LLC](https://developer.rkstudio.careevolution.com)
+[© CareEvolution, LLC](https://developer.mydatahelps.org)
 
 ## Getting started
 
 1. Add MyDataHelpsKit to your Xcode workspace. See the [installation](#installation) section below for details
-2. Create a `MyDataHelpsClient` object for communication with RKStudio/MyDataHelps. This object can be retained for the lifetime of your app
-3. Obtain a [participant access token](https://developer.rkstudio.careevolution.com/sdk/participant_tokens.html) for the authorized MyDataHelps participant. Note that your app is responsible for renewing the access token when it expires
+2. Create a `MyDataHelpsClient` object for communication with MyDataHelps. This object can be retained for the lifetime of your app
+3. Obtain a [participant access token](https://developer.mydatahelps.org/sdk/participant_tokens.html) for the authorized MyDataHelps participant. Note that your app is responsible for renewing the access token when it expires
 4. Create a `ParticipantSession` using the access token. This is the primary interface for interacting with MyDataHelps. It can be retained for as long as the participant's acess token is valid; create a new `ParticipantSession` when you renew the access token or when a different participant logs in
 5. Use `ParticipantSession` functions to perform MyDataHelps operations and requests for the participant
 
-See [online documentation](https://developer.rkstudio.careevolution.com/ios) or integrated Xcode symbol documentation for details about specific operations and model types.
+See [online documentation](https://developer.mydatahelps.org/ios/) or integrated Xcode symbol documentation for details about specific operations and model types.
 
 Example:
 

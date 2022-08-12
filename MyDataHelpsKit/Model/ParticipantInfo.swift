@@ -30,18 +30,18 @@ public struct ParticipantInfo: Decodable {
 /// Participant's gender.
 public struct ParticipantGender: RawRepresentable, Equatable, Decodable {
     public typealias RawValue = String
-    /// The raw string encoding the gender value in RKStudio.
+    /// The raw string encoding the gender value in MyDataHelps.
     public let rawValue: String
     
-    /// Female gender as represented in RKStudio.
+    /// Female gender as represented in MyDataHelps.
     public static let female = ParticipantGender(rawValue: "F")
-    /// Male gender as represented in RKStudio.
+    /// Male gender as represented in MyDataHelps.
     public static let male = ParticipantGender(rawValue: "M")
-    /// Other gender as represented in RKStudio.
+    /// Other gender as represented in MyDataHelps.
     public static let other = ParticipantGender(rawValue: "O")
     
     /// Initializes a `ParticipantGender` with an arbitrary value. Consider using static members such as `ParticipantGender.female` instead for known values.
-    /// - Parameter rawValue: The raw string value as represented in RKStudio.
+    /// - Parameter rawValue: The raw string value as represented in MyDataHelps.
     public init(rawValue: String) {
         self.rawValue = rawValue
     }

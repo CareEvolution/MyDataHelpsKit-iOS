@@ -120,7 +120,7 @@ enum PreviewData {
     static let emptyArray = "[]".data(using: .utf8)!
     
     static let provider1JSONText = """
-        { "id": 1, "name": "RKStudio Demo Provider", "category": "Provider", "logoUrl": "https://careevolution.com/images/rkstudio-logo.png" }
+        { "id": 1, "name": "MyDataHelps Demo Provider", "category": "Provider", "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png" }
     """
     
     static let providersJSON = """
