@@ -15,10 +15,10 @@ struct SurveyAnswersQueryResource: ParticipantResource {
     func urlRequest(session: ParticipantSession) throws -> URLRequest {
         var queryItems: [URLQueryItem] = []
         if let surveyResultID = query.surveyResultID {
-            queryItems.append(.init(name: "surveyResultID", value: surveyResultID))
+            queryItems.append(.init(name: "surveyResultID", value: surveyResultID.value))
         }
         if let surveyID = query.surveyID {
-            queryItems.append(.init(name: "surveyID", value: surveyID))
+            queryItems.append(.init(name: "surveyID", value: surveyID.value))
         }
         if let surveyNames = query.surveyNames?.commaDelimitedQueryValue {
             queryItems.append(.init(name: "surveyName", value: surveyNames))

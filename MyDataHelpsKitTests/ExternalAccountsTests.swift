@@ -25,7 +25,7 @@ class ExternalAccountsTests: XCTestCase {
         let list = try JSONDecoder.myDataHelpsDecoder.decode([ExternalAccount].self, from: accountsJSON)
         XCTAssertEqual(list.count, 1)
         if let first = list.first {
-            XCTAssertEqual(first.id, 100)
+            XCTAssertEqual(first.id.value, 100)
             XCTAssertEqual(first.status, .fetchComplete)
             XCTAssertEqual(first.provider.name, "MyDataHelps Demo Provider")
             XCTAssertEqual(first.provider.logoURL?.absoluteString, "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")
@@ -37,7 +37,7 @@ class ExternalAccountsTests: XCTestCase {
         let list = try JSONDecoder.myDataHelpsDecoder.decode([ExternalAccountProvider].self, from: providersJSON)
         XCTAssertEqual(list.count, 1)
         if let first = list.first {
-            XCTAssertEqual(first.id, 1)
+            XCTAssertEqual(first.id.value, 1)
             XCTAssertEqual(first.category, .provider)
             XCTAssertEqual(first.logoURL?.absoluteString, "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")
         }

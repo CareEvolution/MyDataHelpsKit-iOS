@@ -10,7 +10,7 @@ import Foundation
 struct ConnectExternalAccountResource: ParticipantResource {
     typealias ResponseType = URL
     
-    let providerID: Int
+    let providerID: ExternalAccountProvider.ID
     let finalRedirectURL: URL
 
     func urlRequest(session: ParticipantSession) throws -> URLRequest {

@@ -89,7 +89,7 @@ public final class ParticipantSession {
     /// - Parameters:
     ///   - surveyResultID: Auto-generated, globally-unique identifier for the survey submission to delete.
     ///   - completion: Called when the request is complete, with an empty `.success` on success or an error on failure.
-    public func deleteSurveyResult(surveyResultID: String, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
+    public func deleteSurveyResult(_ surveyResultID: SurveyResult.ID, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
         load(resource: DeleteSurveyResultResource(surveyResultID: surveyResultID), completion: completion)
     }
     

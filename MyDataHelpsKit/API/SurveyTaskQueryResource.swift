@@ -18,7 +18,7 @@ struct SurveyTaskQueryResource: ParticipantResource {
             queryItems.append(.init(name: "status", value: statuses))
         }
         if let surveyID = query.surveyID {
-            queryItems.append(.init(name: "surveyID", value: surveyID))
+            queryItems.append(.init(name: "surveyID", value: surveyID.value))
         }
         if let surveyNames = query.surveyNames?.commaDelimitedQueryValue {
             queryItems.append(.init(name: "surveyName", value: surveyNames))

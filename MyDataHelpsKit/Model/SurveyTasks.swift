@@ -7,6 +7,26 @@
 
 import Foundation
 
+/// Container for the `Survey.ID` identifier type, which identifies a specific survey in MyDataHelps.
+///
+/// The ``Survey`` struct itself is empty and no instances are returned by any APIs.
+public struct Survey {
+    /// Identifies a specific survey in MyDataHelps.
+    ///
+    /// Used for ``SurveyTask`` and ``SurveyAnswer`` values, and related APIs.
+    public typealias ID = ScopedIdentifier<Survey, String>
+}
+
+/// Container for the `SurveyResult.ID` identifier type, which identifies a specific survey submission in MyDataHelps.
+///
+/// The ``Survey`` struct itself is empty and no instances are returned by any APIs.
+public struct SurveyResult {
+    /// Identifies a specific survey submission in MyDataHelps.
+    ///
+    /// Used for ``SurveyAnswer`` values and related APIs.
+    public typealias ID = ScopedIdentifier<SurveyResult, String>
+}
+
 /// Specifies filtering and page-navigation criteria for survey task queries.
 ///
 /// All query properties are optional. Set non-nil/non-default values only for the properties you want to use for filtering or sorting.
@@ -25,7 +45,7 @@ public struct SurveyTaskQuery: PagedQuery {
     /// Filter by one or more survey task status values.
     public let statuses: Set<SurveyTaskStatus>?
     /// Auto-generated, globally-unique identifier for the survey which this task assigns.
-    public let surveyID: String?
+    public let surveyID: Survey.ID?
     /// Internal name for the survey in MyDataHelps which this task assigns. Filter by one or more values.
     public let surveyNames: Set<String>?
     /// Secure and unique identifier for the task, to be used publicly when providing links to a survey.
@@ -47,7 +67,7 @@ public struct SurveyTaskQuery: PagedQuery {
     ///   - sortOrder: Return results in the specified order.
     ///   - limit: Maximum number of results per page.
     ///   - pageID: Identifies a specific page of survey tasks to fetch.
-    public init(statuses: Set<SurveyTaskStatus>? = nil, surveyID: String? = nil, surveyNames: Set<String>? = nil, linkIdentifier: String? = nil, sortOrder: SurveyTaskQuery.SortOrder? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
+    public init(statuses: Set<SurveyTaskStatus>? = nil, surveyID: Survey.ID? = nil, surveyNames: Set<String>? = nil, linkIdentifier: String? = nil, sortOrder: SurveyTaskQuery.SortOrder? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
         self.statuses = statuses
         self.surveyID = surveyID
         self.surveyNames = surveyNames
@@ -96,13 +116,15 @@ public struct SurveyTaskStatus: RawRepresentable, Equatable, Hashable, Decodable
 }
 
 /// A single survey task assigned to a participant.
-public struct SurveyTask: Decodable {
+public struct SurveyTask: Identifiable, Decodable {
+    public typealias ID = ScopedIdentifier<SurveyTask, String>
+    
     /// Auto-generated, globally-unique identifier.
-    public let id: String
+    public let id: ID
     /// Secure and unique identifier for the task, to be used publicly when providing links to a survey.
     public let linkIdentifier: String?
     /// Auto-generated, globally-unique identifier for the survey which this task assigns.
-    public let surveyID: String
+    public let surveyID: Survey.ID
     /// Internal name for the survey in MyDataHelps which this task assigns.
     public let surveyName: String
     /// Name of the survey displayed to the participant, which this task assigns.

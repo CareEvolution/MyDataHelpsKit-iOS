@@ -21,10 +21,10 @@ import Foundation
 /// ```swift
 /// func deleteSurveyResult(containing answer: SurveyAnswer) {
 ///     // Will not compile, and would delete the wrong survey:
-///     // session.deleteSurveyResult(surveyResultID: answer.surveyID) { ... }
+///     // session.deleteSurveyResult(answer.surveyID) { ... }
 ///
 ///     // Will compile and work correctly:
-///     session.deleteSurveyResult(surveyResultID: answer.surveyResultID) { ... }
+///     session.deleteSurveyResult(answer.surveyResultID) { ... }
 /// }
 /// ```
 public struct ScopedIdentifier<Subject, Value: Hashable>: Hashable {

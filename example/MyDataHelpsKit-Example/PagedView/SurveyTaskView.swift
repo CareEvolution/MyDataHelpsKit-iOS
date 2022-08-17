@@ -20,8 +20,8 @@ struct SurveyTaskView: View {
     
     struct Model: Identifiable {
         let session: ParticipantSessionType
-        let id: String
-        let surveyID: String
+        let id: SurveyTask.ID
+        let surveyID: Survey.ID
         let surveyDisplayName: String
         let dueDate: Date?
         let hasSavedProgress: Bool
@@ -134,8 +134,8 @@ struct SurveyTaskView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             VStack {
-                ContainerView(model: .init(session: ParticipantSessionPreview(), id: "1", surveyID: "1", surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .incomplete, surveyName: "name", linkIdentifier: nil), participantLinkIdentifier: nil)
-                ContainerView(model: .init(session: ParticipantSessionPreview(), id: "1", surveyID: "1", surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .complete, surveyName: "name", linkIdentifier: nil), participantLinkIdentifier: nil)
+                ContainerView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .incomplete, surveyName: "name", linkIdentifier: nil), participantLinkIdentifier: nil)
+                ContainerView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .complete, surveyName: "name", linkIdentifier: nil), participantLinkIdentifier: nil)
             }
         }
     }

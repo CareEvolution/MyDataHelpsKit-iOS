@@ -8,7 +8,7 @@
 import SwiftUI
 import MyDataHelpsKit
 
-extension ExternalAccount: Identifiable {
+extension ExternalAccount {
     var isRefreshable: Bool {
         status != .fetchingData
     }

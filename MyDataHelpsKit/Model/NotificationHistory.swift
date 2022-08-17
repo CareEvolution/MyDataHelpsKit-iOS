@@ -156,7 +156,8 @@ public enum NotificationContent {
 }
 
 /// Information about a notification for a participant.
-public struct NotificationHistoryModel: Decodable {
+public struct NotificationHistoryModel: Identifiable, Decodable {
+    public typealias ID = ScopedIdentifier<NotificationHistoryModel, String>
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -168,7 +169,7 @@ public struct NotificationHistoryModel: Decodable {
     }
     
     /// Auto-generated, globally-unique identifier for this notification.
-    public let id: String
+    public let id: ID
     /// Identifier for the notification configuration.
     public let identifier: String
     /// If the notification was sent, the date at which the notification was sent.
@@ -186,7 +187,7 @@ public struct NotificationHistoryModel: Decodable {
     /// - Throws: DecodingError on failure to decode.
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(String.self, forKey: .id)
+        self.id = try container.decode(ID.self, forKey: .id)
         self.identifier = try container.decode(String.self, forKey: .identifier)
         self.sentDate = try container.decode(Date.self, forKey: .sentDate)
         self.statusCode = try container.decode(NotificationSendStatusCode.self, forKey: .statusCode)

@@ -21,9 +21,16 @@ class ScopedIdentifierTests: XCTestCase {
         let value: String
     }
     
+    private struct IntModel: Identifiable {
+        typealias ID = ScopedIdentifier<IntModel, Int>
+        let id: ID
+        let value: String
+    }
+    
     private let id100 = ExampleModel.ID("100")
     private let model100 = ExampleModel(id: .init("100"), value: "Value100")
     private let model200 = ExampleModel(id: .init("200"), value: "Value200")
+    private let intModel123 = IntModel(id: .init(123), value: "Value123")
     
     func testHashableEquatable() {
         XCTAssertEqual(id100, id100, "Equatable protocol: identity relation")
@@ -31,6 +38,16 @@ class ScopedIdentifierTests: XCTestCase {
         XCTAssertEqual(id100.hashValue, model100.id.hashValue, "Hashable protocol")
         XCTAssertEqual(model100.value, "Value100", "value")
         XCTAssertNotEqual(model200.id, model100.id, "Equatable: two unequal values")
+        
+        XCTAssertEqual(intModel123.id.value, 123, "Int identifier values")
+    }
+    
+    func testStringRepresentation() {
+        // String interpolation, etc., is important for embedding IDs in URL paths for API endpoints, etc.
+        XCTAssertEqual(id100.description, "100", "String description")
+        XCTAssertEqual(intModel123.id.description, "123", "Int description")
+        XCTAssertEqual("/api/model/\(model200.id)/test", "/api/model/200/test", "String value interpolation")
+        XCTAssertEqual("/api/model/\(intModel123.id)/test", "/api/model/123/test", "Int value interpolation")
     }
     
     func testCodable() throws {
