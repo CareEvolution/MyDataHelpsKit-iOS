@@ -108,9 +108,11 @@ public struct DeviceDataNamespace: RawRepresentable, Equatable, Decodable {
 }
 
 /// A single device data point stored in MyDataHelps.
-public struct DeviceDataPoint: Decodable {
+public struct DeviceDataPoint: Identifiable, Decodable {
+    public typealias ID = ScopedIdentifier<DeviceDataPoint, String>
+    
     /// Auto-generated, globally-unique identifier.
-    public let id: String
+    public let id: ID
     /// Identifies device data as from a specific source system.
     public let namespace: DeviceDataNamespace
     /// Auto-generated, globally-unique identifier for a group of device data points, which share some context.

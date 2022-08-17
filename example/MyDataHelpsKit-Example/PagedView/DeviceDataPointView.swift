@@ -50,7 +50,7 @@ struct DeviceDataPointView: View {
 struct DeviceDataPointView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            DeviceDataPointView(model: .init(session: ParticipantSessionPreview(), namespace: .project, id: "1", identifier: "1", type: "HeartRate", value: "62", units: nil, source: .init(identifier: "", properties: [:]), startDate: Date(), observationDate: Date()))
+            DeviceDataPointView(model: .init(session: ParticipantSessionPreview(), namespace: .project, id: .init("1"), identifier: "1", type: "HeartRate", value: "62", units: nil, source: .init(identifier: "", properties: [:]), startDate: Date(), observationDate: Date()))
         }
     }
 }
