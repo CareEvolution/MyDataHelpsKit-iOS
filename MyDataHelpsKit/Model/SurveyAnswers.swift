@@ -40,7 +40,7 @@ public struct SurveyAnswersQuery: PagedQuery {
     /// Maximum number of results per page. Default and maximum value is 100.
     public let limit: Int
     /// Identifies a specific page of survey answers to fetch. Use `nil` to fetch the first page of results. To fetch the page following a given `SurveyAnswersPage` use its `nextPageID`; the other parameters should be the same as the original `SurveyAnswersQuery`.
-    public let pageID: String?
+    public let pageID: SurveyAnswersPage.PageID?
     
     /// Initializes a new query for a page of survey answers with various filters.
     /// - Parameters:
@@ -56,7 +56,7 @@ public struct SurveyAnswersQuery: PagedQuery {
     ///   - answers: Filter by one or more specific text values the answer contains.
     ///   - limit: Maximum number of results per page.
     ///   - pageID: Identifies a specific page of survey answers to fetch.
-    public init(surveyResultID: SurveyResult.ID? = nil, surveyID: Survey.ID? = nil, surveyNames: Set<String>? = nil, after: Date? = nil, before: Date? = nil, insertedAfter: Date? = nil, insertedBefore: Date? = nil, stepIdentifiers: Set<String>? = nil, resultIdentifiers: Set<String>? = nil, answers: Set<String>? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
+    public init(surveyResultID: SurveyResult.ID? = nil, surveyID: Survey.ID? = nil, surveyNames: Set<String>? = nil, after: Date? = nil, before: Date? = nil, insertedAfter: Date? = nil, insertedBefore: Date? = nil, stepIdentifiers: Set<String>? = nil, resultIdentifiers: Set<String>? = nil, answers: Set<String>? = nil, limit: Int = defaultLimit, pageID: SurveyAnswersPage.PageID? = nil) {
         self.surveyResultID = surveyResultID
         self.surveyID = surveyID
         self.surveyNames = surveyNames
@@ -82,10 +82,12 @@ public struct SurveyAnswersQuery: PagedQuery {
 
 /// A page of survey answers.
 public struct SurveyAnswersPage: PagedResult, Decodable {
+    /// Identifies a specific page of survey answers.
+    public typealias PageID = ScopedIdentifier<SurveyAnswersPage, String>
     /// A list of SurveyAnswers filtered by the query criteria.
     public let surveyAnswers: [SurveyAnswer]
     /// An ID to be used with subsequent `SurveyAnswersQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
-    public let nextPageID: String?
+    public let nextPageID: PageID?
 }
 
 /// A single survey answer completed by a participant.

@@ -27,8 +27,8 @@ public struct NotificationHistoryQuery: PagedQuery {
     
     /// Maximum number of results per page. Default and maximum value is 100.
     public let limit: Int
-    /// Identifies a specific page of survey answers to fetch. Use `nil` to fetch the first page of results. To fetch the page following a given `SurveyAnswersPage` use its `nextPageID`; the other parameters should be the same as the original `SurveyAnswersQuery`.
-    public let pageID: String?
+    /// Identifies a specific page of notifications to fetch. Use `nil` to fetch the first page of results. To fetch the page following a given `NotificationHistoryPage` use its `nextPageID`; the other parameters should be the same as the original `NotificationHistoryQuery`.
+    public let pageID: NotificationHistoryPage.PageID?
     
     /// Initializes a new query for a page of notifications with various filters.
     /// - Parameters:
@@ -38,8 +38,8 @@ public struct NotificationHistoryQuery: PagedQuery {
     ///   - type: Type of notification.
     ///   - statusCode: Describes whether the notification was sent.
     ///   - limit: Maximum number of results per page.
-    ///   - pageID: Identifies a specific page of survey answers to fetch.
-    public init(identifier: String? = nil, sentAfter: Date? = nil, sentBefore: Date? = nil, type: NotificationType? = nil, statusCode: NotificationSendStatusCode? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
+    ///   - pageID: Identifies a specific page of notifications to fetch.
+    public init(identifier: String? = nil, sentAfter: Date? = nil, sentBefore: Date? = nil, type: NotificationType? = nil, statusCode: NotificationSendStatusCode? = nil, limit: Int = defaultLimit, pageID: NotificationHistoryPage.PageID? = nil) {
         self.identifier = identifier
         self.sentAfter = sentAfter
         self.sentBefore = sentBefore
@@ -60,10 +60,12 @@ public struct NotificationHistoryQuery: PagedQuery {
 
 /// A page of notifications.
 public struct NotificationHistoryPage: PagedResult, Decodable {
+    /// Identifies a specific page of notifications.
+    public typealias PageID = ScopedIdentifier<NotificationHistoryPage, String>
     /// A list of notifications filtered by the query criteria.
     public let notifications: [NotificationHistoryModel]
     /// An ID to be used with subsequent `NotificationHistoryQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
-    public let nextPageID: String?
+    public let nextPageID: PageID?
 }
 
 /// The type of notification sent to a participant.

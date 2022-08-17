@@ -56,7 +56,7 @@ public struct SurveyTaskQuery: PagedQuery {
     /// Maximum number of results per page. Default and maximum value is 100.
     public let limit: Int
     /// Identifies a specific page of survey tasks to fetch. Use `nil` to fetch the first page of results. To fetch the page following a given `SurveyTaskResultPage` use its `nextPageID`; the other parameters should be the same as the original `SurveyTaskQuery`.
-    public let pageID: String?
+    public let pageID: SurveyTaskResultPage.PageID?
     
     /// Initializes a new query for a page of survey tasks with various filters.
     /// - Parameters:
@@ -67,7 +67,7 @@ public struct SurveyTaskQuery: PagedQuery {
     ///   - sortOrder: Return results in the specified order.
     ///   - limit: Maximum number of results per page.
     ///   - pageID: Identifies a specific page of survey tasks to fetch.
-    public init(statuses: Set<SurveyTaskStatus>? = nil, surveyID: Survey.ID? = nil, surveyNames: Set<String>? = nil, linkIdentifier: String? = nil, sortOrder: SurveyTaskQuery.SortOrder? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
+    public init(statuses: Set<SurveyTaskStatus>? = nil, surveyID: Survey.ID? = nil, surveyNames: Set<String>? = nil, linkIdentifier: String? = nil, sortOrder: SurveyTaskQuery.SortOrder? = nil, limit: Int = defaultLimit, pageID: SurveyTaskResultPage.PageID? = nil) {
         self.statuses = statuses
         self.surveyID = surveyID
         self.surveyNames = surveyNames
@@ -88,10 +88,12 @@ public struct SurveyTaskQuery: PagedQuery {
 
 /// A page of survey tasks.
 public struct SurveyTaskResultPage: PagedResult, Decodable {
+    /// Identifies a specific page of survey tasks.
+    public typealias PageID = ScopedIdentifier<SurveyTaskResultPage, String>
     /// A list of SurveyTasks filtered by the query criteria.
     public let surveyTasks: [SurveyTask]
     /// An ID to be used with subsequent `SurveyTaskQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
-    public let nextPageID: String?
+    public let nextPageID: PageID?
 }
 
 /// Describes the status of a survey task assigned to a participant.

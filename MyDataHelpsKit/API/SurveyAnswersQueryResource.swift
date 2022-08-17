@@ -47,7 +47,7 @@ struct SurveyAnswersQueryResource: ParticipantResource {
         
         queryItems.append(.init(name: "limit", value: "\(query.limit)"))
         if let pageID = query.pageID {
-            queryItems.append(.init(name: "pageID", value: pageID))
+            queryItems.append(.init(name: "pageID", value: pageID.value))
         }
         
         let url = try session.client.endpoint(path: "api/v1/delegated/surveyanswers", queryItems: queryItems)
