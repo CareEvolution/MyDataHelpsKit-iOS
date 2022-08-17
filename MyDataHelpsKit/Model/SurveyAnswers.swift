@@ -90,6 +90,7 @@ public struct SurveyAnswersPage: PagedResult, Decodable {
 
 /// A single survey answer completed by a participant.
 public struct SurveyAnswer: Identifiable, Decodable {
+    /// Auto-generated, globally-unique identifier for a SurveyAnswer.
     public typealias ID = ScopedIdentifier<SurveyAnswer, String>
     
     /// Auto-generated, globally-unique identifier.

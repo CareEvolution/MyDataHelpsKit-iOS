@@ -157,6 +157,7 @@ public enum NotificationContent {
 
 /// Information about a notification for a participant.
 public struct NotificationHistoryModel: Identifiable, Decodable {
+    /// Auto-generated, globally-unique identifier for a NotificationHistoryModel.
     public typealias ID = ScopedIdentifier<NotificationHistoryModel, String>
     
     enum CodingKeys: String, CodingKey {

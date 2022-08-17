@@ -84,6 +84,7 @@ public struct ExternalAccountProviderCategory: RawRepresentable, Equatable, Hash
 ///
 /// Use `ParticipantSession.connectExternalAccount` to initiate a connected account between the participant and this provider.
 public struct ExternalAccountProvider: Identifiable, Decodable {
+    /// Assigned identifier for an ExternalAccountProvider.
     public typealias ID = ScopedIdentifier<ExternalAccountProvider, Int>
     
     enum CodingKeys: String, CodingKey {

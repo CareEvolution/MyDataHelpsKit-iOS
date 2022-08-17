@@ -117,6 +117,7 @@ public struct SurveyTaskStatus: RawRepresentable, Equatable, Hashable, Decodable
 
 /// A single survey task assigned to a participant.
 public struct SurveyTask: Identifiable, Decodable {
+    /// Auto-generated, globally-unique identifier for a SurveyTask.
     public typealias ID = ScopedIdentifier<SurveyTask, String>
     
     /// Auto-generated, globally-unique identifier.
