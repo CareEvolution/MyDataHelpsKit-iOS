@@ -7,18 +7,37 @@
 
 import Foundation
 
+/// Container for the `Project.ID` identifier type, which identifies a project in MyDataHelps.
+///
+/// The ``Project`` struct itself is empty and no instances are returned by any APIs.
+public struct Project {
+    /// Auto-generated internal ID for a project in MyDataHelps.
+    public typealias ID = ScopedIdentifier<Project, String>
+}
+
+/// Container for the `ParticipantLink.ID` identifier type, which identifies a participant link identifier in MyDataHelps.
+///
+/// The ``ParticipantLink`` struct itself is empty and no instances are returned by any APIs.
+public struct ParticipantLink {
+    /// Auto-generated identifier used to complete surveys via link for a specific participant, if that feature is enabled for the project.
+    public typealias ID = ScopedIdentifier<ParticipantLink, String>
+}
+
 /// Information about a participant.
 public struct ParticipantInfo: Decodable {
+    /// Auto-generated internal ID for a participant.
+    public typealias ID = ScopedIdentifier<ParticipantInfo, String>
+    
     /// Auto-generated internal ID for the participant.
-    public let participantID: String
+    public let participantID: ID
     /// Auto-generated internal ID for the project.
-    public let projectID: String
+    public let projectID: Project.ID
     /// Project-specific participant identifier.
     public let participantIdentifier: String
     /// Project-specific secondary identifier.
     public let secondaryIdentifier: String?
     /// Auto-generated identifier used to complete surveys via link, if that feature is enabled for the project.
-    public let linkIdentifier: String?
+    public let linkIdentifier: ParticipantLink.ID?
     /// All demographic fields populated for the participant. Unpopulated values are `nil`.
     public let demographics: ParticipantDemographics
     /// Key/value pairs representing project-specific custom fields.

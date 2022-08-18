@@ -49,7 +49,7 @@ public struct SurveyTaskQuery: PagedQuery {
     /// Internal name for the survey in MyDataHelps which this task assigns. Filter by one or more values.
     public let surveyNames: Set<String>?
     /// Secure and unique identifier for the task, to be used publicly when providing links to a survey.
-    public let linkIdentifier: String?
+    public let linkIdentifier: SurveyTaskLink.ID?
     /// Return results in the specified order. Defaults to `dateDescending`.
     public let sortOrder: SortOrder?
     
@@ -67,7 +67,7 @@ public struct SurveyTaskQuery: PagedQuery {
     ///   - sortOrder: Return results in the specified order.
     ///   - limit: Maximum number of results per page.
     ///   - pageID: Identifies a specific page of survey tasks to fetch.
-    public init(statuses: Set<SurveyTaskStatus>? = nil, surveyID: Survey.ID? = nil, surveyNames: Set<String>? = nil, linkIdentifier: String? = nil, sortOrder: SurveyTaskQuery.SortOrder? = nil, limit: Int = defaultLimit, pageID: SurveyTaskResultPage.PageID? = nil) {
+    public init(statuses: Set<SurveyTaskStatus>? = nil, surveyID: Survey.ID? = nil, surveyNames: Set<String>? = nil, linkIdentifier: SurveyTaskLink.ID? = nil, sortOrder: SurveyTaskQuery.SortOrder? = nil, limit: Int = defaultLimit, pageID: SurveyTaskResultPage.PageID? = nil) {
         self.statuses = statuses
         self.surveyID = surveyID
         self.surveyNames = surveyNames
@@ -117,6 +117,14 @@ public struct SurveyTaskStatus: RawRepresentable, Equatable, Hashable, Decodable
     }
 }
 
+/// Container for the `SurveyTaskLink.ID` identifier type, which is used for generating links to a survey.
+///
+/// The ``SurveyTaskLink`` struct itself is empty and no instances are returned by any APIs.
+public struct SurveyTaskLink {
+    /// Secure and unique identifier for a SurveyTask, to be used publicly when providing links to a survey.
+    public typealias ID = ScopedIdentifier<SurveyTaskLink, String>
+}
+
 /// A single survey task assigned to a participant.
 public struct SurveyTask: Identifiable, Decodable {
     /// Auto-generated, globally-unique identifier for a SurveyTask.
@@ -125,7 +133,7 @@ public struct SurveyTask: Identifiable, Decodable {
     /// Auto-generated, globally-unique identifier.
     public let id: ID
     /// Secure and unique identifier for the task, to be used publicly when providing links to a survey.
-    public let linkIdentifier: String?
+    public let linkIdentifier: SurveyTaskLink.ID?
     /// Auto-generated, globally-unique identifier for the survey which this task assigns.
     public let surveyID: Survey.ID
     /// Internal name for the survey in MyDataHelps which this task assigns.

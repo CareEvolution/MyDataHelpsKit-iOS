@@ -27,11 +27,11 @@ struct SurveyTaskView: View {
         let hasSavedProgress: Bool
         let status: SurveyTaskStatus
         let surveyName: String
-        let linkIdentifier: String?
+        let linkIdentifier: SurveyTaskLink.ID?
     }
     
     let model: Model
-    let participantLinkIdentifier: String?
+    let participantLinkIdentifier: ParticipantLink.ID?
     @State var showingAnswers = false
     @State var embeddableSurveySelection: Binding<EmbeddableSurveySelection?>
     
@@ -123,7 +123,7 @@ extension SurveyTaskView.Model {
 struct SurveyTaskView_Previews: PreviewProvider {
     struct ContainerView: View {
         let model: SurveyTaskView.Model
-        let participantLinkIdentifier: String?
+        let participantLinkIdentifier: ParticipantLink.ID?
         @State var embeddableSurvey: EmbeddableSurveySelection? = nil
         var body: some View {
             SurveyTaskView(model: model, participantLinkIdentifier: participantLinkIdentifier, embeddableSurveySelection: $embeddableSurvey)

@@ -24,7 +24,7 @@ struct SurveyTaskQueryResource: ParticipantResource {
             queryItems.append(.init(name: "surveyName", value: surveyNames))
         }
         if let linkIdentifier = query.linkIdentifier {
-            queryItems.append(.init(name: "linkIdentifier", value: linkIdentifier))
+            queryItems.append(.init(name: "linkIdentifier", value: linkIdentifier.value))
         }
         if let sortOrder = query.sortOrder {
             queryItems.append(.init(name: "sortOrder", value: sortOrder.rawValue))

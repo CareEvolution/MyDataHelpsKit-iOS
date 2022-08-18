@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// A unique identifier associated with a specific model type (the `Subject`) in MyDataHelpsKit.
+/// A unique identifier associated with a specific model type (the `Subject`) in MyDataHelps.
 ///
 /// Most model types in this SDK have at least one identifier value, typically a string. It is an error
 /// to use the identifier from a model of type A when fetching, querying, or creating models of type B.

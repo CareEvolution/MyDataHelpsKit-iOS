@@ -53,7 +53,7 @@ struct EmbeddableSurveyViewRepresentable_Previews: PreviewProvider {
         @State var errorModel: ErrorView.Model? = nil
         
         var body: some View {
-            EmbeddableSurveyViewRepresentable(model: .init(survey: .surveyName(""), participantLinkIdentifier: ""), presentation: $selection, error: $surveyError)
+            EmbeddableSurveyViewRepresentable(model: .init(survey: .surveyName(""), participantLinkIdentifier: .init("")), presentation: $selection, error: $surveyError)
                 .alert(item: $errorModel) {
                     Alert(title: Text($0.errorDescription))
                 }

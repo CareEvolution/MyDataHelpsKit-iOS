@@ -10,24 +10,24 @@ import MyDataHelpsKit
 
 struct EmbeddableSurveySelection: Identifiable {
     let survey: EmbeddableSurveyID
-    let participantLinkIdentifier: String
+    let participantLinkIdentifier: ParticipantLink.ID
     
     var id: String {
         switch survey {
         case let .surveyName(name): return name
-        case let .taskLinkIdentifier(name): return name
+        case let .taskLinkIdentifier(id): return id.value
         }
     }
 }
 
 enum EmbeddableSurveyID: Identifiable {
     case surveyName(String)
-    case taskLinkIdentifier(String)
+    case taskLinkIdentifier(SurveyTaskLink.ID)
     
     var id: String {
         switch self {
         case let .surveyName(name): return name
-        case let .taskLinkIdentifier(name): return name
+        case let .taskLinkIdentifier(id): return id.value
         }
     }
 }

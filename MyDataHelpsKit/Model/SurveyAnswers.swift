@@ -104,7 +104,7 @@ public struct SurveyAnswer: Identifiable, Decodable {
     /// Version number of the survey that the participant completed.
     public let surveyVersion: Int
     /// Auto-generated, globally-unique identifier for the task which prompted the participant to complete the survey, if any.
-    public let taskID: String?
+    public let taskID: SurveyTask.ID?
     /// Internal name for the survey in MyDataHelps.
     public let surveyName: String
     /// Name of the survey displayed to the participant.

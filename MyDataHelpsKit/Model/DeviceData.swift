@@ -109,6 +109,14 @@ public struct DeviceDataNamespace: RawRepresentable, Equatable, Decodable {
     }
 }
 
+/// Container for the `DeviceDataContext.ID` identifier type, which identifies a group of device data points.
+///
+/// The ``DeviceDataContext`` struct itself is empty and no instances are returned by any APIs.
+public struct DeviceDataContext {
+    /// Auto-generated, globally-unique identifier for a group of device data points, which share some context.
+    public typealias ID = ScopedIdentifier<DeviceDataContext, String>
+}
+
 /// A single device data point stored in MyDataHelps.
 public struct DeviceDataPoint: Identifiable, Decodable {
     /// Auto-generated, globally-unique identifier for a DeviceDataPoint.
@@ -119,7 +127,7 @@ public struct DeviceDataPoint: Identifiable, Decodable {
     /// Identifies device data as from a specific source system.
     public let namespace: DeviceDataNamespace
     /// Auto-generated, globally-unique identifier for a group of device data points, which share some context.
-    public let deviceDataContextID: String?
+    public let deviceDataContextID: DeviceDataContext.ID?
     /// Date when the data point was first added.
     public let insertedDate: Date
     /// Date when the data point was last updated in the system.
