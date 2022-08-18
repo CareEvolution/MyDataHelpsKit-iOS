@@ -13,7 +13,7 @@ class DeviceDataSource: PagedModelSource {
         let session: ParticipantSessionType
         let namespace: DeviceDataNamespace
         let id: String
-        let identifier: String
+        let identifier: String?
         let type: String
         let value: String
         let units: String?
@@ -56,7 +56,7 @@ extension DeviceDataSource.ItemModel {
         self.session = session
         self.namespace = dataPoint.namespace
         self.id = dataPoint.id
-        self.identifier = dataPoint.identifier ?? ""
+        self.identifier = dataPoint.identifier
         self.type = dataPoint.type
         self.value = dataPoint.value
         self.units = dataPoint.units

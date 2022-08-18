@@ -139,8 +139,8 @@ public struct DeviceDataPoint: Decodable {
 
 /// Describes a device data point to create or update.
 public struct DeviceDataPointPersistModel: Encodable {
-    /// String used to name a device data point. Natural Key property.
-    public let identifier: String
+    /// String used to name a device data point. Optional. Natural Key property.
+    public let identifier: String?
     /// The general category this device data point belongs in, or what the device data represents. Natural Key property.
     public let type: String
     /// The value of the recorded data point.
@@ -158,7 +158,7 @@ public struct DeviceDataPointPersistModel: Encodable {
     
     /// Initializes an object describing device data point to create or update.
     /// - Parameters:
-    ///   - identifier: String used to name a device data point. Natural Key property.
+    ///   - identifier: String used to name a device data point. Optional. Natural Key property.
     ///   - type: The general category this device data point belongs in, or what the device data represents. Natural Key property.
     ///   - value: The value of the recorded data point.
     ///   - units: The units, if any, that the data was recorded in.
@@ -166,7 +166,7 @@ public struct DeviceDataPointPersistModel: Encodable {
     ///   - source: Identifying information about the device which recorded the data point.
     ///   - startDate: The date at which this device data point began being recorded (for data that is recorded over time). Natural Key property.
     ///   - observationDate: The date at which this device data point was completely recorded. Natural Key property.
-    public init(identifier: String, type: String, value: String, units: String?, properties: [String : String], source: DeviceDataPointSource?, startDate: Date?, observationDate: Date?) {
+    public init(identifier: String?, type: String, value: String, units: String?, properties: [String : String], source: DeviceDataPointSource?, startDate: Date?, observationDate: Date?) {
         self.identifier = identifier
         self.type = type
         self.value = value
