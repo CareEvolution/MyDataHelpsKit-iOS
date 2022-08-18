@@ -19,7 +19,7 @@ public struct Survey {
 
 /// Container for the `SurveyResult.ID` identifier type, which identifies a specific survey submission in MyDataHelps.
 ///
-/// The ``Survey`` struct itself is empty and no instances are returned by any APIs.
+/// The ``SurveyResult`` struct itself is empty and no instances are returned by any APIs.
 public struct SurveyResult {
     /// Identifies a specific survey submission in MyDataHelps.
     ///

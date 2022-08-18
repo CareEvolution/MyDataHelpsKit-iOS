@@ -15,7 +15,7 @@ public struct Project {
     public typealias ID = ScopedIdentifier<Project, String>
 }
 
-/// Container for the `ParticipantLink.ID` identifier type, which identifies a participant link identifier in MyDataHelps.
+/// Container for the `ParticipantLink.ID` identifier type, for participant link identifiers.
 ///
 /// The ``ParticipantLink`` struct itself is empty and no instances are returned by any APIs.
 public struct ParticipantLink {
