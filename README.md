@@ -52,7 +52,7 @@ Based on your preferred installation process or dependency manager, choose from 
 Add MyDataHelpsKit as a dependency to your Package.swift file. For more information, see the [Swift Package Manager documentation](https://github.com/apple/swift-package-manager/tree/master/Documentation).
 
 ```swift
-.package(url: "https://github.com/CareEvolution/MyDataHelpsKit-iOS", from: "1.0.0")
+.package(url: "https://github.com/CareEvolution/MyDataHelpsKit-iOS", from: "1.2.0")
 ```
 
 Or in your Xcode project, go to File > Swift Packages > Add Package Dependency and enter `https://github.com/CareEvolution/MyDataHelpsKit-iOS`.

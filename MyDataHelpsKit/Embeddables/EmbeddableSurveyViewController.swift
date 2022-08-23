@@ -59,7 +59,7 @@ public final class EmbeddableSurveyViewController: UIViewController {
     ///   - taskLinkIdentifier: Identifies the survey task to present to the participant. This is the `linkIdentifier` property of `SurveyTask`, as retrieved via `ParticipantSession.querySurveyTasks`.
     ///   - participantLinkIdentifier: Auto-generated participant identifier used to complete surveys via link. This is the `linkIdentifier` property of `ParticipantInfo`, as retrieved via `ParticipantSession.getParticipantInfo`.
     ///   - completion: Called when the participant has completed interaction with the survey. The completion callback must always dismiss the EmbeddableSurveyViewController.
-    public init(client: MyDataHelpsClient, taskLinkIdentifier: String, participantLinkIdentifier: String, completion: @escaping (Result<EmbeddableSurveyCompletionReason, MyDataHelpsError>) -> Void) {
+    public init(client: MyDataHelpsClient, taskLinkIdentifier: SurveyTaskLink.ID, participantLinkIdentifier: ParticipantLink.ID, completion: @escaping (Result<EmbeddableSurveyCompletionReason, MyDataHelpsError>) -> Void) {
         self.surveyURL = client.embeddableSurveyURL(taskLinkIdentifier: taskLinkIdentifier, participantLinkIdentifier: participantLinkIdentifier)
         self.languageTag = client.languageTag
         self.userAgent = client.userAgent
@@ -77,7 +77,7 @@ public final class EmbeddableSurveyViewController: UIViewController {
     ///   - surveyName: The name of the survey to present.
     ///   - participantLinkIdentifier: Auto-generated participant identifier used to complete surveys via link. This is the `linkIdentifier` property of `ParticipantInfo`, as retrieved via `ParticipantSession.getParticipantInfo`.
     ///   - completion: Called when the participant has completed interaction with the survey. The completion callback must always dismiss the EmbeddableSurveyViewController.
-    public init(client: MyDataHelpsClient, surveyName: String, participantLinkIdentifier: String, completion: @escaping (Result<EmbeddableSurveyCompletionReason, MyDataHelpsError>) -> Void) {
+    public init(client: MyDataHelpsClient, surveyName: String, participantLinkIdentifier: ParticipantLink.ID, completion: @escaping (Result<EmbeddableSurveyCompletionReason, MyDataHelpsError>) -> Void) {
         self.surveyURL = client.embeddableSurveyURL(surveyName: surveyName, participantLinkIdentifier: participantLinkIdentifier)
         self.languageTag = client.languageTag
         self.userAgent = client.userAgent
@@ -208,7 +208,7 @@ extension EmbeddableSurveyViewController: WKNavigationDelegate {
 #endif
 
 internal extension MyDataHelpsClient {
-    func embeddableSurveyURL(taskLinkIdentifier: String, participantLinkIdentifier: String) -> Result<URL, MyDataHelpsError> {
+    func embeddableSurveyURL(taskLinkIdentifier: SurveyTaskLink.ID, participantLinkIdentifier: ParticipantLink.ID) -> Result<URL, MyDataHelpsError> {
         do {
             let url = try endpoint(path: "mydatahelps/\(participantLinkIdentifier)/tasklink/\(taskLinkIdentifier)", queryItems: [.init(name: "lang", value: languageTag)])
             return .success(url)
@@ -217,7 +217,7 @@ internal extension MyDataHelpsClient {
         }
     }
     
-    func embeddableSurveyURL(surveyName: String, participantLinkIdentifier: String) -> Result<URL, MyDataHelpsError> {
+    func embeddableSurveyURL(surveyName: String, participantLinkIdentifier: ParticipantLink.ID) -> Result<URL, MyDataHelpsError> {
         do {
             let url = try endpoint(path: "mydatahelps/\(participantLinkIdentifier)/surveylink/\(surveyName)", queryItems: [.init(name: "lang", value: languageTag)])
             return .success(url)

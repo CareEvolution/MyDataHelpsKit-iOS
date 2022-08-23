@@ -9,7 +9,7 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct SurveyAnswerView: View {
-    static func pageView(session: ParticipantSessionType, surveyID: String?) -> PagedView<SurveyAnswersSource, SurveyAnswerView> {
+    static func pageView(session: ParticipantSessionType, surveyID: Survey.ID?) -> PagedView<SurveyAnswersSource, SurveyAnswerView> {
         /// EXERCISE: Add parameters to this `SurveyAnswersQuery` to further customize filtering.
         let query = SurveyAnswersQuery(surveyID: surveyID)
         let source = SurveyAnswersSource(session: session, query: query)
@@ -20,14 +20,14 @@ struct SurveyAnswerView: View {
     
     class Model: Identifiable, ObservableObject {
         let session: ParticipantSessionType
-        let id: String
-        let surveyResultID: String
+        let id: SurveyAnswer.ID
+        let surveyResultID: SurveyResult.ID
         let value: String
         let date: Date?
         let surveyDisplayName: String
         @Published var deletionState: Result<Void, MyDataHelpsError>? = nil
         
-        init(session: ParticipantSessionType, id: String, surveyResultID: String, value: String, date: Date?, surveyDisplayName: String, deletionState: Result<Void, MyDataHelpsError>? = nil) {
+        init(session: ParticipantSessionType, id: SurveyAnswer.ID, surveyResultID: SurveyResult.ID, value: String, date: Date?, surveyDisplayName: String, deletionState: Result<Void, MyDataHelpsError>? = nil) {
             self.session = session
             self.id = id
             self.surveyResultID = surveyResultID
@@ -49,7 +49,7 @@ struct SurveyAnswerView: View {
         
         func delete() {
             guard deletionState == nil else { return }
-            session.deleteSurveyResult(surveyResultID: surveyResultID) { [weak self] in
+            session.deleteSurveyResult(surveyResultID) { [weak self] in
                 self?.deletionState = $0
             }
         }
@@ -92,11 +92,11 @@ struct SurveyAnswerView: View {
 struct SurveyAnswerView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: "1", surveyResultID: "1", value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: nil))
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: nil))
                 .padding()
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: "1", surveyResultID: "1", value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .success(())))
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .success(())))
                 .padding()
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: "1", surveyResultID: "1", value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .failure(.unknown(nil))))
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .failure(.unknown(nil))))
                 .padding()
         }
     }

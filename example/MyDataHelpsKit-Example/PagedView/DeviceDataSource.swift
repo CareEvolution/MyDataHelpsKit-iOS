@@ -12,7 +12,7 @@ class DeviceDataSource: PagedModelSource {
     struct ItemModel: Identifiable {
         let session: ParticipantSessionType
         let namespace: DeviceDataNamespace
-        let id: String
+        let id: DeviceDataPoint.ID
         let identifier: String?
         let type: String
         let value: String

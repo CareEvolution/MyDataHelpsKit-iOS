@@ -83,7 +83,10 @@ public struct ExternalAccountProviderCategory: RawRepresentable, Equatable, Hash
 /// An external account provider supported by MyDataHelps.
 ///
 /// Use `ParticipantSession.connectExternalAccount` to initiate a connected account between the participant and this provider.
-public struct ExternalAccountProvider: Decodable {
+public struct ExternalAccountProvider: Identifiable, Decodable {
+    /// Assigned identifier for an ExternalAccountProvider.
+    public typealias ID = ScopedIdentifier<ExternalAccountProvider, Int>
+    
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case name = "name"
@@ -92,7 +95,7 @@ public struct ExternalAccountProvider: Decodable {
     }
     
     /// Assigned identifier for this external account provider.
-    public let id: Int
+    public let id: ID
     /// Name of the external account provider.
     public let name: String
     /// Type of account provider.
