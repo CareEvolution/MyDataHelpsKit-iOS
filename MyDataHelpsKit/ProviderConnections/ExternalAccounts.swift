@@ -60,9 +60,12 @@ public struct ExternalAccountStatus: RawRepresentable, Equatable, Hashable, Deco
 }
 
 /// An external account that the participant is currently connected to.
-public struct ExternalAccount: Decodable {
+public struct ExternalAccount: Identifiable, Decodable {
+    /// Assigned identifier for an ExternalAccount.
+    public typealias ID = ScopedIdentifier<ExternalAccount, Int>
+    
     /// Assigned identifier for this connected external account.
-    public let id: Int
+    public let id: ID
     /// The current status for this connected external account.
     public let status: ExternalAccountStatus
     /// The provider for this external account.

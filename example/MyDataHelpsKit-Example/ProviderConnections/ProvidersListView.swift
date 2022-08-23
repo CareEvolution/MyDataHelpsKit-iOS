@@ -8,11 +8,8 @@
 import SwiftUI
 import MyDataHelpsKit
 
-extension ExternalAccountProvider: Identifiable {
-}
-
 extension ExternalAccountAuthorization: Identifiable {
-    public var id: Int { provider.id }
+    public var id: ExternalAccountProvider.ID { provider.id }
 }
 
 class ProvidersListViewModel: ObservableObject {

@@ -18,7 +18,7 @@ struct NotificationHistoryView: View {
     }
     
     struct Model: Identifiable {
-        let id: String
+        let id: NotificationHistoryModel.ID
         let identifier: String
         let sentDate: Date
         let statusCode: NotificationSendStatusCode
@@ -77,7 +77,7 @@ extension NotificationHistoryView.Model {
 
 struct NotificationHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        NotificationHistoryView(model: .init(id: "1", identifier: "NOTIFICATION_A", sentDate: Date(), statusCode: .succeeded, content: "Title Text"))
+        NotificationHistoryView(model: .init(id: .init("n1"), identifier: "NOTIFICATION_A", sentDate: Date(), statusCode: .succeeded, content: "Title Text"))
             .padding()
     }
 }

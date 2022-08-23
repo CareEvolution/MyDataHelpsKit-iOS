@@ -54,7 +54,7 @@ struct PagedView_Previews: PreviewProvider {
             items
         }
         let items: [PreviewListItem]
-        let nextPageID: String? = nil
+        let nextPageID: ScopedIdentifier<PreviewListPage, String>? = nil
     }
     
     class PreviewSource: PagedModelSource {

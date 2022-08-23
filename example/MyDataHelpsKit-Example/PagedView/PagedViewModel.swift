@@ -11,7 +11,7 @@ import MyDataHelpsKit
 protocol PageModelType {
     associatedtype ItemType: Identifiable
     func pageItems(session: ParticipantSessionType) -> [ItemType]
-    var nextPageID: String? { get }
+    var nextPageID: ScopedIdentifier<Self, String>? { get }
 }
 
 protocol PagedModelSource {

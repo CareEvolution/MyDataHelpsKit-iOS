@@ -10,7 +10,7 @@ import MyDataHelpsKit
 
 struct ParticipantInfoViewModel {
     let name: String
-    let linkIdentifier: String?
+    let linkIdentifier: ParticipantLink.ID?
     let email: String?
     let phone: String?
     let enrollmentDate: Date?

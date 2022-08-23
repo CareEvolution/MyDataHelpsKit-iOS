@@ -36,9 +36,9 @@ class MyDataHelpsClientTests: XCTestCase {
     
     func testEmbeddableURLs() {
         let sut = MyDataHelpsClient()
-        let participantLinkID = UUID().uuidString
+        let participantLinkID = ParticipantLink.ID(UUID().uuidString)
         let surveyName = UUID().uuidString
-        let taskLinkID = UUID().uuidString
+        let taskLinkID = SurveyTaskLink.ID(UUID().uuidString)
         let languageTag = sut.languageTag
         var url = try? sut.embeddableSurveyURL(surveyName: surveyName, participantLinkIdentifier: participantLinkID).get()
         XCTAssertEqual(url?.absoluteString, "https://mydatahelps.org/mydatahelps/\(participantLinkID)/surveylink/\(surveyName)?lang=\(languageTag)")
