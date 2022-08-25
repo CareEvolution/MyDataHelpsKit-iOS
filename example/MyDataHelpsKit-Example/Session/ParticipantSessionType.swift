@@ -17,7 +17,7 @@ protocol ParticipantSessionType {
     func deleteSurveyResult(_ surveyResultID: SurveyResult.ID, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
     func queryNotifications(_ query: NotificationHistoryQuery, completion: @escaping (Result<NotificationHistoryPage, MyDataHelpsError>) -> Void)
     func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel], completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
-    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<[ExternalAccountProvider], MyDataHelpsError>) -> Void)
+    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<ExternalAccountProvidersResultPage, MyDataHelpsError>) -> Void)
     func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void)
     func listExternalAccounts(completion: @escaping (Result<[ExternalAccount], MyDataHelpsError>) -> Void)
     func refreshExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
@@ -66,8 +66,7 @@ class ParticipantSessionPreview: ParticipantSessionType {
         completion(.success(()))
     }
     
-    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<[ExternalAccountProvider], MyDataHelpsError>) -> Void) {
-        delayedSuccess(data: PreviewData.providersJSON, completion: completion)
+    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<ExternalAccountProvidersResultPage, MyDataHelpsError>) -> Void) {
     }
     
     func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void) {
@@ -114,9 +113,10 @@ enum PreviewData {
     """
     
     static let providersJSON = """
-    [
-        \(provider1JSONText)
-    ]
+    {
+        "externalAccountProviders": [ \(provider1JSONText) ],
+        "totalExternalAccountProviders": 35
+    }
     """.data(using: .utf8)!
     
     static let accountsJSON = """
