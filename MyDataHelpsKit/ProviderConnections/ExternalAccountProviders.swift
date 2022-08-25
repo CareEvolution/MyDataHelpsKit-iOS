@@ -9,11 +9,18 @@ import Foundation
 
 public extension ParticipantSession {
     /// Query the list of external account providers supported by MyDataHelps.
+    ///
+    /// To fetch the first page of results, call this with a new ``ExternalAccountProvidersQuery`` object. If there are additional pages available, the next page can be fetched by using `ExternalAccountProvidersQuery.page(after:)` to construct a query for the following page.
     /// - Parameters:
     ///   - query: Specifies how to filter the providers.
-    ///   - completion: Called when the request is complete, with an array of `ExternalAccountProvider` on success or an error on failure.
-    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<[ExternalAccountProvider], MyDataHelpsError>) -> Void) {
-        load(resource: ExternalAccountProvidersQueryResource(query: query), completion: completion)
+    ///   - completion: Called when the request is complete, with a ``ExternalAccountProvidersResultPage`` instance on success or an error on failure. Results are ordered by name.
+    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<ExternalAccountProvidersResultPage, MyDataHelpsError>) -> Void) {
+        load(resource: ExternalAccountProvidersQueryResource(query: query)) {
+            (result: Result<ExternalAccountProvidersResultPage.APIResponse, MyDataHelpsError>) in
+            completion(result.map {
+                ExternalAccountProvidersResultPage(result: $0, query: query)
+            })
+        }
     }
         
     /// Initiates a new connected external account. Grants access to a secure OAuth connection to the specified external account provider, where the participant can provide their provider credentials and authorize MyDataHelps to retrieve data from the account.
@@ -42,20 +49,69 @@ public extension ParticipantSession {
     }
 }
 
-/// Specifies filtering criteria for external account provider queries. All filter criteria are optional; specifying no criteria will produce a list of all available external account providers.
+/// Specifies filtering and page-navigation criteria for external account provider queries.
+///
+/// All filter criteria are optional. Set non-nil/non-default values only for the properties you want to use for filtering.
 public struct ExternalAccountProvidersQuery {
+    /// The default and maximum number of results per page.
+    public static let defaultLimit = 100
+    /// The page index that indicates the first page of results.
+    public static let firstPageNumber = 0
+    
     /// Limit search results to account providers whose keyword, postal code, city, or state begins with the search string. Case-insensitive.
     public let search: String?
     /// Limit search results to account providers with the specified category.
     public let category: ExternalAccountProviderCategory?
+    /// Maximum number of results per page. Default and maximum value is 100.
+    public let limit: Int
+    /// Identifies a specific page of data to fetch. The default is `firstPageNumber`, fetching the first page of results. For convenience, to fetch the page following a given ``ExternalAccountProvidersResultPage``, use `page(after:)` to construct a copy of this query with `pageNumber` incremented.
+    public let pageNumber: Int
     
-    /// Initializes a new query for external account providers with various filters.
+    /// Initializes a new query for a page of external account providers with various filters.
     /// - Parameters:
     ///   - search: Limit search results to account providers whose keyword, postal code, city, or state begins with the search string. Case-insensitive.
     ///   - category: Limit search results to account providers with the specified category.
-    public init(search: String? = nil, category: ExternalAccountProviderCategory? = nil) {
+    ///   - limit: Limit search results to account providers with the specified category.
+    ///   - pageNumber: Identifies a specific page of data to fetch. The default is `firstPageNumber`, fetching the first page of results. For convenience, to fetch the page following a given ``ExternalAccountProvidersResultPage``, use `page(after:)` to construct a copy of this query with `pageNumber` incremented.
+    public init(search: String? = nil, category: ExternalAccountProviderCategory? = nil, limit: Int = defaultLimit, pageNumber: Int = firstPageNumber) {
         self.search = search
         self.category = category
+        self.limit = max(1, min(limit, Self.defaultLimit))
+        self.pageNumber = max(Self.firstPageNumber, pageNumber)
+    }
+    
+    /// Creates a copy of this query for a page of results following the given page, with the same filters as the original query.
+    /// - Parameter page: the previous page of results, which should have been produced with this query.
+    /// - Returns: A copy of this query, with `pageNumber` set to fetch results following the given `page`, if there are additional results to fetch. If there are no additional results available, returns `nil`. The query returned, if any, has the same filters as the original.
+    public func page(after page: ExternalAccountProvidersResultPage) -> ExternalAccountProvidersQuery? {
+        guard page.externalAccountProviders.count >= limit else {
+            return nil
+        }
+        return ExternalAccountProvidersQuery(search: self.search, category: self.category, limit: self.limit, pageNumber: page.pageNumber + 1)
+    }
+}
+
+/// A page of external account providers.
+///
+/// Call `page(after:)` on the original `ExternalAccountProvidersQuery` that produced these results to construct a query that will fetch the next page.
+public struct ExternalAccountProvidersResultPage {
+    internal struct APIResponse: Decodable {
+        let externalAccountProviders: [ExternalAccountProvider]
+        let totalExternalAccountProviders: Int
+    }
+    
+    /// A list of providers filtered by the query criteria.
+    public let externalAccountProviders: [ExternalAccountProvider]
+    /// The total number of providers across all pages of results matching the query criteria.
+    public let totalCount: Int
+    /// The page index for this specific page of results.
+    public let pageNumber: Int
+    
+    /// `APIResponse`—the data returned from the API endpoint—does not include a `pageNumber`. Combine the APIResponse with the query that produced the response so the caller has access to the `pageNumber` to safely perform paging.
+    internal init(result: APIResponse, query: ExternalAccountProvidersQuery) {
+        self.externalAccountProviders = result.externalAccountProviders
+        self.totalCount = result.totalExternalAccountProviders
+        self.pageNumber = query.pageNumber
     }
 }
 

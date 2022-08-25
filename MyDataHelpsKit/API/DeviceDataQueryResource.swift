@@ -31,7 +31,7 @@ struct DeviceDataQueryResource: ParticipantResource {
             queryItems.append(.init(name: "modifiedBefore", value: modifiedBefore))
         }
         
-        queryItems.append(.init(name: "limit", value: "\(query.limit)"))
+        queryItems.append(.init(name: "limit", value: String(query.limit)))
         if let pageID = query.pageID {
             queryItems.append(.init(name: "pageID", value: pageID.value))
         }
