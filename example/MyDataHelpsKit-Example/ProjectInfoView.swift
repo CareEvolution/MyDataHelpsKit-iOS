@@ -49,7 +49,7 @@ struct ProjectInfoView_Previews: PreviewProvider {
         "id": "\(UUID().uuidString)",
         "name": "My Organization",
         "description": "Organization description",
-        "logoUrl": "https://careevolution.com/images/rkstudio-logo.png",
+        "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png",
         "color": "#0c509b"
     },
     "supportEmail": "support@example.com",

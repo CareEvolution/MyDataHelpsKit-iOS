@@ -25,7 +25,7 @@ class ProjectModelTests: XCTestCase {
         "id": "\(organizationID)",
         "name": "My Organization",
         "description": "Organization description",
-        "logoUrl": "https://careevolution.com/images/rkstudio-logo.png",
+        "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png",
         "color": "#0c509b"
     },
     "supportEmail": "support@example.com",
@@ -49,7 +49,7 @@ class ProjectModelTests: XCTestCase {
         XCTAssertEqual(project.organization.id, organizationID)
         XCTAssertEqual(project.organization.name, "My Organization")
         XCTAssertEqual(project.organization.description, "Organization description")
-        XCTAssertEqual(project.organization.logoURL.absoluteString, "https://careevolution.com/images/rkstudio-logo.png")
+        XCTAssertEqual(project.organization.logoURL.absoluteString, "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")
         XCTAssertEqual(project.organization.color, "#0c509b")
     }
     
@@ -67,7 +67,7 @@ class ProjectModelTests: XCTestCase {
     "organization": {
         "id": "\(organizationID)",
         "name": "My Organization",
-        "logoUrl": "https://careevolution.com/images/rkstudio-logo.png",
+        "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png",
         "color": "#0c509b"
     }
 }
@@ -87,7 +87,7 @@ class ProjectModelTests: XCTestCase {
         XCTAssertEqual(project.organization.id, organizationID)
         XCTAssertEqual(project.organization.name, "My Organization")
         XCTAssertNil(project.organization.description, "Organization description is nil")
-        XCTAssertEqual(project.organization.logoURL.absoluteString, "https://careevolution.com/images/rkstudio-logo.png")
+        XCTAssertEqual(project.organization.logoURL.absoluteString, "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")
         XCTAssertEqual(project.organization.color, "#0c509b")
     }
     
@@ -105,7 +105,7 @@ class ProjectModelTests: XCTestCase {
     "organization": {
         "id": "\(organizationID)",
         "name": "My Organization",
-        "logoUrl": "https://careevolution.com/images/rkstudio-logo.png",
+        "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png",
         "color": "#0c509b"
     },
     "learnMoreLink": ""
