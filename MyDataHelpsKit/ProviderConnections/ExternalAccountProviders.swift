@@ -84,10 +84,11 @@ public struct ExternalAccountProvidersQuery {
     /// - Parameter page: the previous page of results, which should have been produced with this query.
     /// - Returns: A copy of this query, with `pageNumber` set to fetch results following the given `page`, if there are additional results to fetch. If there are no additional results available, returns `nil`. The query returned, if any, has the same filters as the original.
     public func page(after page: ExternalAccountProvidersResultPage) -> ExternalAccountProvidersQuery? {
-        guard page.externalAccountProviders.count >= limit else {
+        let nextPageNumber = page.pageNumber + 1
+        guard limit > 0, (nextPageNumber * limit) < page.totalCount else {
             return nil
         }
-        return ExternalAccountProvidersQuery(search: self.search, category: self.category, limit: self.limit, pageNumber: page.pageNumber + 1)
+        return ExternalAccountProvidersQuery(search: self.search, category: self.category, limit: self.limit, pageNumber: nextPageNumber)
     }
 }
 

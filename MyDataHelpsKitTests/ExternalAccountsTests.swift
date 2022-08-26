@@ -39,24 +39,37 @@ class ExternalAccountsTests: XCTestCase {
         XCTAssertEqual(ExternalAccountProvidersQuery(limit: 1000).limit, ExternalAccountProvidersQuery.defaultLimit, "Upper bound for limit")
         
         XCTAssertEqual(ExternalAccountProvidersQuery(pageNumber: -1).pageNumber, ExternalAccountProvidersQuery.firstPageNumber, "Lower bound for page number")
+    }
+    
+    /// Total results 5, limit 2, expect 3 pages, with page indexes 0 through 2.
+    func testExternalAccountProvidersQueryPageAfter() {
+        let makeProviderQuery: (Int) -> ExternalAccountProvidersQuery = { pageNumber in
+                .init(search: "search text", category: .deviceManufacturer, limit: 2, pageNumber: pageNumber)
+        }
         
-        query = ExternalAccountProvidersQuery(search: "search text", category: .deviceManufacturer, limit: 2, pageNumber: 0)
+        let query0 = makeProviderQuery(0)
         let provider1 = ExternalAccountProvider(id: .init(1), name: "Provider", category: .deviceManufacturer, logoURL: nil)
-        let fullResultPage0 = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [provider1, provider1], totalExternalAccountProviders: 5), query: query)
-        let fullResultPage1 = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [provider1, provider1], totalExternalAccountProviders: 5), query: ExternalAccountProvidersQuery(search: "search text", category: .deviceManufacturer, limit: 2, pageNumber: 1))
-        let partialResultPage = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [provider1], totalExternalAccountProviders: 5), query: query)
-        let emptyResultPage = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [], totalExternalAccountProviders: 5), query: query)
+        let fullResultPage0 = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [provider1, provider1], totalExternalAccountProviders: 5), query: query0)
+        let fullResultPage1 = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [provider1, provider1], totalExternalAccountProviders: 5), query: makeProviderQuery(1))
+        let partialResultPage = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [provider1], totalExternalAccountProviders: 5), query: makeProviderQuery(2))
+        let emptyResultPage = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [], totalExternalAccountProviders: 5), query: makeProviderQuery(3))
+        let emptyResultPage13 = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [], totalExternalAccountProviders: 5), query: makeProviderQuery(13))
         
-        let pageAfter = query.page(after: fullResultPage0)
-        XCTAssertEqual(pageAfter?.search, "search text", "Copies search to next page query")
-        XCTAssertEqual(pageAfter?.category, .deviceManufacturer, "Copies category to next page query")
-        XCTAssertEqual(pageAfter?.limit, 2, "Copies limit to next page query")
-        XCTAssertEqual(pageAfter?.pageNumber, 1, "Increments page number")
-        XCTAssertEqual(pageAfter?.page(after: fullResultPage1)?.pageNumber, 2, "Increments page number again")
-        XCTAssertEqual(query.page(after: fullResultPage1)?.pageNumber, 2, "Increments page number based on result's page number, not the original query")
+        let query1 = query0.page(after: fullResultPage0)
+        XCTAssertEqual(query1?.search, "search text", "Copies search to next page query")
+        XCTAssertEqual(query1?.category, .deviceManufacturer, "Copies category to next page query")
+        XCTAssertEqual(query1?.limit, 2, "Copies limit to next page query")
+        XCTAssertEqual(query1?.pageNumber, 1, "Increments page number")
         
-        XCTAssertNil(pageAfter?.page(after: partialResultPage), "Partial result indicates end of pages")
-        XCTAssertNil(pageAfter?.page(after: emptyResultPage), "Empty result indicates end of pages")
+        XCTAssertEqual(query1?.page(after: fullResultPage1)?.pageNumber, 2, "Increments page number again")
+        XCTAssertEqual(query0.page(after: fullResultPage1)?.pageNumber, 2, "Increments page number based on result's page number, not the original query")
+        
+        XCTAssertNil(query0.page(after: partialResultPage), "Partial result indicates end of pages")
+        XCTAssertNil(query0.page(after: emptyResultPage), "Empty result indicates end of pages")
+        XCTAssertNil(query0.page(after: emptyResultPage13), "Farther out of page bounds")
+        
+        let noResults = ExternalAccountProvidersResultPage(result: .init(externalAccountProviders: [], totalExternalAccountProviders: 0), query: query0)
+        XCTAssertNil(query0.page(after: noResults), "Test totally empty results")
     }
     
     func testExternalAccountJSONDecodes() throws {
