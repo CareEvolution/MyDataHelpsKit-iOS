@@ -49,7 +49,7 @@ public final class ParticipantSession {
         load(resource: DeviceDataQueryResource(query: query), completion: completion)
     }
     
-    /// Creats new and/or updates existing device data points. Each device data point is uniquely identified by a combination of its properties, called a natural key, as identified in `DeviceDataPointPersistModel`. Data points are always persisted with the `project` namespace.
+    /// Creates new and/or updates existing device data points. Each device data point is uniquely identified by a combination of its properties, called a natural key, as identified in `DeviceDataPointPersistModel`. Data points are always persisted with the `project` namespace.
     ///
     /// To update an existing device data point, persist one whose natural key properties exactly match the one to be updated. All non-natural key properties will be updated to your persisted point.
     ///
