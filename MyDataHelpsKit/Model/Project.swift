@@ -37,7 +37,6 @@ public struct ProjectInfo: Decodable {
 }
 
 /// Describes the type of a MyDataHelps project.
-/// May be one of: Research Study, Wellness Program, or Clinical Program.
 public struct ProjectType: RawRepresentable, Equatable, Decodable {
     /// The raw value for the project type as stored in MyDataHelps.
     public let rawValue: String
