@@ -78,7 +78,7 @@ class ProjectModelTests: XCTestCase {
         XCTAssertEqual(project.name, "Example Project")
         XCTAssertNil(project.description, "description is nil")
         XCTAssertEqual(project.code, "ABCDEF")
-        XCTAssertEqual(project.type.rawValue, "Unknown")
+        XCTAssertEqual(project.type.rawValue, "Unknown", "Decodes unknown ProjectType without error")
         XCTAssertNil(project.supportEmail, "supportEmail is nil")
         XCTAssertNil(project.supportPhone, "supportPhone is nil")
         XCTAssertNil(project.learnMoreURL, "learnMoreURL is nil")
