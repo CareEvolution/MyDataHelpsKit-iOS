@@ -36,7 +36,7 @@ class ProjectModelTests: XCTestCase {
 """.data(using: .utf8)!
         
         let project = try decoder.decode(ProjectInfo.self, from: json)
-        XCTAssertEqual(project.id, projectID)
+        XCTAssertEqual(project.id.value, projectID)
         XCTAssertEqual(project.name, "Example Project")
         XCTAssertEqual(project.description, "Project description")
         XCTAssertEqual(project.code, "ABCDEF")
@@ -46,7 +46,7 @@ class ProjectModelTests: XCTestCase {
         XCTAssertEqual(project.learnMoreURL?.absoluteString, "https://example.com/")
         XCTAssertEqual(project.learnMoreTitle, "Learn More")
         
-        XCTAssertEqual(project.organization.id, organizationID)
+        XCTAssertEqual(project.organization.id.value, organizationID)
         XCTAssertEqual(project.organization.name, "My Organization")
         XCTAssertEqual(project.organization.description, "Organization description")
         XCTAssertEqual(project.organization.logoURL.absoluteString, "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")
@@ -74,7 +74,7 @@ class ProjectModelTests: XCTestCase {
 """.data(using: .utf8)!
         
         let project = try decoder.decode(ProjectInfo.self, from: json)
-        XCTAssertEqual(project.id, projectID)
+        XCTAssertEqual(project.id.value, projectID)
         XCTAssertEqual(project.name, "Example Project")
         XCTAssertNil(project.description, "description is nil")
         XCTAssertEqual(project.code, "ABCDEF")
@@ -84,7 +84,7 @@ class ProjectModelTests: XCTestCase {
         XCTAssertNil(project.learnMoreURL, "learnMoreURL is nil")
         XCTAssertNil(project.learnMoreTitle, "learnMoreTitle is nil")
         
-        XCTAssertEqual(project.organization.id, organizationID)
+        XCTAssertEqual(project.organization.id.value, organizationID)
         XCTAssertEqual(project.organization.name, "My Organization")
         XCTAssertNil(project.organization.description, "Organization description is nil")
         XCTAssertEqual(project.organization.logoURL.absoluteString, "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")

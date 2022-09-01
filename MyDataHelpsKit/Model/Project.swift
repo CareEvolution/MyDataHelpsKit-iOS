@@ -8,9 +8,12 @@
 import Foundation
 
 /// Information about the project and its settings.
-public struct ProjectInfo: Decodable {
+public struct ProjectInfo: Identifiable, Decodable {
     /// Unique project identifier.
-    public let id: String
+    public typealias ID = ScopedIdentifier<ProjectInfo, String>
+    
+    /// Unique project identifier.
+    public let id: ID
     /// Project's display name, localized based on participant's language settings.
     public let name: String
     /// Project's display description, localized based on participant's language settings.
@@ -56,7 +59,7 @@ public struct ProjectType: RawRepresentable, Equatable, Decodable {
 }
 
 /// Information about an organization.
-public struct Organization: Decodable {
+public struct Organization: Identifiable, Decodable {
     enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -66,7 +69,10 @@ public struct Organization: Decodable {
     }
     
     /// Unique organization identifier.
-    public let id: String
+    public typealias ID = ScopedIdentifier<Organization, String>
+    
+    /// Unique organization identifier.
+    public let id: ID
     /// Organization name.
     public let name: String
     /// Organization description.
