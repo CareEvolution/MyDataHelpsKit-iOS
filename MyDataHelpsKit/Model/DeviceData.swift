@@ -75,7 +75,7 @@ public struct DeviceDataResultPage: PagedResult, Decodable {
 }
     
 /// Device data is grouped into namespaces, which represent the source frameworks that generate the data. There is also a separate `project` namespace, where projects can persist their own data. The static members of DeviceDataNamespace identify all supported namespace values.
-public struct DeviceDataNamespace: RawRepresentable, Equatable, Decodable {
+public struct DeviceDataNamespace: RawRepresentable, Equatable, Hashable, Decodable {
     public typealias RawValue = String
     
     /// Project-specific device data.
