@@ -16,7 +16,8 @@ private let accountsJSON = """
 
 private let providersJSON = """
     [
-        { "id": 1, "name": "MyDataHelps Demo Provider", "category": "Provider", "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png" }
+        { "id": 1, "name": "MyDataHelps Demo Provider", "category": "Provider", "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png" },
+        { "id": 2, "name": "Unknown Category Provider", "category": "NewCategory", "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png" }
     ]
     """.data(using: .utf8)!
 
@@ -35,11 +36,15 @@ class ExternalAccountsTests: XCTestCase {
     
     func testProviderAccountsJSONDecodes() throws {
         let list = try JSONDecoder.myDataHelpsDecoder.decode([ExternalAccountProvider].self, from: providersJSON)
-        XCTAssertEqual(list.count, 1)
+        XCTAssertEqual(list.count, 2)
         if let first = list.first {
             XCTAssertEqual(first.id, 1)
+            XCTAssertEqual(first.name, "MyDataHelps Demo Provider")
             XCTAssertEqual(first.category, .provider)
             XCTAssertEqual(first.logoURL?.absoluteString, "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png")
+        }
+        if let last = list.last {
+            XCTAssertEqual(last.category, .init(rawValue: "NewCategory"), "Unknown category decodes without error")
         }
     }
 }
