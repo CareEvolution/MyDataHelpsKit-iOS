@@ -89,5 +89,6 @@ struct ProjectInfoView_Previews: PreviewProvider {
     
     static var previews: some View {
         ProjectInfoView(project: project, dataCollectionSettings: projectDataCollectionSettings)
+            .environmentObject(RemoteImageCache())
     }
 }
