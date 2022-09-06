@@ -9,8 +9,7 @@ import Foundation
 
 public extension ParticipantSession {
     /// Fetches a list of all of the participant's connected external accounts.
-    /// - Parameters:
-    ///   - completion: Called when the request is complete, with a list of connected accounts on success or an error on failure.
+    /// - Returns: An asynchronously-delivered list of connected counts, if successful. Throws a `MyDataHelpsError` if unsuccessful.
     func listExternalAccounts() async throws -> [ExternalAccount] {
         try await load(resource: ExternalAccountsResource())
     }
@@ -20,7 +19,6 @@ public extension ParticipantSession {
     /// This API only begins the process of refreshing an account; the process may take additional time to complete. To track the status of a refresh, use `ParticipantSession.listExternalAccounts` to poll the `status` value of an account, checking for `fetchingData` or `fetchComplete` status values.
     /// - Parameters:
     ///   - account: The external account to refresh.
-    ///   - completion: Called when the request is complete, with an empty `.success` on success or an error on failure.
     func refreshExternalAccount(_ account: ExternalAccount) async throws {
         try await load(resource: RefreshExternalAccountResource(account: account))
     }
@@ -30,7 +28,6 @@ public extension ParticipantSession {
     /// This API is idempotent: the result will indicate success even if the account was already disconnected, or the participant had no such account.
     /// - Parameters:
     ///   - account: The external account to disconnect.
-    ///   - completion: Called when the request is complete, with an empty `.success` on success or an error on failure.
     func deleteExternalAccount(_ account: ExternalAccount) async throws {
         try await load(resource: DeleteExternalAccountResource(account: account))
     }

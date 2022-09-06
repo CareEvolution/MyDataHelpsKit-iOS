@@ -90,7 +90,7 @@ public struct SurveyTaskQuery: PagedQuery {
 public struct SurveyTaskResultPage: PagedResult, Decodable {
     /// Identifies a specific page of survey tasks.
     public typealias PageID = ScopedIdentifier<SurveyTaskResultPage, String>
-    /// A list of SurveyTasks filtered by the query criteria.
+    /// A list of SurveyTasks filtered by the query criteria, ordered by the task creation date.
     public let surveyTasks: [SurveyTask]
     /// An ID to be used with subsequent `SurveyTaskQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
     public let nextPageID: PageID?
