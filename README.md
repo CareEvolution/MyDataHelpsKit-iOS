@@ -43,7 +43,7 @@ For a complete sample app, see the [`example`](https://github.com/CareEvolution/
 
 ### Requirements
 
-MyDataHelpsKit is a Cocoa Touch framework, linked to your app as a static library. It's built with the latest Xcode, Swift, and iOS SDK versions. It supports iOS 11 and above. MyDataHelpsKit is self-contained; there are no dependencies on other frameworks or libraries, and requires no Apple frameworks other than Foundation.
+MyDataHelpsKit is a Cocoa Touch framework, linked to your app as a static library. It's built with the latest Xcode, Swift, and iOS SDK versions. It supports iOS 13.6 and above. MyDataHelpsKit is self-contained; there are no dependencies on other frameworks or libraries, and requires no Apple frameworks other than Foundation.
 
 Based on your preferred installation process or dependency manager, choose from the below options to integrate MyDataHelpsKit.
 

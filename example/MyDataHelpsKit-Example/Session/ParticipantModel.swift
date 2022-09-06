@@ -8,7 +8,7 @@
 import Foundation
 import MyDataHelpsKit
 
-class ParticipantModel: ObservableObject {
+@MainActor class ParticipantModel: ObservableObject {
     let session: ParticipantSessionType
     
     @Published var info: Result<ParticipantInfoViewModel, MyDataHelpsError>? = nil
@@ -19,8 +19,8 @@ class ParticipantModel: ObservableObject {
     
     func loadInfo() {
         if case .some(.success(_)) = info { return }
-        session.getParticipantInfoViewModel { [weak self] result in
-            self?.info = result
+        Task {
+            info = await Result(wrapping: try await session.getParticipantInfoViewModel())
         }
     }
 }

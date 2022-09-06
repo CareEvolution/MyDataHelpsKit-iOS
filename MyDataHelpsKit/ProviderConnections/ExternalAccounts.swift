@@ -11,8 +11,8 @@ public extension ParticipantSession {
     /// Fetches a list of all of the participant's connected external accounts.
     /// - Parameters:
     ///   - completion: Called when the request is complete, with a list of connected accounts on success or an error on failure.
-    func listExternalAccounts(completion: @escaping (Result<[ExternalAccount], MyDataHelpsError>) -> Void) {
-        load(resource: ExternalAccountsResource(), completion: completion)
+    func listExternalAccounts() async throws -> [ExternalAccount] {
+        try await load(resource: ExternalAccountsResource())
     }
     
     /// Requests the refresh of data from a connected external account.
@@ -21,8 +21,8 @@ public extension ParticipantSession {
     /// - Parameters:
     ///   - account: The external account to refresh.
     ///   - completion: Called when the request is complete, with an empty `.success` on success or an error on failure.
-    func refreshExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        load(resource: RefreshExternalAccountResource(account: account), completion: completion)
+    func refreshExternalAccount(_ account: ExternalAccount) async throws {
+        try await load(resource: RefreshExternalAccountResource(account: account))
     }
     
     /// Deletes an external account.
@@ -31,8 +31,8 @@ public extension ParticipantSession {
     /// - Parameters:
     ///   - account: The external account to disconnect.
     ///   - completion: Called when the request is complete, with an empty `.success` on success or an error on failure.
-    func deleteExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        load(resource: DeleteExternalAccountResource(account: account), completion: completion)
+    func deleteExternalAccount(_ account: ExternalAccount) async throws {
+        try await load(resource: DeleteExternalAccountResource(account: account))
     }
 }
 

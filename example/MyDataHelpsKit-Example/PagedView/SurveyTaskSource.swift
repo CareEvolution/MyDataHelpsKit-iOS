@@ -17,9 +17,11 @@ class SurveyTaskSource: PagedModelSource, ObservableObject {
         self.query = query
     }
     
-    func loadPage(after page: SurveyTaskResultPage?, completion: @escaping (Result<SurveyTaskResultPage, MyDataHelpsError>) -> Void) {
+    func loadPage(after page: SurveyTaskResultPage?) async throws -> SurveyTaskResultPage? {
         if let query = query(after: page) {
-            session.querySurveyTasks(query, completion: completion)
+            return try await session.querySurveyTasks(query)
+        } else {
+            return nil
         }
     }
     

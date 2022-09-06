@@ -12,8 +12,8 @@ public extension ParticipantSession {
     /// - Parameters:
     ///   - query: Specifies how to filter the providers.
     ///   - completion: Called when the request is complete, with an array of `ExternalAccountProvider` on success or an error on failure.
-    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<[ExternalAccountProvider], MyDataHelpsError>) -> Void) {
-        load(resource: ExternalAccountProvidersQueryResource(query: query), completion: completion)
+    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery) async throws -> [ExternalAccountProvider] {
+        try await load(resource: ExternalAccountProvidersQueryResource(query: query))
     }
         
     /// Initiates a new connected external account. Grants access to a secure OAuth connection to the specified external account provider, where the participant can provide their provider credentials and authorize MyDataHelps to retrieve data from the account.
@@ -33,12 +33,9 @@ public extension ParticipantSession {
     ///   - provider: The external account provider to connect.
     ///   - finalRedirectURL: A URL that is configured to open your app via a custom scheme or Universal Link.
     ///   - completion: Called when the request is complete, with the provider authorization URL and supporting information on success, or an error on failure.
-    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void) {
-        load(resource: ConnectExternalAccountResource(providerID: provider.id, finalRedirectURL: finalRedirectURL)) {
-            completion($0.map {
-                ExternalAccountAuthorization(provider: provider, authorizationURL: $0, finalRedirectURL: finalRedirectURL)
-            })
-        }
+    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL) async throws -> ExternalAccountAuthorization {
+        let authorizationURL = try await load(resource: ConnectExternalAccountResource(providerID: provider.id, finalRedirectURL: finalRedirectURL))
+        return ExternalAccountAuthorization(provider: provider, authorizationURL: authorizationURL, finalRedirectURL: finalRedirectURL)
     }
 }
 

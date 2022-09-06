@@ -18,16 +18,22 @@ struct SurveyAnswerView: View {
         })
     }
     
-    class Model: Identifiable, ObservableObject {
+    @MainActor class Model: Identifiable, ObservableObject {
+        enum DeletionState {
+            case notDeleted
+            case deleted
+            case failure(MyDataHelpsError)
+        }
+        
         let session: ParticipantSessionType
         let id: SurveyAnswer.ID
         let surveyResultID: SurveyResult.ID
         let value: String
         let date: Date?
         let surveyDisplayName: String
-        @Published var deletionState: Result<Void, MyDataHelpsError>? = nil
+        @Published var deletionState = DeletionState.notDeleted
         
-        init(session: ParticipantSessionType, id: SurveyAnswer.ID, surveyResultID: SurveyResult.ID, value: String, date: Date?, surveyDisplayName: String, deletionState: Result<Void, MyDataHelpsError>? = nil) {
+        init(session: ParticipantSessionType, id: SurveyAnswer.ID, surveyResultID: SurveyResult.ID, value: String, date: Date?, surveyDisplayName: String, deletionState: DeletionState = .notDeleted) {
             self.session = session
             self.id = id
             self.surveyResultID = surveyResultID
@@ -44,13 +50,18 @@ struct SurveyAnswerView: View {
             self.value = answer.answers.joined(separator: ", ")
             self.date = answer.date
             self.surveyDisplayName = answer.surveyDisplayName
-            self.deletionState = nil
+            self.deletionState = .notDeleted
         }
         
         func delete() {
-            guard deletionState == nil else { return }
-            session.deleteSurveyResult(surveyResultID) { [weak self] in
-                self?.deletionState = $0
+            Task {
+                guard case .notDeleted = deletionState else { return }
+                do {
+                    try await session.deleteSurveyResult(surveyResultID)
+                    deletionState = .deleted
+                } catch {
+                    deletionState = .failure(MyDataHelpsError(error))
+                }
             }
         }
     }
@@ -68,13 +79,13 @@ struct SurveyAnswerView: View {
             }
             Spacer()
             switch model.deletionState {
-            case .none:
+            case .notDeleted:
                 Button(action: { model.delete() }, label: {
                     Image(systemName: "trash")
                 })
-            case .some(.success):
+            case .deleted:
                 Image(systemName: "multiply")
-            case .some(.failure):
+            case .failure:
                 Image(systemName: "exclamationmark.circle")
                     .foregroundColor(Color(.systemRed))
             }
@@ -82,7 +93,7 @@ struct SurveyAnswerView: View {
     }
     
     var deletionStateColor: Color? {
-        if case .some(.success) = model.deletionState {
+        if case .deleted = model.deletionState {
             return Color(.systemGray)
         }
         return nil
@@ -92,9 +103,9 @@ struct SurveyAnswerView: View {
 struct SurveyAnswerView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: nil))
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .notDeleted))
                 .padding()
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .success(())))
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .deleted))
                 .padding()
             SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .failure(.unknown(nil))))
                 .padding()
