@@ -12,6 +12,8 @@ class ParticipantModel: ObservableObject {
     let session: ParticipantSessionType
     
     @Published var info: Result<ParticipantInfoViewModel, MyDataHelpsError>? = nil
+    @Published var project: Result<ProjectInfo, MyDataHelpsError>? = nil
+    @Published var dataCollectionSettings: Result<ProjectDataCollectionSettings, MyDataHelpsError>? = nil
     
     init(session: ParticipantSessionType) {
         self.session = session
@@ -21,6 +23,20 @@ class ParticipantModel: ObservableObject {
         if case .some(.success(_)) = info { return }
         session.getParticipantInfoViewModel { [weak self] result in
             self?.info = result
+        }
+    }
+    
+    func loadProject() {
+        if case .some(.success) = project { return }
+        session.getProjectInfo { [weak self] in
+            self?.project = $0
+        }
+    }
+    
+    func loadDataCollectionSettings() {
+        if case .some(.success) = project { return }
+        session.getDataCollectionSettings { [weak self] in
+            self?.dataCollectionSettings = $0
         }
     }
 }
