@@ -12,6 +12,8 @@ import MyDataHelpsKit
     let session: ParticipantSessionType
     
     @Published var info: Result<ParticipantInfoViewModel, MyDataHelpsError>? = nil
+    @Published var project: Result<ProjectInfo, MyDataHelpsError>? = nil
+    @Published var dataCollectionSettings: Result<ProjectDataCollectionSettings, MyDataHelpsError>? = nil
     
     init(session: ParticipantSessionType) {
         self.session = session
@@ -21,6 +23,20 @@ import MyDataHelpsKit
         if case .some(.success(_)) = info { return }
         Task {
             info = await Result(wrapping: try await session.getParticipantInfoViewModel())
+        }
+    }
+    
+    func loadProject() {
+        if case .some(.success) = project { return }
+        Task {
+            project = await Result(wrapping: try await session.getProjectInfo())
+        }
+    }
+    
+    func loadDataCollectionSettings() {
+        if case .some(.success) = dataCollectionSettings { return }
+        Task {
+            dataCollectionSettings = await Result(wrapping: try await session.getDataCollectionSettings())
         }
     }
 }

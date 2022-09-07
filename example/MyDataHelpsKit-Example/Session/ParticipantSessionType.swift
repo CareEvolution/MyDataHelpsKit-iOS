@@ -11,6 +11,8 @@ import MyDataHelpsKit
 /// Protocol wrapping MyDataHelpsKit.ParticipantSession, to allow substituting stub implementations for SwiftUI Previews.
 protocol ParticipantSessionType {
     func getParticipantInfoViewModel() async throws -> ParticipantInfoViewModel
+    func getProjectInfo() async throws -> ProjectInfo
+    func getDataCollectionSettings() async throws -> ProjectDataCollectionSettings
     func queryDeviceData(_ query: DeviceDataQuery) async throws -> DeviceDataResultPage
     func querySurveyTasks(_ query: SurveyTaskQuery) async throws -> SurveyTaskResultPage
     func querySurveyAnswers(_ query: SurveyAnswersQuery) async throws -> SurveyAnswersPage
@@ -46,7 +48,15 @@ class ParticipantSessionPreview: ParticipantSessionType {
         return .init(name: "name", linkIdentifier: nil, email: "email", phone: "phone", enrollmentDate: Date(), isUnsubscribedFromEmails: false)
     }
     
-    public func queryDeviceData(_ query: DeviceDataQuery) async throws -> DeviceDataResultPage {
+    func getProjectInfo() async throws -> ProjectInfo {
+        return await ProjectInfoView_Previews.project
+    }
+    
+    func getDataCollectionSettings() async throws -> ProjectDataCollectionSettings {
+        return await ProjectInfoView_Previews.projectDataCollectionSettings
+    }
+    
+    func queryDeviceData(_ query: DeviceDataQuery) async throws -> DeviceDataResultPage {
         throw NotImplementedForSwiftUIPreviews()
     }
     

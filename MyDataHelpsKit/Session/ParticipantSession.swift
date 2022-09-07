@@ -78,12 +78,24 @@ public final class ParticipantSession {
         self.session = client.newURLSession()
     }
     
-    // MARK: Participant info
+    // MARK: Participant and project info
     
     /// Retrieves basic information about the participant.
     /// - Returns: An asynchronously-delivered `ParticipantInfo` instance, if successful. Throws a `MyDataHelpsError` if unsuccessful.
     public func getParticipantInfo() async throws -> ParticipantInfo {
         try await load(resource: GetParticipantInfoResource())
+    }
+    
+    /// Retrieves general project information.
+    /// - Returns: An asynchronously-delivered `ProjectInfo` instance, if successful. Throws a `MyDataHelpsError` if unsuccessful.
+    public func getProjectInfo() async throws -> ProjectInfo {
+        try await load(resource: GetProjectInfoResource())
+    }
+    
+    /// Retrieves settings related to data collection for the participant and their project.
+    /// - Returns: An asynchronously-delivered `ProjectDataCollectionSettings` instance, if successful. Throws a `MyDataHelpsError` if unsuccessful.
+    public func getDataCollectionSettings() async throws -> ProjectDataCollectionSettings {
+        try await load(resource: GetProjectDataCollectionSettingsResource())
     }
     
     // MARK: Device data
@@ -98,7 +110,7 @@ public final class ParticipantSession {
         try await load(resource: DeviceDataQueryResource(query: query))
     }
     
-    /// Creats new and/or updates existing device data points. Each device data point is uniquely identified by a combination of its properties, called a natural key, as identified in `DeviceDataPointPersistModel`. Data points are always persisted with the `project` namespace.
+    /// Creates new and/or updates existing device data points. Each device data point is uniquely identified by a combination of its properties, called a natural key, as identified in `DeviceDataPointPersistModel`. Data points are always persisted with the `project` namespace.
     ///
     /// To update an existing device data point, persist one whose natural key properties exactly match the one to be updated. All non-natural key properties will be updated to your persisted point.
     ///
