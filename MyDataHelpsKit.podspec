@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name = "MyDataHelpsKit"
-  spec.version = '1.2.0' #auto-generated
+  spec.version = '1.3.0' #auto-generated
   spec.summary = "An SDK to integrate MyDataHelps™ with your apps to develop your own participant experiences"
   spec.homepage = "https://github.com/CareEvolution/MyDataHelpsKit-iOS"
   spec.documentation_url = "https://developer.mydatahelps.org"
