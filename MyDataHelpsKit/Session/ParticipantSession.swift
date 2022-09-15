@@ -13,7 +13,56 @@ import Foundation
 ///
 /// ### Asynchronous Behavior
 /// 
-/// Requests to the MyDataHelps platform are typically asynchronous. All asynchronous requests in ParticipantSession are implemented with a completion parameter of type `(Result<ModelType, MyDataHelpsError>) -> Void`, where `ModelType` is the type of the data model object returned upon success. All completion blocks are invoked on the main thread.
+/// Requests to the MyDataHelps platform are typically asynchronous. All asynchronous requests in ParticipantSession are implemented as Swift `async` functions. These functions suspend the calling thread until the request is complete, and then return the result object (if applicable). ParticipantSession performs the actual requests and all response parsing in a background thread, and makes no guarantee about the specific thread the result is returned on.
+///
+/// The caller is responsible for controlling the thread in which the async continuation occurs; the calling Task, function, or class should be marked as `@MainActor` if it updates the app's UI, as shown in the examples below.
+///
+/// ### Error Handling
+///
+/// Async functions in `ParticipantSession` will throw errors for any failures in communicating with the MyDataHelps platform. All thrown errors are of type ``MyDataHelpsError``. `MyDataHelpsError` provides a convenience initializer to simplify `do/catch` blocks, as shown in the examples below.
+///
+/// ### Examples
+///
+/// Using ParticipantSession's async APIs and errors in SwiftUI (see the [MyDataHelpsKit example app](https://github.com/CareEvolution/MyDataHelpsKit-iOS/tree/main/example) for additional SwiftUI examples):
+///
+///     @MainActor class ParticipantInfoViewModel: ObservableObject {
+///         let session: ParticipantSession
+///         @Published var name: String?
+///         @Published var error: MyDataHelpsError?
+///         func fetch() async {
+///             do {
+///                 // ParticipantInfoViewModel is marked as @MainActor, guaranteeing the
+///                 // name value (or any thrown error) will be set on the main thread.
+///                 name = try await session.getParticipantInfo().demographics.firstName
+///             } catch {
+///                 // This safely casts the thrown error to a MyDataHelpsError
+///                 // without an extra 'catch let...as...' block.
+///                 error = MyDataHelpsError(error)
+///             }
+///         }
+///     }
+///
+/// Using ParticipantSession's async APIs and errors in UIKit:
+///
+///     class ParticipantInfoViewController: UIViewController {
+///         let session: ParticipantSession
+///         @IBOutlet var nameLabel: UILabel!
+///         @IBOutlet var errorLabel: UILabel!
+///         func viewDidLoad() {
+///             // Mark the Task as @MainActor to guarantee the UI
+///             // (or any thrown error) will be updated on the main thread.
+///             Task { @MainActor in
+///                 do {
+///                     let name = try await self.session.getParticipantInfo().demographics.firstName
+///                     self.nameLabel.text = name
+///                 } catch {
+///                     // This safely casts the thrown error to a MyDataHelpsError
+///                     // without an extra 'catch let...as...' block.
+///                     self.errorLabel.text = MyDataHelpsError(error).localizedDescription
+///                 }
+///             }
+///         }
+///     }
 public final class ParticipantSession {
     
     internal let client: MyDataHelpsClient
@@ -32,21 +81,21 @@ public final class ParticipantSession {
     // MARK: Participant and project info
     
     /// Retrieves basic information about the participant.
-    /// - Parameter completion: Called when the request is complete, with a `ParticipantInfo` instance on success or an error on failure.
-    public func getParticipantInfo(completion: @escaping (Result<ParticipantInfo, MyDataHelpsError>) -> Void) {
-        load(resource: GetParticipantInfoResource(), completion: completion)
+    /// - Returns: An asynchronously-delivered `ParticipantInfo` instance, if successful. Throws a `MyDataHelpsError` if unsuccessful.
+    public func getParticipantInfo() async throws -> ParticipantInfo {
+        try await load(resource: GetParticipantInfoResource())
     }
     
     /// Retrieves general project information.
-    /// - Parameter completion: Called when the request is complete, with a ``ProjectInfo`` instance on success or an error on failure.
-    public func getProjectInfo(completion: @escaping (Result<ProjectInfo, MyDataHelpsError>) -> Void) {
-        load(resource: GetProjectInfoResource(), completion: completion)
+    /// - Returns: An asynchronously-delivered `ProjectInfo` instance, if successful. Throws a `MyDataHelpsError` if unsuccessful.
+    public func getProjectInfo() async throws -> ProjectInfo {
+        try await load(resource: GetProjectInfoResource())
     }
     
     /// Retrieves settings related to data collection for the participant and their project.
-    /// - Parameter completion: Called when the request is complete, with a ``ProjectDataCollectionSettings`` instance on success or an error on failure.
-    public func getDataCollectionSettings(completion: @escaping (Result<ProjectDataCollectionSettings, MyDataHelpsError>) -> Void) {
-        load(resource: GetProjectDataCollectionSettingsResource(), completion: completion)
+    /// - Returns: An asynchronously-delivered `ProjectDataCollectionSettings` instance, if successful. Throws a `MyDataHelpsError` if unsuccessful.
+    public func getDataCollectionSettings() async throws -> ProjectDataCollectionSettings {
+        try await load(resource: GetProjectDataCollectionSettingsResource())
     }
     
     // MARK: Device data
@@ -56,9 +105,9 @@ public final class ParticipantSession {
     /// To fetch the first page of results, call this with a new `DeviceDataQuery` object. If there are additional pages available, the next page can be fetched by using `DeviceDataQuery.page(after:)` to construct a query for the following page.
     /// - Parameters:
     ///   - query: Specifies how to filter the data, and optionally which page of data to fetch.
-    ///   - completion: Called when the request is complete, with a `DeviceDataResultPage` instance on success or an error on failure. Results are ordered by most recent date.
-    public func queryDeviceData(_ query: DeviceDataQuery, completion: @escaping (Result<DeviceDataResultPage, MyDataHelpsError>) -> Void) {
-        load(resource: DeviceDataQueryResource(query: query), completion: completion)
+    /// - Returns: An asynchronously-delivered `DeviceDataResultPage` instance, if successful. Throws a `MyDataHelpsError` if unsuccessful. Results are ordered by most recent date.
+    public func queryDeviceData(_ query: DeviceDataQuery) async throws -> DeviceDataResultPage {
+        try await load(resource: DeviceDataQueryResource(query: query))
     }
     
     /// Creates new and/or updates existing device data points. Each device data point is uniquely identified by a combination of its properties, called a natural key, as identified in `DeviceDataPointPersistModel`. Data points are always persisted with the `project` namespace.
@@ -68,9 +117,8 @@ public final class ParticipantSession {
     /// To add a new device data point, provide enough natural key properties to uniquely identify it. Recommended properties include `identifier`, `type` and `observationDate`; these can be made into a unique combination for most device data points.
     /// - Parameters:
     ///   - dataPoints: A set of data points to persist.
-    ///   - completion: Called when the request is complete, with an empty `.success` on success or an error on failure.
-    public func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel], completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        load(resource: PersistDeviceDataResource(dataPoints: dataPoints), completion: completion)
+    public func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel]) async throws {
+        try await load(resource: PersistDeviceDataResource(dataPoints: dataPoints))
     }
     
     // MARK: Surveys and tasks
@@ -80,9 +128,9 @@ public final class ParticipantSession {
     /// To fetch the first page of results, call this with a new `SurveyTaskQuery` object. If there are additional pages available, the next page can be fetched by using `SurveyTaskQuery.page(after:)` to construct a query for the following page.
     /// - Parameters:
     ///   - query: Specifies how to filter the data, and optionally which page of data to fetch.
-    ///   - completion: Called when the request is complete, with a `SurveyTaskResultPage` instance on success or an error on failure. Results are ordered by the task creation date.
-    public func querySurveyTasks(_ query: SurveyTaskQuery, completion: @escaping (Result<SurveyTaskResultPage, MyDataHelpsError>) -> Void) {
-        load(resource: SurveyTaskQueryResource(query: query), completion: completion)
+    /// - Returns: An asynchronously-delivered `SurveyTaskResultPage` instance, if successful. Throws a `MyDataHelpsError` if unsuccessful. Results are ordered by the task creation date.
+    public func querySurveyTasks(_ query: SurveyTaskQuery) async throws -> SurveyTaskResultPage {
+        try await load(resource: SurveyTaskQueryResource(query: query))
     }
     
     /// Retrieve past survey answers from QuestionSteps, FormSteps, or WebViewSteps. Often this is used to display past answers to the participant.
@@ -90,9 +138,9 @@ public final class ParticipantSession {
     /// To fetch the first page of results, call this with a new `SurveyAnswersQuery` object. If there are additional pages available, the next page can be fetched by using `SurveyAnswersQuery.page(after:)` to construct a query for the following page.
     /// - Parameters:
     ///   - query: Specifies how to filter the data, and optionally which page of data to fetch.
-    ///   - completion: Called when the request is complete, with a `SurveyAnswersPage` instance on success or an error on failure. Results are ordered by answer date.
-    public func querySurveyAnswers(_ query: SurveyAnswersQuery, completion: @escaping (Result<SurveyAnswersPage, MyDataHelpsError>) -> Void) {
-        load(resource: SurveyAnswersQueryResource(query: query), completion: completion)
+    /// - Returns: An asynchronously-delivered `SurveyAnswersPage`, if successful. Throws a `MyDataHelpsError` if unsuccessful. Results are ordered by answer date.
+    public func querySurveyAnswers(_ query: SurveyAnswersQuery) async throws -> SurveyAnswersPage {
+        try await load(resource: SurveyAnswersQueryResource(query: query))
     }
     
     /// Deletes a survey result for a participant. This feature is only available for surveys with “Results Can Be Deleted” enabled. This option can be enabled from the survey editor Settings pane in MyDataHelps Designer.
@@ -100,9 +148,8 @@ public final class ParticipantSession {
     /// This operation CANNOT be undone.
     /// - Parameters:
     ///   - surveyResultID: Auto-generated, globally-unique identifier for the survey submission to delete.
-    ///   - completion: Called when the request is complete, with an empty `.success` on success or an error on failure.
-    public func deleteSurveyResult(_ surveyResultID: SurveyResult.ID, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        load(resource: DeleteSurveyResultResource(surveyResultID: surveyResultID), completion: completion)
+    public func deleteSurveyResult(_ surveyResultID: SurveyResult.ID) async throws {
+        try await load(resource: DeleteSurveyResultResource(surveyResultID: surveyResultID))
     }
     
     // MARK: Notifications
@@ -112,8 +159,8 @@ public final class ParticipantSession {
     /// To fetch the first page of results, call this with a new `NotificationHistoryQuery` object. If there are additional pages available, the next page can be fetched by using `NotificationHistoryQuery.page(after:)` to construct a query for the following page.
     /// - Parameters:
     ///   - query: Specifies how to filter the data, and optionally which page of data to fetch.
-    ///   - completion: Called when the request is complete, with a `NotificationHistoryPage` instance on success or an error on failure. Results are ordered by date.
-    public func queryNotifications(_ query: NotificationHistoryQuery, completion: @escaping (Result<NotificationHistoryPage, MyDataHelpsError>) -> Void) {
-        load(resource: NotificationHistoryQueryResource(query: query), completion: completion)
+    /// - Returns: An asynchronously-delivered `NotificationHistoryPage` instance, if successful. Throws a `MyDataHelpsError` if unsuccessful. Results are ordered by date.
+    public func queryNotifications(_ query: NotificationHistoryQuery) async throws -> NotificationHistoryPage {
+        try await load(resource: NotificationHistoryQueryResource(query: query))
     }
 }

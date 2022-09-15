@@ -68,7 +68,7 @@ public struct DeviceDataQuery: PagedQuery {
 public struct DeviceDataResultPage: PagedResult, Decodable {
     /// Identifies a specific page of device data points.
     public typealias PageID = ScopedIdentifier<DeviceDataResultPage, String>
-    /// A list of DeviceDataPoints filtered by the query criteria.
+    /// A list of DeviceDataPoints filtered by the query criteria, ordered by most recent date.
     public let deviceDataPoints: [DeviceDataPoint]
     /// An ID to be used with subsequent `DeviceDataQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
     public let nextPageID: PageID?

@@ -9,7 +9,7 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct SurveyTaskView: View {
-    static func pageView(session: ParticipantSessionType, participantInfo: ParticipantInfoViewModel, embeddableSurveySelection: Binding<EmbeddableSurveySelection?>) -> PagedView<SurveyTaskSource, SurveyTaskView> {
+    @MainActor static func pageView(session: ParticipantSessionType, participantInfo: ParticipantInfoViewModel, embeddableSurveySelection: Binding<EmbeddableSurveySelection?>) -> PagedView<SurveyTaskSource, SurveyTaskView> {
         /// EXERCISE: Add parameters to this `SurveyTaskQuery` to customize filtering.
         let query = SurveyTaskQuery()
         let source = SurveyTaskSource(session: session, query: query)

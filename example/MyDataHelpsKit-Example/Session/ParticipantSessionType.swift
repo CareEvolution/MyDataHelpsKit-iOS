@@ -10,27 +10,25 @@ import MyDataHelpsKit
 
 /// Protocol wrapping MyDataHelpsKit.ParticipantSession, to allow substituting stub implementations for SwiftUI Previews.
 protocol ParticipantSessionType {
-    func getParticipantInfoViewModel(completion: @escaping (Result<ParticipantInfoViewModel, MyDataHelpsError>) -> Void)
-    func getProjectInfo(completion: @escaping (Result<ProjectInfo, MyDataHelpsError>) -> Void)
-    func getDataCollectionSettings(completion: @escaping (Result<ProjectDataCollectionSettings, MyDataHelpsError>) -> Void)
-    func queryDeviceData(_ query: DeviceDataQuery, completion: @escaping (Result<DeviceDataResultPage, MyDataHelpsError>) -> Void)
-    func querySurveyTasks(_ query: SurveyTaskQuery, completion: @escaping (Result<SurveyTaskResultPage, MyDataHelpsError>) -> Void)
-    func querySurveyAnswers(_ query: SurveyAnswersQuery, completion: @escaping (Result<SurveyAnswersPage, MyDataHelpsError>) -> Void)
-    func deleteSurveyResult(_ surveyResultID: SurveyResult.ID, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
-    func queryNotifications(_ query: NotificationHistoryQuery, completion: @escaping (Result<NotificationHistoryPage, MyDataHelpsError>) -> Void)
-    func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel], completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
-    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<[ExternalAccountProvider], MyDataHelpsError>) -> Void)
-    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void)
-    func listExternalAccounts(completion: @escaping (Result<[ExternalAccount], MyDataHelpsError>) -> Void)
-    func refreshExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
-    func deleteExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void)
+    func getParticipantInfoViewModel() async throws -> ParticipantInfoViewModel
+    func getProjectInfo() async throws -> ProjectInfo
+    func getDataCollectionSettings() async throws -> ProjectDataCollectionSettings
+    func queryDeviceData(_ query: DeviceDataQuery) async throws -> DeviceDataResultPage
+    func querySurveyTasks(_ query: SurveyTaskQuery) async throws -> SurveyTaskResultPage
+    func querySurveyAnswers(_ query: SurveyAnswersQuery) async throws -> SurveyAnswersPage
+    func deleteSurveyResult(_ surveyResultID: SurveyResult.ID) async throws
+    func queryNotifications(_ query: NotificationHistoryQuery) async throws -> NotificationHistoryPage
+    func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel]) async throws
+    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery) async throws -> [ExternalAccountProvider]
+    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL) async throws -> ExternalAccountAuthorization
+    func listExternalAccounts() async throws -> [ExternalAccount]
+    func refreshExternalAccount(_ account: ExternalAccount) async throws
+    func deleteExternalAccount(_ account: ExternalAccount) async throws
 }
 
 extension ParticipantSession: ParticipantSessionType {
-    func getParticipantInfoViewModel(completion: @escaping (Result<ParticipantInfoViewModel, MyDataHelpsError>) -> Void) {
-        getParticipantInfo { result in
-            completion(result.map { .init(info: $0) })
-        }
+    func getParticipantInfoViewModel() async throws -> ParticipantInfoViewModel {
+        return .init(info: try await getParticipantInfo())
     }
 }
 
@@ -40,71 +38,76 @@ extension ParticipantSession: ParticipantSessionType {
 class ParticipantSessionPreview: ParticipantSessionType {
     private let empty: Bool
     
+    struct NotImplementedForSwiftUIPreviews: Error { }
+    
     init(empty: Bool = false) {
         self.empty = empty
     }
     
-    func getParticipantInfoViewModel(completion: @escaping (Result<ParticipantInfoViewModel, MyDataHelpsError>) -> Void) {
-        completion(.success(.init(name: "name", linkIdentifier: nil, email: "email", phone: "phone", enrollmentDate: Date(), isUnsubscribedFromEmails: false)))
+    func getParticipantInfoViewModel() async throws -> ParticipantInfoViewModel {
+        return .init(name: "name", linkIdentifier: nil, email: "email", phone: "phone", enrollmentDate: Date(), isUnsubscribedFromEmails: false)
     }
     
-    func getProjectInfo(completion: @escaping (Result<ProjectInfo, MyDataHelpsError>) -> Void) {
-        completion(.success(ProjectInfoView_Previews.project))
+    func getProjectInfo() async throws -> ProjectInfo {
+        return await ProjectInfoView_Previews.project
     }
     
-    func getDataCollectionSettings(completion: @escaping (Result<ProjectDataCollectionSettings, MyDataHelpsError>) -> Void) {
-        completion(.success(ProjectInfoView_Previews.projectDataCollectionSettings))
+    func getDataCollectionSettings() async throws -> ProjectDataCollectionSettings {
+        return await ProjectInfoView_Previews.projectDataCollectionSettings
     }
     
-    func queryDeviceData(_ query: DeviceDataQuery, completion: @escaping (Result<DeviceDataResultPage, MyDataHelpsError>) -> Void) {
+    func queryDeviceData(_ query: DeviceDataQuery) async throws -> DeviceDataResultPage {
+        throw NotImplementedForSwiftUIPreviews()
     }
     
-    func querySurveyTasks(_ query: SurveyTaskQuery, completion: @escaping (Result<SurveyTaskResultPage, MyDataHelpsError>) -> Void) {
+    func querySurveyTasks(_ query: SurveyTaskQuery) async throws -> SurveyTaskResultPage {
+        throw NotImplementedForSwiftUIPreviews()
     }
     
-    func querySurveyAnswers(_ query: SurveyAnswersQuery, completion: @escaping (Result<SurveyAnswersPage, MyDataHelpsError>) -> Void) {
+    func querySurveyAnswers(_ query: SurveyAnswersQuery) async throws -> SurveyAnswersPage {
+        throw NotImplementedForSwiftUIPreviews()
     }
     
-    func deleteSurveyResult(_ surveyResultID: SurveyResult.ID, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        completion(.success(()))
+    func deleteSurveyResult(_ surveyResultID: SurveyResult.ID) async throws {
     }
     
-    func queryNotifications(_ query: NotificationHistoryQuery, completion: @escaping (Result<NotificationHistoryPage, MyDataHelpsError>) -> Void) {
+    func queryNotifications(_ query: NotificationHistoryQuery) async throws -> NotificationHistoryPage {
+        throw NotImplementedForSwiftUIPreviews()
     }
     
-    func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel], completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        completion(.success(()))
+    func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel]) async throws {
     }
     
-    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<[ExternalAccountProvider], MyDataHelpsError>) -> Void) {
-        delayedSuccess(data: PreviewData.providersJSON, completion: completion)
+    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery) async throws -> [ExternalAccountProvider] {
+        return try await delayedSuccess(data: PreviewData.providersJSON)
     }
     
-    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void) {
+    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL) async throws -> ExternalAccountAuthorization {
+        throw NotImplementedForSwiftUIPreviews()
     }
     
-    func listExternalAccounts(completion: @escaping (Result<[ExternalAccount], MyDataHelpsError>) -> Void) {
+    func listExternalAccounts() async throws -> [ExternalAccount] {
         if empty {
-            delayedSuccess(data: PreviewData.emptyArray, completion: completion)
+            return try await delayedSuccess(data: PreviewData.emptyArray)
         } else {
-            delayedSuccess(data: PreviewData.accountsJSON, completion: completion)
+            return try await delayedSuccess(data: PreviewData.accountsJSON)
         }
     }
     
-    func refreshExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        completion(.success(()))
+    func refreshExternalAccount(_ account: ExternalAccount) async throws {
     }
     
-    func deleteExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        completion(.success(()))
+    func deleteExternalAccount(_ account: ExternalAccount) async throws {
     }
     
-    private func delayedSuccess<T: Decodable>(data: Data, completion: @escaping (Result<T, MyDataHelpsError>) -> Void) {
+    private func delayedSuccess<T: Decodable>(data: Data) async throws -> T {
         guard let model = try? JSONDecoder.myDataHelpsDecoder.decode(T.self, from: data) else {
-            return
+            throw MyDataHelpsError.decodingError(DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "")))
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            completion(.success(model))
+        return try await withCheckedThrowingContinuation { continuation in
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                continuation.resume(with: .success(model))
+            }
         }
     }
 }

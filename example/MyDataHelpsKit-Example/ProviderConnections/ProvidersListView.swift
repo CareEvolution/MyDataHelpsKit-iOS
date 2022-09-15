@@ -12,7 +12,7 @@ extension ExternalAccountAuthorization: Identifiable {
     public var id: ExternalAccountProvider.ID { provider.id }
 }
 
-class ProvidersListViewModel: ObservableObject {
+@MainActor class ProvidersListViewModel: ObservableObject {
     private let session: ParticipantSessionType
     let query: ExternalAccountProvidersQuery
     @Published var providers: Result<[ExternalAccountProvider], MyDataHelpsError>?
@@ -24,16 +24,17 @@ class ProvidersListViewModel: ObservableObject {
         /// EXERCISE: Set non-nil `search` and `category` values to customize filtering providers.
         self.query = ExternalAccountProvidersQuery(search: nil, category: nil)
         self.providers = nil
-        session.queryExternalAccountProviders(query) {
-            self.providers = $0
+        Task {
+            providers = await Result(wrapping: try await session.queryExternalAccountProviders(query))
         }
     }
     
-    func connect(_ provider: ExternalAccountProvider, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void) {
+    func connect(_ provider: ExternalAccountProvider) async throws -> ExternalAccountAuthorization {
         guard let finalRedirectURL = URL(string: finalRedirectURLPreference) else {
-            return
+            throw MyDataHelpsError.unknown(nil)
         }
-        session.connectExternalAccount(provider: provider, finalRedirectURL: finalRedirectURL, completion: completion)
+        
+        return try await session.connectExternalAccount(provider: provider, finalRedirectURL: finalRedirectURL)
     }
 }
 
@@ -80,12 +81,11 @@ struct ProvidersListView: View {
     private func connect(_ provider: ExternalAccountProvider) {
         guard newConnection == nil else { return }
         errorModel = nil
-        model.connect(provider) {
-            switch $0 {
-            case let .success(connection):
-                newConnection = connection
-            case let .failure(error):
-                errorModel = .init(title: "Error", error: error)
+        Task {
+            do {
+                newConnection = try await model.connect(provider)
+            } catch {
+                errorModel = .init(title: "Error", error: MyDataHelpsError(error))
             }
         }
     }

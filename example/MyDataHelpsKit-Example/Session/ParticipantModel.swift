@@ -8,7 +8,7 @@
 import Foundation
 import MyDataHelpsKit
 
-class ParticipantModel: ObservableObject {
+@MainActor class ParticipantModel: ObservableObject {
     let session: ParticipantSessionType
     
     @Published var info: Result<ParticipantInfoViewModel, MyDataHelpsError>? = nil
@@ -21,22 +21,22 @@ class ParticipantModel: ObservableObject {
     
     func loadInfo() {
         if case .some(.success(_)) = info { return }
-        session.getParticipantInfoViewModel { [weak self] result in
-            self?.info = result
+        Task {
+            info = await Result(wrapping: try await session.getParticipantInfoViewModel())
         }
     }
     
     func loadProject() {
         if case .some(.success) = project { return }
-        session.getProjectInfo { [weak self] in
-            self?.project = $0
+        Task {
+            project = await Result(wrapping: try await session.getProjectInfo())
         }
     }
     
     func loadDataCollectionSettings() {
-        if case .some(.success) = project { return }
-        session.getDataCollectionSettings { [weak self] in
-            self?.dataCollectionSettings = $0
+        if case .some(.success) = dataCollectionSettings { return }
+        Task {
+            dataCollectionSettings = await Result(wrapping: try await session.getDataCollectionSettings())
         }
     }
 }

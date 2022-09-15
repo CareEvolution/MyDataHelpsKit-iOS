@@ -8,7 +8,7 @@
 import SwiftUI
 import MyDataHelpsKit
 
-class PersistDeviceDataViewModel: ObservableObject {
+@MainActor class PersistDeviceDataViewModel: ObservableObject {
     @Published var identifier = ""
     @Published var type = ""
     @Published var value = ""
@@ -48,9 +48,15 @@ class PersistDeviceDataViewModel: ObservableObject {
 }
 
 struct PersistDeviceDataView: View {
+    enum PersistResult {
+        case notPersisted
+        case persisted
+        case failure(MyDataHelpsError)
+    }
+    
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject var model: PersistDeviceDataViewModel
-    @State var result: Result<Void, MyDataHelpsError>? = nil
+    @State var result = PersistResult.notPersisted
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -63,11 +69,11 @@ struct PersistDeviceDataView: View {
             Text("Value:")
             TextField("Value", text: $model.value)
             switch result {
-            case .success: Text("Saved!")
+            case .persisted: Text("Saved!")
             case let .failure(error):
                 Text(error.localizedDescription)
                     .foregroundColor(Color(.systemRed))
-            case .none: Text("")
+            case .notPersisted: Text("")
             }
         }
         .padding()
@@ -81,12 +87,15 @@ struct PersistDeviceDataView: View {
     
     func save() {
         let persistModel = model.persistModel
-        model.session.persistDeviceData([persistModel]) {
-            self.result = $0
-            if case .success = $0 {
+        Task {
+            do {
+                try await model.session.persistDeviceData([persistModel])
+                result = .persisted
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                     presentationMode.wrappedValue.dismiss()
                 }
+            } catch {
+                result = .failure(MyDataHelpsError(error))
             }
         }
     }

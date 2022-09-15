@@ -14,39 +14,63 @@ extension ExternalAccount {
     }
 }
 
-class ExternalAccountsListViewModel: ObservableObject {
+@MainActor class ExternalAccountsListViewModel: ObservableObject {
     let session: ParticipantSessionType
     @Published var accounts: Result<[ExternalAccount], MyDataHelpsError>?
+    @Published var accountChangeResult: String? {
+        didSet {
+            Task {
+                // Dismiss the result after a few seconds.
+                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                accountChangeResult = nil
+            }
+        }
+    }
     
     init(session: ParticipantSessionType) {
         self.session = session
         self.accounts = nil
+        self.accountChangeResult = nil
         self.reload()
     }
     
     #if DEBUG
-    init(session: ParticipantSessionType, result: Result<[ExternalAccount], MyDataHelpsError>) {
+    // For SwiftUI previews.
+    init(session: ParticipantSessionType, result: Result<[ExternalAccount], MyDataHelpsError>, accountChangeResult: String?) {
         self.session = session
         self.accounts = result
+        self.accountChangeResult = accountChangeResult
     }
     #endif
     
     func reload() {
-        session.listExternalAccounts {
-            self.accounts = $0
+        Task {
+            accounts = await Result(wrapping: try await session.listExternalAccounts())
         }
     }
     
     func refresh(account: ExternalAccount) {
         guard account.isRefreshable else { return }
-        session.refreshExternalAccount(account) { [weak self] _ in
-            self?.reload()
+        Task {
+            do {
+                try await session.refreshExternalAccount(account)
+                accountChangeResult = "Refreshed \(account.provider.name)"
+            } catch {
+                accountChangeResult = error.localizedDescription
+            }
+            reload()
         }
     }
     
     func delete(account: ExternalAccount) {
-        session.deleteExternalAccount(account) { [weak self] _ in
-            self?.reload()
+        Task {
+            do {
+                try await session.deleteExternalAccount(account)
+                accountChangeResult = "Deleted \(account.provider.name)"
+            } catch {
+                accountChangeResult = error.localizedDescription
+            }
+            reload()
         }
     }
 }
@@ -69,10 +93,14 @@ struct ExternalAccountsListView: View {
                     Text("No connected accounts. Tap + to connect to a provider.")
                 }
             case let .some(.success(accounts)):
-                List(accounts) { account in
-                    ExternalAccountView(account: account, listModel: model)
-                        .onTapGesture(perform: { self.selected = account })
-                }
+                List {
+                    Section(model.accountChangeResult ?? "") {
+                        ForEach(accounts) { account in
+                            ExternalAccountView(account: account, listModel: model)
+                                .onTapGesture(perform: { self.selected = account })
+                        }
+                    }
+                }.listStyle(.insetGrouped)
             }
         }
         .actionSheet(item: $selected) { account in
@@ -131,7 +159,7 @@ struct ExternalAccountView: View {
 
 struct ExternalAccountsListView_Previews: PreviewProvider {
     static var previews: some View {
-        ExternalAccountView(account: ExternalAccount.previewList[0], listModel: ExternalAccountsListViewModel(session: ParticipantSessionPreview(), result: .success([])))
+        ExternalAccountView(account: ExternalAccount.previewList[0], listModel: ExternalAccountsListViewModel(session: ParticipantSessionPreview(), result: .success([]), accountChangeResult: nil))
             .padding()
             .previewLayout(.sizeThatFits)
             .environmentObject(RemoteImageCache())
@@ -141,17 +169,17 @@ struct ExternalAccountsListView_Previews: PreviewProvider {
                 .environmentObject(RemoteImageCache())
         }
         NavigationView {
-            ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .success(ExternalAccount.previewList)))
+            ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .success(ExternalAccount.previewList), accountChangeResult: "Refreshed Account"))
                 .navigationTitle("External Accounts")
                 .environmentObject(RemoteImageCache())
         }
         NavigationView {
-            ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .success([])))
+            ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .success([]), accountChangeResult: nil))
                 .navigationTitle("External Accounts")
                 .environmentObject(RemoteImageCache())
         }
         NavigationView {
-            ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .failure(.unknown(nil))))
+            ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .failure(.unknown(nil)), accountChangeResult: nil))
                 .navigationTitle("External Accounts")
                 .environmentObject(RemoteImageCache())
         }

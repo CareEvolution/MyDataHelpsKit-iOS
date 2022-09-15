@@ -32,7 +32,7 @@ public final class MyDataHelpsClient {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.timeoutIntervalForRequest = Self.requestTimeoutInterval
         configuration.urlCache = nil
-        return URLSession(configuration: configuration, delegate: nil, delegateQueue: .main)
+        return URLSession(configuration: configuration)
     }
     
     internal var languageTag: String {

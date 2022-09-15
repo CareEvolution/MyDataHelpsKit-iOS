@@ -13,37 +13,49 @@ protocol ParticipantResource {
 }
 
 extension ParticipantSession {
-    func load<ResourceType: ParticipantResource>(resource: ResourceType, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) where ResourceType.ResponseType == Void {
+    /// Performs a remote URL request with no expected response data.
+    ///
+    /// On success, asynchronously returns control to the caller. On failure, throws a `MyDataHelpsError`.
+    /// - Parameter resource: Describes the resource to load and request to perform.
+    internal func load<ResourceType: ParticipantResource>(resource: ResourceType) async throws where ResourceType.ResponseType == Void {
+        let request: URLRequest
         do {
-            let request = try resource.urlRequest(session: self)
+            request = try resource.urlRequest(session: self)
+        } catch {
+            throw MyDataHelpsError.encodingError(error)
+        }
+        
+        return try await withCheckedThrowingContinuation { continuation in
             let task = session.dataTask(with: request) {
                 let result = Self.dataResult($0, $1, $2).map { _ in () }
-                completion(result)
+                continuation.resume(with: result)
             }
             task.resume()
-        } catch {
-            DispatchQueue.main.async {
-                completion(.failure(.encodingError(error)))
-            }
         }
     }
     
-    func load<ResourceType: ParticipantResource>(resource: ResourceType, completion: @escaping (Result<ResourceType.ResponseType, MyDataHelpsError>) -> Void) where ResourceType.ResponseType: Decodable {
+    /// Performs a remote URL request and decodes the response into the specified model type.
+    ///
+    /// On success, asynchronously returns to the caller with the decoded model. On failure, throws a `MyDataHelpsError`.
+    /// - Parameter resource: Describes the request to perform and the response model type to decode.
+    /// - Returns: The decoded model.
+    internal func load<ResourceType: ParticipantResource>(resource: ResourceType) async throws -> ResourceType.ResponseType where ResourceType.ResponseType: Decodable {
+        let request: URLRequest
         do {
-            let request = try resource.urlRequest(session: self)
+            request = try resource.urlRequest(session: self)
+        } catch {
+            throw MyDataHelpsError.encodingError(error)
+        }
+        
+        return try await withCheckedThrowingContinuation { continuation in
             let task = session.dataTask(with: request) {
-                completion(Self.responseResult($0, $1, $2))
+                continuation.resume(with: Self.responseResult($0, $1, $2))
             }
             task.resume()
-        } catch {
-            DispatchQueue.main.async {
-                completion(.failure(.encodingError(error)))
-            }
         }
     }
     
-    static func dataResult(_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Result<Data?, MyDataHelpsError> {
-        assert(Thread.isMainThread)
+    private static func dataResult(_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Result<Data?, MyDataHelpsError> {
         if let error = error as? URLError, error.code == URLError.Code.timedOut {
             return .failure(.timedOut(error))
         }
@@ -65,7 +77,7 @@ extension ParticipantSession {
         return .success(data)
     }
     
-    static func responseResult<ResultType: Decodable>(_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Result<ResultType, MyDataHelpsError> {
+    private static func responseResult<ResultType: Decodable>(_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Result<ResultType, MyDataHelpsError> {
         return dataResult(data, response, error).flatMap {
             guard let body = $0 else {
                 return .failure(.decodingError(DecodingError.emptyHTTPResponse))

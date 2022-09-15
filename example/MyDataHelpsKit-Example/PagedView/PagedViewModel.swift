@@ -17,10 +17,10 @@ protocol PageModelType {
 protocol PagedModelSource {
     associatedtype PageModel: PageModelType
     var session: ParticipantSessionType { get }
-    func loadPage(after page: PageModel?, completion: @escaping (Result<PageModel, MyDataHelpsError>) -> Void)
+    func loadPage(after page: PageModel?) async throws -> PageModel?
 }
 
-class PagedViewModel<SourceType: PagedModelSource, ItemViewType: View>: ObservableObject {
+@MainActor class PagedViewModel<SourceType: PagedModelSource, ItemViewType: View>: ObservableObject {
     typealias ItemType = SourceType.PageModel.ItemType
     
     enum State {
@@ -51,14 +51,14 @@ class PagedViewModel<SourceType: PagedModelSource, ItemViewType: View>: Observab
         guard case .normal(true) = state, !loading else { return }
         
         loading = true
-        source.loadPage(after: lastPage) { [weak self] result in
-            switch result {
-            case let .success(page):
-                self?.loaded(page)
-            case let .failure(error):
-                self?.state = .failure(error)
+        Task {
+            do {
+                let nextPage = try await source.loadPage(after: lastPage)
+                loaded(nextPage)
+            } catch {
+                state = .failure(MyDataHelpsError(error))
             }
-            self?.loading = false
+            loading = false
         }
     }
     
@@ -66,13 +66,15 @@ class PagedViewModel<SourceType: PagedModelSource, ItemViewType: View>: Observab
         item.id == items.last?.id
     }
     
-    private func loaded(_ page: SourceType.PageModel) {
+    private func loaded(_ page: SourceType.PageModel?) {
         lastPage = page
-        items.append(contentsOf: page.pageItems(session: source.session))
+        if let page = page {
+            items.append(contentsOf: page.pageItems(session: source.session))
+        }
         if items.isEmpty {
             state = .empty
         } else {
-            state = .normal(loadMore: page.nextPageID != nil)
+            state = .normal(loadMore: page?.nextPageID != nil)
         }
     }
 }

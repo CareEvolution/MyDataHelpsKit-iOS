@@ -17,9 +17,11 @@ class SurveyAnswersSource: PagedModelSource {
         self.query = query
     }
     
-    func loadPage(after page: SurveyAnswersPage?, completion: @escaping (Result<SurveyAnswersPage, MyDataHelpsError>) -> Void) {
+    func loadPage(after page: SurveyAnswersPage?) async throws -> SurveyAnswersPage? {
         if let query = query(after: page) {
-            session.querySurveyAnswers(query, completion: completion)
+            return try await session.querySurveyAnswers(query)
+        } else {
+            return nil
         }
     }
     
@@ -33,7 +35,7 @@ class SurveyAnswersSource: PagedModelSource {
 }
 
 extension SurveyAnswersPage: PageModelType {
-    func pageItems(session: ParticipantSessionType) -> [SurveyAnswerView.Model] {
+    @MainActor func pageItems(session: ParticipantSessionType) -> [SurveyAnswerView.Model] {
         surveyAnswers.map { .init(session: session, answer: $0) }
     }
 }

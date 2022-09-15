@@ -30,9 +30,11 @@ class DeviceDataSource: PagedModelSource {
         self.query = query
     }
     
-    func loadPage(after page: DeviceDataResultPage?, completion: @escaping (Result<DeviceDataResultPage, MyDataHelpsError>) -> Void) {
+    func loadPage(after page: DeviceDataResultPage?) async throws -> DeviceDataResultPage? {
         if let query = query(after: page) {
-            session.queryDeviceData(query, completion: completion)
+            return try await session.queryDeviceData(query)
+        } else {
+            return nil
         }
     }
     

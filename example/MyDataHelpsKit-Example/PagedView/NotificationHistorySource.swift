@@ -17,9 +17,11 @@ class NotificationHistorySource: PagedModelSource {
         self.query = query
     }
     
-    func loadPage(after page: NotificationHistoryPage?, completion: @escaping (Result<NotificationHistoryPage, MyDataHelpsError>) -> Void) {
+    func loadPage(after page: NotificationHistoryPage?) async throws -> NotificationHistoryPage? {
         if let query = query(after: page) {
-            session.queryNotifications(query, completion: completion)
+            return try await session.queryNotifications(query)
+        } else {
+            return nil
         }
     }
     

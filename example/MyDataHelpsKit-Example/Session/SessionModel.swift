@@ -9,7 +9,7 @@ import Foundation
 import MyDataHelpsKit
 
 /// Produces a `ParticipantSession` object with a `ParticipantAccessToken` manually entered into the UI. See [documentation on Participant Tokens](https://developer.mydatahelps.org/sdk/participant_tokens.html) for information about obtaining an access token.
-class SessionModel: ObservableObject {
+@MainActor class SessionModel: ObservableObject {
     let client: MyDataHelpsClient
     @Published var token: String = ""
     @Published var session: ParticipantSession? = nil
