@@ -30,6 +30,32 @@ public enum MyDataHelpsError: Error {
     case unknown(Error?)
 }
 
+public extension MyDataHelpsError {
+    /// Converts any `Error` to a `MyDataHelpsError`.
+    ///
+    /// Throwing functions in MyDataHelpsKit are designed to always throw a `MyDataHelpsError`. This is a convenience method to safely cast errors thrown by MyDataHelpsKit into the original `MyDataHelpsError`.
+    ///
+    /// Example:
+    ///
+    ///     do {
+    ///         print(try await session.getParticipantInfo())
+    ///     }
+    ///     catch {
+    ///         // getParticipantInfo should throw a MyDataHelpsError.
+    ///         // This safely casts the thrown error to a MyDataHelpsError
+    ///         // without an extra 'catch let...as...' block.
+    ///         print(MyDataHelpsError(error))
+    ///     }
+    /// - Parameter error: Any `Error` object. If it is a `MyDataHelpsError`, this initializer produces an identical `MyDataHelpsError`. If not, produces `.unknown(error)`.
+    init(_ error: Error) {
+        if let myDataHelpsError = error as? MyDataHelpsError {
+            self = myDataHelpsError
+        } else {
+            self = .unknown(error)
+        }
+    }
+}
+
 /// Details about a failed HTTP request or an HTTP response that indicated an error.
 public struct HTTPResponseError: Error {
     /// HTTP status code, e.g. 500.

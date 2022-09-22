@@ -13,19 +13,15 @@ public extension ParticipantSession {
     /// To fetch the first page of results, call this with a new ``ExternalAccountProvidersQuery`` object. If there are additional pages available, the next page can be fetched by using `ExternalAccountProvidersQuery.page(after:)` to construct a query for the following page.
     /// - Parameters:
     ///   - query: Specifies how to filter the providers.
-    ///   - completion: Called when the request is complete, with a ``ExternalAccountProvidersResultPage`` instance on success or an error on failure. Results are ordered by name.
-    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery, completion: @escaping (Result<ExternalAccountProvidersResultPage, MyDataHelpsError>) -> Void) {
-        load(resource: ExternalAccountProvidersQueryResource(query: query)) {
-            (result: Result<ExternalAccountProvidersResultPage.APIResponse, MyDataHelpsError>) in
-            completion(result.map {
-                ExternalAccountProvidersResultPage(result: $0, query: query)
-            })
-        }
+    /// - Returns: An asynchronously-delivered `ExternalAccountProvidersResultPage`, if successful. Throws a `MyDataHelpsError` if unsuccessful. Results are ordered by name.
+    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery) async throws -> ExternalAccountProvidersResultPage {
+        let response = try await load(resource: ExternalAccountProvidersQueryResource(query: query))
+        return ExternalAccountProvidersResultPage(result: response, query: query)
     }
-        
+    
     /// Initiates a new connected external account. Grants access to a secure OAuth connection to the specified external account provider, where the participant can provide their provider credentials and authorize MyDataHelps to retrieve data from the account.
     ///
-    /// Upon receiving the completion callback, you must present an `SFSafariViewController` to the user using the secure URL in the callback's result object to complete the provider authorization flow.
+    /// After receiving the `ExternalAccountAuthorization` returned by this function, you must present an `SFSafariViewController` to the user using the `authorizationURL` in the returned object to complete the provider authorization flow.
     ///
     /// Upon completion of the connection flow in the Safari view, the participant is sent to the `finalRedirectURL` to indicate that the browser can be dismissed. Your app should intercept this URL via the AppDelegate's `application(_:open:options:)` or `application(_:continue:restorationHandler:)` or the SwiftUI `onOpenURL` modifier, and programmatically dismiss the SFSafariViewController when the URL is opened. Your app can use a specific path in this URL in order to differentiate it from other URLs your app may support.
     ///
@@ -39,13 +35,10 @@ public extension ParticipantSession {
     /// - Parameters:
     ///   - provider: The external account provider to connect.
     ///   - finalRedirectURL: A URL that is configured to open your app via a custom scheme or Universal Link.
-    ///   - completion: Called when the request is complete, with the provider authorization URL and supporting information on success, or an error on failure.
-    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void) {
-        load(resource: ConnectExternalAccountResource(providerID: provider.id, finalRedirectURL: finalRedirectURL)) {
-            completion($0.map {
-                ExternalAccountAuthorization(provider: provider, authorizationURL: $0, finalRedirectURL: finalRedirectURL)
-            })
-        }
+    /// - Returns: An asynchronously-delivered `ExternalAccountAuthorization`, with the provider authorization URL and supporting information, if successful. Throws a `MyDataHelpsError` if unsuccessful.
+    func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL) async throws -> ExternalAccountAuthorization {
+        let authorizationURL = try await load(resource: ConnectExternalAccountResource(providerID: provider.id, finalRedirectURL: finalRedirectURL))
+        return ExternalAccountAuthorization(provider: provider, authorizationURL: authorizationURL, finalRedirectURL: finalRedirectURL)
     }
 }
 
@@ -176,4 +169,3 @@ public struct ExternalAccountAuthorization {
     /// The URL specified in `ParticipantSession.connectExternalAccount` to indicate completion of the provider connection flow. When your app receives an incoming URL (via Universal Links or a custom scheme) that matches `finalRedirectURL`, the provider connection is complete and you can dismiss the `SFSafariViewController`.
     public let finalRedirectURL: URL
 }
-

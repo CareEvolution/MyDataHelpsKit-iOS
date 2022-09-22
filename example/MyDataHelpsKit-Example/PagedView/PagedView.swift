@@ -61,11 +61,11 @@ struct PagedView_Previews: PreviewProvider {
     class PreviewSource: PagedModelSource {
         let session: ParticipantSessionType = ParticipantSessionPreview()
         
-        func loadPage(after page: PreviewListPage?, completion: @escaping (Result<PreviewListPage, MyDataHelpsError>) -> Void) {
-            completion(.success(.init(items: [
+        func loadPage(after page: PreviewListPage?) async throws -> PreviewListPage? {
+            return .init(items: [
                 .init(id: "1", text: "abc"),
                 .init(id: "2", text: "def")
-            ])))
+            ])
         }
     }
     

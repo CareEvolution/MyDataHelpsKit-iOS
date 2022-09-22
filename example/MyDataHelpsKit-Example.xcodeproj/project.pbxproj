@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		27AA30DD26D6946500AC0D2C /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AA30DC26D6946500AC0D2C /* RemoteImageView.swift */; };
+		AC139DFB28C7A34E002F456E /* FoundationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC139DFA28C7A34E002F456E /* FoundationExtensions.swift */; };
+		AC0D4E6D28A560C700FE145B /* ProjectInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0D4E6C28A560C700FE145B /* ProjectInfoView.swift */; };
 		AC44F53E261375EE0065075C /* MyDataHelpsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */; };
 		AC44F561261610A10065075C /* PersistDeviceDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44F560261610A10065075C /* PersistDeviceDataView.swift */; };
 		AC8E0BB626694D830072A9C1 /* EmbeddableSurveySelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC8E0BB526694D830072A9C1 /* EmbeddableSurveySelection.swift */; };
@@ -42,6 +44,8 @@
 
 /* Begin PBXFileReference section */
 		27AA30DC26D6946500AC0D2C /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
+		AC139DFA28C7A34E002F456E /* FoundationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationExtensions.swift; sourceTree = "<group>"; };
+		AC0D4E6C28A560C700FE145B /* ProjectInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectInfoView.swift; sourceTree = "<group>"; };
 		AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MyDataHelpsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC44F54126137CBE0065075C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AC44F560261610A10065075C /* PersistDeviceDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistDeviceDataView.swift; sourceTree = "<group>"; };
@@ -132,12 +136,14 @@
 				AC9DC9E3260E374E00C5D9E4 /* ContentView.swift */,
 				AC932353265D9A7F007AAF69 /* Embeddables */,
 				AC9DCA13260E3E5700C5D9E4 /* ErrorView.swift */,
+				AC139DFA28C7A34E002F456E /* FoundationExtensions.swift */,
 				AC9DC9EA260E374F00C5D9E4 /* Info.plist */,
 				AC9DCA09260E3BBA00C5D9E4 /* LoadingView.swift */,
 				AC9DC9E1260E374E00C5D9E4 /* MyDataHelpsKit_ExampleApp.swift */,
 				ACCD97E4260E490E00FF7438 /* PagedView */,
 				AC44F560261610A10065075C /* PersistDeviceDataView.swift */,
 				AC9DC9E7260E374F00C5D9E4 /* Preview Content */,
+				AC0D4E6C28A560C700FE145B /* ProjectInfoView.swift */,
 				ACA1A86A26D5452900CBD7EA /* ProviderConnections */,
 				27AA30DC26D6946500AC0D2C /* RemoteImageView.swift */,
 				AC9DC9F5260E37B500C5D9E4 /* Session */,
@@ -267,12 +273,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC139DFB28C7A34E002F456E /* FoundationExtensions.swift in Sources */,
 				AC932355265D9AEB007AAF69 /* EmbeddableSurveyViewRepresentable.swift in Sources */,
 				ACCD97F0260E5A8600FF7438 /* PagedViewModel.swift in Sources */,
 				AC9DCA07260E3BAC00C5D9E4 /* ParticipantInfoView.swift in Sources */,
 				ACEAF44A26D67C95002F79AB /* ExternalAccountsListView.swift in Sources */,
 				ACCD9801260E6E3000FF7438 /* NotificationHistoryView.swift in Sources */,
 				AC9DCA0D260E3CE700C5D9E4 /* ParticipantModel.swift in Sources */,
+				AC0D4E6D28A560C700FE145B /* ProjectInfoView.swift in Sources */,
 				ACEAF45726D91B9B002F79AB /* ParticipantSessionType.swift in Sources */,
 				ACCD9804260E6F7A00FF7438 /* NotificationHistorySource.swift in Sources */,
 				AC44F561261610A10065075C /* PersistDeviceDataView.swift in Sources */,
@@ -351,7 +359,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -406,7 +414,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -427,7 +435,6 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/MyDataHelpsKit-Example/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -451,7 +458,6 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/MyDataHelpsKit-Example/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

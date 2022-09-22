@@ -8,13 +8,13 @@
 import SwiftUI
 import MyDataHelpsKit
 
-class PersistDeviceDataViewModel: ObservableObject {
+@MainActor class PersistDeviceDataViewModel: ObservableObject {
+    @Published var identifier = ""
     @Published var type = ""
     @Published var value = ""
     
     let session: ParticipantSessionType
     let isNew: Bool
-    let identifier: String
     let units: String?
     let source: DeviceDataPointSource?
     let startDate: Date?
@@ -24,7 +24,6 @@ class PersistDeviceDataViewModel: ObservableObject {
     init(session: ParticipantSessionType) {
         self.session = session
         self.isNew = true
-        self.identifier = UUID().uuidString
         self.units = nil
         self.source = .init(identifier: UUID().uuidString, properties: [:])
         self.startDate = nil
@@ -34,7 +33,7 @@ class PersistDeviceDataViewModel: ObservableObject {
     init(existing model: DeviceDataSource.ItemModel) {
         self.session = model.session
         self.isNew = false
-        self.identifier = model.identifier
+        self.identifier = model.identifier ?? ""
         self.type = model.type
         self.value = model.value
         self.units = model.units
@@ -44,28 +43,37 @@ class PersistDeviceDataViewModel: ObservableObject {
     }
     
     var persistModel: DeviceDataPointPersistModel {
-        .init(identifier: identifier, type: type, value: value, units: units, properties: [:], source: source, startDate: startDate, observationDate: observationDate)
+        .init(identifier: identifier.isEmpty ? nil : identifier, type: type, value: value, units: units, properties: [:], source: source, startDate: startDate, observationDate: observationDate)
     }
 }
 
 struct PersistDeviceDataView: View {
+    enum PersistResult {
+        case notPersisted
+        case persisted
+        case failure(MyDataHelpsError)
+    }
+    
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject var model: PersistDeviceDataViewModel
-    @State var result: Result<Void, MyDataHelpsError>? = nil
+    @State var result = PersistResult.notPersisted
     
     var body: some View {
         VStack(alignment: .leading) {
+            Text("Identifier:")
+            TextField("Optional", text: $model.identifier)
+                .padding(.bottom, 20)
             Text("Type:")
             TextField("Type", text: $model.type)
                 .padding(.bottom, 20)
             Text("Value:")
             TextField("Value", text: $model.value)
             switch result {
-            case .success: Text("Saved!")
+            case .persisted: Text("Saved!")
             case let .failure(error):
                 Text(error.localizedDescription)
                     .foregroundColor(Color(.systemRed))
-            case .none: Text("")
+            case .notPersisted: Text("")
             }
         }
         .padding()
@@ -79,12 +87,15 @@ struct PersistDeviceDataView: View {
     
     func save() {
         let persistModel = model.persistModel
-        model.session.persistDeviceData([persistModel]) {
-            self.result = $0
-            if case .success = $0 {
+        Task {
+            do {
+                try await model.session.persistDeviceData([persistModel])
+                result = .persisted
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                     presentationMode.wrappedValue.dismiss()
                 }
+            } catch {
+                result = .failure(MyDataHelpsError(error))
             }
         }
     }

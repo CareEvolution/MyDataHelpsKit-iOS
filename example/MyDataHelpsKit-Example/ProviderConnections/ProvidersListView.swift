@@ -8,10 +8,14 @@
 import SwiftUI
 import MyDataHelpsKit
 
+extension ExternalAccountAuthorization: Identifiable {
+    public var id: ExternalAccountProvider.ID { provider.id }
+}
+
 struct ExternalAccountProviderView: View {
     let provider: ExternalAccountProvider
     
-    static func pageView(session: ParticipantSessionType, search: String?, category: ExternalAccountProviderCategory?) -> some View {
+    @MainActor static func pageView(session: ParticipantSessionType, search: String?, category: ExternalAccountProviderCategory?) -> some View {
         let query = ExternalAccountProvidersQuery(search: search, category: category, limit: 25)
         let source = ExternalAccountProvidersSource(session: session, query: query)
         return ExternalAccountProviderPagedView(session: session, model: .init(source: source) { item in
@@ -74,12 +78,11 @@ struct ExternalAccountProviderPagedView: View {
             return
         }
         
-        session.connectExternalAccount(provider: provider, finalRedirectURL: finalRedirectURL) {
-            switch $0 {
-            case let .success(connection):
-                newConnection = connection
-            case let .failure(error):
-                errorModel = .init(title: "Error", error: error)
+        Task {
+            do {
+                newConnection = try await session.connectExternalAccount(provider: provider, finalRedirectURL: finalRedirectURL)
+            } catch {
+                errorModel = .init(title: "Error", error: MyDataHelpsError(error))
                 newConnection = nil
                 model.selectedItem = nil
             }
@@ -114,11 +117,12 @@ class ExternalAccountProvidersSource: PagedModelSource {
         self.query = query
     }
     
-    func loadPage(after result: ExternalAccountProvidersResultPageViewModel?, completion: @escaping (Result<ExternalAccountProvidersResultPageViewModel, MyDataHelpsError>) -> Void) {
-        if let query = query(after: result) {
-            session.queryExternalAccountProviders(query) { result in
-                completion(result.map { .init(page: $0, query: query) })
-            }
+    func loadPage(after page: ExternalAccountProvidersResultPageViewModel?) async throws -> ExternalAccountProvidersResultPageViewModel? {
+        if let query = query(after: page) {
+            let result = try await session.queryExternalAccountProviders(query)
+            return .init(page: result, query: query)
+        } else {
+            return nil
         }
     }
     
@@ -136,11 +140,6 @@ extension ExternalAccountProvider: Equatable {
     public static func == (lhs: ExternalAccountProvider, rhs: ExternalAccountProvider) -> Bool {
         lhs.id == rhs.id
     }
-}
-
-// Identifiable conformance required for `.sheet(item: $newConnection)` below.
-extension ExternalAccountAuthorization: Identifiable {
-    public var id: ExternalAccountProvider.ID { provider.id }
 }
 
 struct ProvidersListView_Previews: PreviewProvider {

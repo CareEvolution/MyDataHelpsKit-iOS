@@ -84,7 +84,7 @@ public struct SurveyAnswersQuery: PagedQuery {
 public struct SurveyAnswersPage: PagedResult, Decodable {
     /// Identifies a specific page of survey answers.
     public typealias PageID = ScopedIdentifier<SurveyAnswersPage, String>
-    /// A list of SurveyAnswers filtered by the query criteria.
+    /// A list of SurveyAnswers filtered by the query criteria, ordered by answer date.
     public let surveyAnswers: [SurveyAnswer]
     /// An ID to be used with subsequent `SurveyAnswersQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
     public let nextPageID: PageID?

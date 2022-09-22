@@ -16,10 +16,11 @@ Browse the example app source code to see how a real app might use the MyDataHel
 
 The headings below describe the functionality you can find in each subview accessed from the example app's main menu (RootMenuView):
 
-### Participant Info
+### Participant/Project Info
 
 - After entering a valid participant token and proceeding to the main menu, the app immediately loads and displays the ParticipantInfo object via `ParticipantSession.getParticipantInfo`.
 - Modify `ParticipantInfoView` to experiment with displaying various ParticipantInfo properties or demographic fields.
+- Similarly, project info and data collection settings retrieved via `ParticipantSession.getProjectInfo` and `ParticipantSession.getDataCollectionSettings` are displayed in a `ProjectInfoView`; modify this view to explore the various data available in project info or data settings.
 
 ### Query Survey Tasks
 
