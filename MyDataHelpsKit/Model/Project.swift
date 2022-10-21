@@ -79,6 +79,7 @@ public struct Organization: Decodable {
     public let color: String
 }
 
+/// Settings related to data collection for a participant and their project.
 public struct ProjectDataCollectionSettings: Decodable {
     /// Indicates whether Fitbit data collection is enabled for this project.
     public let fitbitEnabled: Bool
