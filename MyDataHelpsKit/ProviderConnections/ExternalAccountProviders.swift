@@ -21,7 +21,7 @@ public extension ParticipantSession {
     
     /// Initiates a new connected external account. Grants access to a secure OAuth connection to the specified external account provider, where the participant can provide their provider credentials and authorize MyDataHelps to retrieve data from the account.
     ///
-    /// After receiving the `ExternalAccountAuthorization` returned by this function, you must present an `SFSafariViewController` to the user using the `authorizationURL` in the returned object to complete the provider authorization flow.
+    /// After receiving the `ExternalAccountAuthorization` returned by this function, your app must present an `SFSafariViewController` to the user using the `authorizationURL` in the returned object to complete the provider authorization flow.
     ///
     /// Upon completion of the connection flow in the Safari view, the participant is sent to the `finalRedirectURL` to indicate that the browser can be dismissed. Your app should intercept this URL via the AppDelegate's `application(_:open:options:)` or `application(_:continue:restorationHandler:)` or the SwiftUI `onOpenURL` modifier, and programmatically dismiss the SFSafariViewController when the URL is opened. Your app can use a specific path in this URL in order to differentiate it from other URLs your app may support.
     ///
@@ -31,7 +31,7 @@ public extension ParticipantSession {
     /// - [Universal Link](https://developer.apple.com/library/archive/documentation/General/Conceptual/AppSearch/UniversalLinks.html), e.g. `https://my.app/linkprovidercompletion`. The Universal Link domain and path must be fully configured in your app's entitlements file, the apple-app-site-association file hosted at the `my.app` domain, etc.
     /// - [Custom scheme](https://developer.apple.com/documentation/xcode/defining-a-custom-url-scheme-for-your-app), e.g. `myapp://linkprovidercompletion`. Your app's Info.plist file must register the scheme `myapp` in the URL Types list.
     ///
-    /// Contact [CareEvolution support](https://developer.mydatahelps.org/help.html) to have your `finalRedirectURL` added to the list of allowed URLs in MyDataHelps. If the URL is not in the allow list, this API will produce an error result.
+    /// Contact [CareEvolution support](https://developer.mydatahelps.org/help.html) to have your `finalRedirectURL` added to the list of allowed URLs in MyDataHelps. If the URL is not in the allowed list, the provider authorization flow will fail to load correctly.
     /// - Parameters:
     ///   - provider: The external account provider to connect.
     ///   - finalRedirectURL: A URL that is configured to open your app via a custom scheme or Universal Link.
