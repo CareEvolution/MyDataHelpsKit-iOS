@@ -36,7 +36,8 @@ protocol PagedModelSource {
     
     @Published var state: State
     @Published var items: [ItemType]
-
+    @Published var selectedItem: ItemType?
+    
     init(source: SourceType, viewProvider: @escaping (ItemType) -> ItemViewType) {
         self.source = source
         self.viewProvider = viewProvider

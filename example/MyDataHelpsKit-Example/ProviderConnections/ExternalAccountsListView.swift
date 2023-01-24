@@ -106,8 +106,9 @@ struct ExternalAccountsListView: View {
         .actionSheet(item: $selected) { account in
             ActionSheet(title: Text(account.provider.name), message: nil, buttons: actionButtons(account: account))
         }
+        /// EXERCISE: Try non-nil `search` and `category` values to customize filtering providers.
         .navigationBarItems(trailing: NavigationLink(destination:
-            ProvidersListView(model: ProvidersListViewModel(session: model.session))
+            ExternalAccountProviderView.pageView(session: model.session, search: nil, category: nil)
                 .navigationTitle("External Account Providers"), label: {
             Image(systemName: "plus")
         }))

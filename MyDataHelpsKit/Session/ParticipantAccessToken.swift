@@ -9,7 +9,7 @@ import Foundation
 
 /// Represents an access token for a single participant.
 ///
-/// See [documentation on Participant Tokens](https://developer.mydatahelps.org/sdk/participant_tokens.html) for more information about obtaining an access token.
+/// See [documentation on Participant Tokens](https://developer.mydatahelps.org/embeddables/participant_tokens.html) for more information about obtaining an access token.
 ///
 /// **Warning:** Never expose a service token in a client application or to the SDK. Use participant tokens instead.
 public struct ParticipantAccessToken {

@@ -77,9 +77,9 @@ public struct SurveyTaskQuery: PagedQuery {
         self.pageID = pageID
     }
     
-    /// Initializes a new query for a page of results following the given page, with the same filters as the original query.
+    /// Creates a copy of this query for a page of results following the given page, with the same filters as the original query.
     /// - Parameter page: The previous page of results, which should have been produced with this query.
-    /// - Returns: A query for results following `page`, if page has a `nextPageID`. If there are no additional pages of results available, returns `nil`. The query returned, if any, has the same filters as the original.
+    /// - Returns: A copy of this query for fetching results following `page`, if page has a `nextPageID`. If there are no additional pages of results available, returns `nil`. The query returned, if any, has the same filters as the original.
     public func page(after page: SurveyTaskResultPage) -> SurveyTaskQuery? {
         guard let nextPageID = page.nextPageID else { return nil }
         return SurveyTaskQuery(statuses: statuses, surveyID: surveyID, surveyNames: surveyNames, linkIdentifier: linkIdentifier, sortOrder: sortOrder, limit: limit, pageID: nextPageID)

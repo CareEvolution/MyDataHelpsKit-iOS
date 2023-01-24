@@ -26,6 +26,7 @@ struct PagedView<SourceType, ViewType>: View where SourceType: PagedModelSource,
                 Section {
                     ForEach(model.items) { item in
                         model.viewProvider(item)
+                            .onTapGesture { model.selectedItem = item }
                             .onAppear(perform: {
                                 if model.isLastItem(item) {
                                     model.loadNextPage()

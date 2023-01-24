@@ -19,7 +19,7 @@ protocol ParticipantSessionType {
     func deleteSurveyResult(_ surveyResultID: SurveyResult.ID) async throws
     func queryNotifications(_ query: NotificationHistoryQuery) async throws -> NotificationHistoryPage
     func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel]) async throws
-    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery) async throws -> [ExternalAccountProvider]
+    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery) async throws -> ExternalAccountProvidersResultPage
     func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL) async throws -> ExternalAccountAuthorization
     func listExternalAccounts() async throws -> [ExternalAccount]
     func refreshExternalAccount(_ account: ExternalAccount) async throws
@@ -78,8 +78,8 @@ class ParticipantSessionPreview: ParticipantSessionType {
     func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel]) async throws {
     }
     
-    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery) async throws -> [ExternalAccountProvider] {
-        return try await delayedSuccess(data: PreviewData.providersJSON)
+    func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery) async throws -> ExternalAccountProvidersResultPage {
+        throw NotImplementedForSwiftUIPreviews()
     }
     
     func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL) async throws -> ExternalAccountAuthorization {
@@ -127,9 +127,10 @@ enum PreviewData {
     """
     
     static let providersJSON = """
-    [
-        \(provider1JSONText)
-    ]
+    {
+        "externalAccountProviders": [ \(provider1JSONText) ],
+        "totalExternalAccountProviders": 35
+    }
     """.data(using: .utf8)!
     
     static let accountsJSON = """
