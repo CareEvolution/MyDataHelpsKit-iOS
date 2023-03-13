@@ -10,9 +10,11 @@ import UIKit
 import MyDataHelpsKit
 
 extension SurveyPresentation: Identifiable {
+    /// SurveyPresentation must be Identifiable for use in SwiftUI `.sheet` presentation.
     public var id: String { surveyName }
 }
 
+/// SwiftUI wrapper for MyDataHelpsKit.SurveyViewController.
 struct PresentedSurveyView: UIViewControllerRepresentable {
     let presentation: Binding<SurveyPresentation?>
     let resultMessage: Binding<String?>

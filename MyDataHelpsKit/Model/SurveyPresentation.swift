@@ -9,14 +9,26 @@ import Foundation
 import RegexBuilder
 
 extension ParticipantSession {
+    /// Prepares a model object used for presenting a `SurveyViewController`. See ``SurveyViewController`` documentation for more information.
+    /// - Parameter surveyName: The name of the survey to present. In MyDataHelps Designer, this survey must be published to the project the participant is interacting with.
+    /// - Returns: A value that is used to initialize a ``SurveyViewController``.
     public func surveyPresentation(surveyName: String) -> SurveyPresentation {
         return SurveyPresentation(surveyName: surveyName, languageTag: client.languageTag, session: self)
     }
 }
 
+/// Information about a survey that should be presented to the participant.
+///
+/// See ``SurveyViewController`` documentation for more information.
 public struct SurveyPresentation {
+    /// The name of the survey to present.
     public let surveyName: String
+    
+    /// The language and region that will be used for the survey, if the survey is appropriately localized.
+    ///
+    /// An IETF language tag, such as `en-US`.
     public let languageTag: String
+    
     fileprivate let session: ParticipantSession
     
     internal var baseURL: URL {

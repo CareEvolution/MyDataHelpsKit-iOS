@@ -13,9 +13,34 @@ import UIKit
 import WebKit
 import SafariServices
 
-public class SurveyViewController: UIViewController {
+/// Presents a MyDataHelps survey inside a web view. This view controller implements the complete user experience for a MyDataHelps survey, including step navigation and sending results to MyDataHelps, and is intended for modal presentation.
+///
+/// Surveys are presented to the participant are identified by the [survey name](https://support.mydatahelps.org/hc/en-us/articles/360020984114). The survey must be [published to the project](https://support.mydatahelps.org/hc/en-us/articles/4882070156051-Survey-Versioning-and-Publishing) that the participant is currently interacting with.
+///
+/// SurveyViewController is not intended for subclassing.
+///
+/// ### Initializing and Presenting
+///
+/// 1. Call `ParticipantSession.surveyPresentation(surveyName:)` to construct a model object for the survey you wish to present.
+/// 2. Construct a `SurveyViewController` using the `init(presentation:, completion:)` initializer.
+/// 3. Present the view controller to the participant. SurveyViewControllers are intended to be shown modally, e.g. using `present(surveyViewController, animated: true)` in UIKit or a `.sheet` presentation in SwiftUI.
+///
+/// Do not wrap the SurveyViewController with a UINavigationController or NavigationView or embed it inside another view controller. MyDataHelpsKit handles all navigation elements and controls internally, including localized Cancel/Done buttons.
+///
+/// ### Completion and Dismissal
+///
+/// Once the participant has finished interacting with the survey, or if there is a failure to present the survey, SurveyViewController will invoke the `completion` callback you passed to its initializer. The SurveyViewController will not dismiss itself. In all cases—success and failure—you _must_ dismiss the SurveyViewController yourself from the completion callback.
+///
+/// The completion callback includes a `Result` value that indicates whether the participant successfully completed the survey, and any error that may have been encountered. If the result is a `failure`, consider displaying an error alert to the user.
+public final class SurveyViewController: UIViewController {
+    
+    /// Describes how a participant completed interaction with a survey.
+    ///
+    /// See ``SurveyViewController`` for usage; note that your app must dismiss the SurveyViewController in _all_ result cases.
     public enum SurveyResult: String {
+        /// Participant completed the survey, and the result was saved to MyDataHelps.
         case completed = "Completed"
+        /// Participant did not complete the survey, and the results were discarded.
         case discarded = "Discarded"
     }
     
@@ -55,6 +80,7 @@ public class SurveyViewController: UIViewController {
     
     private static let timeoutIntervalSeconds = 15
     
+    /// Information about the survey being presented to the participant.
     public let presentation: SurveyPresentation
     
     private let completion: (SurveyViewController, Result<SurveyResult, MyDataHelpsError>) -> Void
@@ -63,6 +89,10 @@ public class SurveyViewController: UIViewController {
     private var activityIndicator: UIActivityIndicatorView?
     private var webView: WKWebView?
     
+    /// Initializes a SurveyViewController that presents a given survey to a participant.
+    /// - Parameters:
+    ///   - presentation: Information about the survey being presented to the participant. Construct this using `ParticipantSession.surveyPresentation(surveyName:)`.
+    ///   - completion: Called when the participant has completed interaction with the survey. The completion callback must always dismiss the SurveyViewController.
     public init(presentation: SurveyPresentation, completion: @escaping (SurveyViewController, Result<SurveyResult, MyDataHelpsError>) -> Void) {
         self.presentation = presentation
         self.completion = completion
