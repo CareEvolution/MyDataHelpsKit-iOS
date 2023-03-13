@@ -30,9 +30,6 @@ extension View {
 /// EXERCISE: This view configures the query objects for the content of various sub-views. Modify the query objects passed to various `pageView` functions here to see how filtering and sorting works in data queries.
 struct RootMenuView: View {
     @StateObject var participant: ParticipantModel
-    @State private var embeddableSurvey: EmbeddableSurveySelection? = nil
-    @State private var embeddableSurveyError: MyDataHelpsError? = nil
-    @State private var errorAlertModel: ErrorView.Model? = nil
     
     var body: some View {
         VStack {
@@ -86,19 +83,8 @@ struct RootMenuView: View {
                 }.roundRectComponent()
                 
                 NavigationLink(
-                    destination: SurveyTaskView.pageView(session: participant.session, participantInfo: info, embeddableSurveySelection: $embeddableSurvey)
+                    destination: SurveyTaskView.pageView(session: participant.session, participantInfo: info)
                         .navigationTitle("Query Survey Tasks")
-                        .sheet(item: $embeddableSurvey, onDismiss: {
-                            // Delay presenting error alert until after sheet is fully dismissed
-                            if let embeddableErrorModel = embeddableSurveyError.map({ ErrorView.Model(title: "Survey error", error: $0) }) {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-                                    errorAlertModel = embeddableErrorModel
-                                }
-                            }
-                        }) { selection in
-                            /// RootView is responsible for modally presenting any Embeddable Survey that the user selects from the `SurveyTaskView`. See `EmbeddableSurveyViewController` documentation.
-                            EmbeddableSurveyViewRepresentable(model: selection, presentation: $embeddableSurvey, error: $embeddableSurveyError)
-                        }
                 ) {
                     Label("Query Survey Tasks", systemImage: "checkmark.square")
                 }.roundRectComponent()
@@ -127,9 +113,6 @@ struct RootMenuView: View {
             ) {
                 Label("External Accounts", systemImage: "link")
             }.roundRectComponent()
-        }
-        .alert(item: $errorAlertModel) {
-            Alert(title: Text($0.title), message: Text($0.error.localizedDescription), dismissButton: nil)
         }
     }
     

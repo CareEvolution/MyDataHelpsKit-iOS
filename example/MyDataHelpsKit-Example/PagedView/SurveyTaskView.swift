@@ -9,12 +9,12 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct SurveyTaskView: View {
-    @MainActor static func pageView(session: ParticipantSessionType, participantInfo: ParticipantInfoViewModel, embeddableSurveySelection: Binding<EmbeddableSurveySelection?>) -> PagedView<SurveyTaskSource, SurveyTaskView> {
+    @MainActor static func pageView(session: ParticipantSessionType, participantInfo: ParticipantInfoViewModel) -> PagedView<SurveyTaskSource, SurveyTaskView> {
         /// EXERCISE: Add parameters to this `SurveyTaskQuery` to customize filtering.
         let query = SurveyTaskQuery()
         let source = SurveyTaskSource(session: session, query: query)
         return PagedView(model: .init(source: source) { item in
-            SurveyTaskView(model: item, participantLinkIdentifier: participantInfo.linkIdentifier, embeddableSurveySelection: embeddableSurveySelection)
+            SurveyTaskView(model: item, participantLinkIdentifier: participantInfo.linkIdentifier)
         })
     }
     
@@ -33,7 +33,6 @@ struct SurveyTaskView: View {
     let model: Model
     let participantLinkIdentifier: ParticipantLink.ID?
     @State var showingAnswers = false
-    @State var embeddableSurveySelection: Binding<EmbeddableSurveySelection?>
     
     static let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -79,21 +78,11 @@ struct SurveyTaskView: View {
         }
         .onTapGesture(perform: self.selected)
     }
-    
-    private var embeddableSurveyContext: EmbeddableSurveySelection? {
-        guard model.status == .incomplete,
-              let participantLinkIdentifier = participantLinkIdentifier else {
-            return nil
-        }
-        return .init(survey: model.embeddableSurveyID, participantLinkIdentifier: participantLinkIdentifier)
-    }
 
-    /// For completed surveys, shows a SurveyAnswerView (via the NavigationLink bound to `$showingAnswers`) filtered to the selected survey task. For incomplete tasks, presents an `EmbeddableSurveyViewController` (via a binding in RootView) if the task is configured to support it.
+    /// For completed surveys, shows a SurveyAnswerView (via the NavigationLink bound to `$showingAnswers`) filtered to the selected survey task.
     private func selected() {
         if model.status == .complete {
             showingAnswers = true
-        } else if let embeddableSurveyContext = embeddableSurveyContext {
-            embeddableSurveySelection.wrappedValue = embeddableSurveyContext
         }
     }
 }
@@ -110,23 +99,14 @@ extension SurveyTaskView.Model {
         self.surveyName = task.surveyName
         self.linkIdentifier = task.linkIdentifier
     }
-    
-    var embeddableSurveyID: EmbeddableSurveyID {
-        if let linkIdentifier = linkIdentifier {
-            return .taskLinkIdentifier(linkIdentifier)
-        } else {
-            return .surveyName(surveyName)
-        }
-    }
 }
 
 struct SurveyTaskView_Previews: PreviewProvider {
     struct ContainerView: View {
         let model: SurveyTaskView.Model
         let participantLinkIdentifier: ParticipantLink.ID?
-        @State var embeddableSurvey: EmbeddableSurveySelection? = nil
         var body: some View {
-            SurveyTaskView(model: model, participantLinkIdentifier: participantLinkIdentifier, embeddableSurveySelection: $embeddableSurvey)
+            SurveyTaskView(model: model, participantLinkIdentifier: participantLinkIdentifier)
                 .padding()
         }
     }

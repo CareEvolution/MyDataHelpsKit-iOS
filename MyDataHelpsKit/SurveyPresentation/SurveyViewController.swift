@@ -38,7 +38,7 @@ public final class SurveyViewController: UIViewController {
     ///
     /// See ``SurveyViewController`` for usage; note that your app must dismiss the SurveyViewController in _all_ result cases.
     public enum SurveyResult: String {
-        /// Participant completed the survey, and the result was saved to MyDataHelps.
+        /// Participant completed the survey, and the result was saved to MyDataHelps. The survey results will be available in the MyDataHelps Designer participant viewer, and in exports.
         case completed = "Completed"
         /// Participant did not complete the survey, and the results were discarded.
         case discarded = "Discarded"
