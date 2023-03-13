@@ -58,7 +58,7 @@ struct ExternalAccountProviderPagedView: View {
                 ProviderConnectionAuthViewRepresentable(url: connection.authorizationURL, presentation: $newConnection)
             }
             .alert(item: $errorModel, content: {
-                Alert(title: Text($0.errorDescription))
+                Alert(title: Text($0.error.localizedDescription))
             })
             // In a UIKit app, implement this in AppDelegate as part of `application(_:open:options:)` (for custom scheme URLs) or `application(_:continue:restorationHandler:)` (for Universal Links).
             .onChange(of: model.selectedItem, perform: beginConnection)

@@ -32,8 +32,6 @@ struct RootMenuView: View {
     @StateObject var participant: ParticipantModel
     @State private var embeddableSurvey: EmbeddableSurveySelection? = nil
     @State private var embeddableSurveyError: MyDataHelpsError? = nil
-    @State private var presentedSurvey: SurveyPresentation? = nil
-    @State private var presentedSurveyError: MyDataHelpsError? = nil
     @State private var errorAlertModel: ErrorView.Model? = nil
     
     var body: some View {
@@ -82,17 +80,10 @@ struct RootMenuView: View {
             }.roundRectComponent()
             
             if case let .some(.success(info)) = participant.info {
-                Button("Launch Survey", action: launchSurvey)
-                    .sheet(item: $presentedSurvey, onDismiss: {
-                        if let presentedSurveyError {
-                            // Delay presenting error alert until after sheet is fully dismissed.
-                            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-                                errorAlertModel = ErrorView.Model(title: "Survey error", error: presentedSurveyError)
-                            }
-                        }
-                    }, content: { presentation in
-                        PresentedSurveyView(presentation: $presentedSurvey, errorResult: $presentedSurveyError)
-                    })
+                /// Displays a simple form to enter a survey name and launch the survey with that name.
+                NavigationLink(destination: SurveyLauncherView(participant: participant)) {
+                    Text("Survey Launcher")
+                }.roundRectComponent()
                 
                 NavigationLink(
                     destination: SurveyTaskView.pageView(session: participant.session, participantInfo: info, embeddableSurveySelection: $embeddableSurvey)
@@ -138,7 +129,7 @@ struct RootMenuView: View {
             }.roundRectComponent()
         }
         .alert(item: $errorAlertModel) {
-            Alert(title: Text($0.title), message: Text($0.errorDescription), dismissButton: nil)
+            Alert(title: Text($0.title), message: Text($0.error.localizedDescription), dismissButton: nil)
         }
     }
     
@@ -146,14 +137,6 @@ struct RootMenuView: View {
         participant.loadInfo()
         participant.loadProject()
         participant.loadDataCollectionSettings()
-    }
-    
-    private func launchSurvey() {
-        // Ignore if using a stubbed session from a preview provider.
-        guard let session = participant.session as? ParticipantSession else { return }
-        presentedSurveyError = nil
-        let surveyName = "TODO" /// EXERCISE: Specify the survey name to launch
-        presentedSurvey = session.surveyPresentation(surveyName: surveyName)
     }
 }
 

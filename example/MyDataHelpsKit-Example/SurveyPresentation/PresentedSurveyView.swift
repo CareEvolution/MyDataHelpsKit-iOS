@@ -15,7 +15,7 @@ extension SurveyPresentation: Identifiable {
 
 struct PresentedSurveyView: UIViewControllerRepresentable {
     let presentation: Binding<SurveyPresentation?>
-    let errorResult: Binding<MyDataHelpsError?>
+    let resultMessage: Binding<String?>
     
     func makeUIViewController(context: Context) -> UIViewController {
         return makeSurveyViewController()
@@ -33,10 +33,15 @@ struct PresentedSurveyView: UIViewControllerRepresentable {
         let viewController = SurveyViewController(presentation: model) { vc, result in
             self.presentation.wrappedValue = nil
             switch result {
-            case .success:
-                self.errorResult.wrappedValue = nil
+            case let .success(reason):
+                switch reason {
+                case .completed:
+                    resultMessage.wrappedValue = "Completed"
+                case .discarded:
+                    resultMessage.wrappedValue = "Discarded"
+                }
             case let .failure(error):
-                self.errorResult.wrappedValue = error
+                resultMessage.wrappedValue = error.localizedDescription
             }
         }
         return viewController
