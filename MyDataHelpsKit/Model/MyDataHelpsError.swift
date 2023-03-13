@@ -16,6 +16,8 @@ public enum MyDataHelpsError: Error {
     case decodingError(Error)
     /// Failure to encode a model object.
     case encodingError(Error)
+    /// Survey failed to present to the user because of an invalid survey name.
+    case invalidSurvey
     /// Unexpected server error, e.g. an HTTP 500 error. Check the included `HTTPResponseError` for details, and [contact support](https://developer.mydatahelps.org/help.html) if you need help determining the problem.
     case serverError(HTTPResponseError)
     /// Server request limit exceeded. The associated `APIRateLimit` indicates when throttling will reset, and the `HTTPResponseError` may include an error message (non-localized) suitable for debugging. [Contact support](https://developer.mydatahelps.org/help.html) with any questions.

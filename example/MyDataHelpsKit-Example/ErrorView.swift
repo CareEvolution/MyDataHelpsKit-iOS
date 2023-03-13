@@ -20,6 +20,8 @@ struct ErrorView: View {
                 return "Decoding error: \(underlying.localizedDescription)"
             case let .encodingError(underlying):
                 return "Encoding error: \(underlying.localizedDescription)"
+            case .invalidSurvey:
+                return "Survey not found"
             case let .serverError(underlying):
                 return "Server error: HTTP \(underlying.statusCode): \(underlying.message ?? underlying.localizedDescription)"
             case let .tooManyRequests(limit, underlying):
