@@ -44,6 +44,10 @@ public final class SurveyViewController: UIViewController {
         case completed = "Completed"
         /// Participant did not complete the survey, and the results were discarded.
         case discarded = "Discarded"
+        /// Participant did not finish the survey, but their progress was saved for later completion.
+        ///
+        /// Saving progress is only allowed if the participant has an incomplete task assigned for the given survey.
+        case saved = "Saved"
     }
     
     private enum State {

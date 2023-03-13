@@ -41,6 +41,8 @@ struct PresentedSurveyView: UIViewControllerRepresentable {
                     resultMessage.wrappedValue = "Completed"
                 case .discarded:
                     resultMessage.wrappedValue = "Discarded"
+                case .saved:
+                    resultMessage.wrappedValue = "Saved Progress"
                 }
             case let .failure(error):
                 resultMessage.wrappedValue = error.localizedDescription
