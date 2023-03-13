@@ -21,8 +21,10 @@ extension MyDataHelpsError {
             return "Server error: HTTP \(underlying.statusCode): \(underlying.message ?? underlying.localizedDescription)"
         case let .tooManyRequests(limit, underlying):
             return "Too many requests: exceeded \(limit.maxRequestsPerHour), reset at \(limit.nextReset.formatted(.dateTime.hour().minute().second())) [\(underlying.message ?? "")]"
-        case let .timedOut(underlying):
+        case let .timedOut(.some(underlying)):
             return "Timed out: \(underlying.localizedDescription)"
+        case .timedOut(.none):
+            return "Timed out"
         case let .unauthorizedRequest(underlying):
             return "Unauthorized: \(underlying.localizedDescription)"
         case let .unknown(.some(underlying)):

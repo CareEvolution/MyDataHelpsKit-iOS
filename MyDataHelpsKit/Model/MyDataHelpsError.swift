@@ -23,7 +23,7 @@ public enum MyDataHelpsError: Error {
     /// Server request limit exceeded. The associated `APIRateLimit` indicates when throttling will reset, and the `HTTPResponseError` may include an error message (non-localized) suitable for debugging. [Contact support](https://developer.mydatahelps.org/help.html) with any questions.
     case tooManyRequests(APIRateLimit, HTTPResponseError)
     /// A server request timed out.
-    case timedOut(Error)
+    case timedOut(Error?)
     /// A server request had a missing or invalid access token. The access token should be refreshed and a new `ParticipantSession` created, if applicable.
     case unauthorizedRequest(HTTPResponseError)
     /// Web content (e.g. a MyDataHelps survey) unexpectedly failed to load, due to a network, server, or web content failure. Includes any underlying error, if available.

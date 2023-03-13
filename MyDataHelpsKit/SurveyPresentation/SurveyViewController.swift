@@ -15,7 +15,7 @@ import SafariServices
 
 /// Presents a MyDataHelps survey inside a web view. This view controller implements the complete user experience for a MyDataHelps survey, including step navigation and sending results to MyDataHelps, and is intended for modal presentation.
 ///
-/// Surveys are presented to the participant are identified by the [survey name](https://support.mydatahelps.org/hc/en-us/articles/360020984114). The survey must be [published to the project](https://support.mydatahelps.org/hc/en-us/articles/4882070156051-Survey-Versioning-and-Publishing) that the participant is currently interacting with.
+/// Surveys presented to the participant are identified by their [survey name](https://support.mydatahelps.org/hc/en-us/articles/360020984114). The survey must be [published to the project](https://support.mydatahelps.org/hc/en-us/articles/4882070156051-Survey-Versioning-and-Publishing) that the participant is currently interacting with.
 ///
 /// SurveyViewController is not intended for subclassing.
 ///
@@ -23,7 +23,7 @@ import SafariServices
 ///
 /// 1. Call `ParticipantSession.surveyPresentation(surveyName:)` to construct a model object for the survey you wish to present.
 /// 2. Construct a `SurveyViewController` using the `init(presentation:, completion:)` initializer.
-/// 3. Present the view controller to the participant. SurveyViewController is designed be presented modally, e.g. using `present(surveyViewController, animated: true)` in UIKit or a `.sheet` presentation in SwiftUI.
+/// 3. Present the view controller to the participant. SurveyViewController is designed to be presented modally, e.g. using `present(surveyViewController, animated: true)` in UIKit or a `.sheet` presentation in SwiftUI.
 ///
 /// Do not wrap the SurveyViewController with a UINavigationController or NavigationView. MyDataHelpsKit handles all navigation elements and controls internally, including localized Cancel/Done buttons.
 ///
@@ -40,7 +40,7 @@ public final class SurveyViewController: UIViewController {
     ///
     /// See ``SurveyViewController`` for usage; note that your app must dismiss the SurveyViewController in _all_ result cases.
     public enum SurveyResult: String {
-        /// Participant completed the survey, and the result was saved to MyDataHelps. The survey results will be available in the MyDataHelps Designer participant viewer, and in exports.
+        /// Participant completed the survey, and the result was saved to MyDataHelps. The survey results will be available in the MyDataHelps Designer participant viewer and in exports.
         case completed = "Completed"
         /// Participant did not complete the survey, and the results were discarded.
         case discarded = "Discarded"
@@ -176,9 +176,9 @@ public final class SurveyViewController: UIViewController {
                 let html = try await self.presentation.buildWrapperHTML()
                 self.loadIframe(html: html)
             } catch let error as MyDataHelpsError {
-                complete(.failure(error))
+                self.complete(.failure(error))
             } catch {
-                complete(.failure(.unknown(error)))
+                self.complete(.failure(.unknown(error)))
             }
         }
     }
@@ -196,7 +196,7 @@ public final class SurveyViewController: UIViewController {
     
     private func checkIframeTimeout() {
         if viewState == .loadingContent {
-            complete(.failure(.timedOut(MyDataHelpsError.unknown(nil))))
+            complete(.failure(.timedOut(nil)))
         }
     }
     
