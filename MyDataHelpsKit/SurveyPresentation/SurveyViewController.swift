@@ -23,9 +23,11 @@ import SafariServices
 ///
 /// 1. Call `ParticipantSession.surveyPresentation(surveyName:)` to construct a model object for the survey you wish to present.
 /// 2. Construct a `SurveyViewController` using the `init(presentation:, completion:)` initializer.
-/// 3. Present the view controller to the participant. SurveyViewControllers are intended to be shown modally, e.g. using `present(surveyViewController, animated: true)` in UIKit or a `.sheet` presentation in SwiftUI.
+/// 3. Present the view controller to the participant. SurveyViewController is designed be presented modally, e.g. using `present(surveyViewController, animated: true)` in UIKit or a `.sheet` presentation in SwiftUI.
 ///
-/// Do not wrap the SurveyViewController with a UINavigationController or NavigationView or embed it inside another view controller. MyDataHelpsKit handles all navigation elements and controls internally, including localized Cancel/Done buttons.
+/// Do not wrap the SurveyViewController with a UINavigationController or NavigationView. MyDataHelpsKit handles all navigation elements and controls internally, including localized Cancel/Done buttons.
+///
+/// This view controller sets `isModalInPresentation` to true by default. In SwiftUI, it's recommended to set `interactiveDismissDisabled()` on your UIViewControllerRepresentable wrapper for SurveyViewController.
 ///
 /// ### Completion and Dismissal
 ///
@@ -98,6 +100,7 @@ public final class SurveyViewController: UIViewController {
         self.completion = completion
         self.viewState = .unloaded
         super.init(nibName: nil, bundle: nil)
+        isModalInPresentation = true
     }
     
     deinit {

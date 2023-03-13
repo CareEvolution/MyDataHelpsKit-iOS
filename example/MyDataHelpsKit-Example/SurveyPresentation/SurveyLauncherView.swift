@@ -65,6 +65,7 @@ struct SurveyLauncherView: View {
             presentedSurveyResult = nil
         }, content: { presentation in
             PresentedSurveyView(presentation: $presentedSurvey, resultMessage: $presentedSurveyResult)
+                .interactiveDismissDisabled()
         })
     }
     
