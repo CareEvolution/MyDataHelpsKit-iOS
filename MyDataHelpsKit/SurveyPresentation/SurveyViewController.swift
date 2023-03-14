@@ -13,9 +13,11 @@ import UIKit
 import WebKit
 import SafariServices
 
-/// Presents a MyDataHelps survey inside a web view. This view controller implements the complete user experience for a MyDataHelps survey, including step navigation and sending results to MyDataHelps, and is intended for modal presentation.
+/// Presents a MyDataHelps survey for the participant to complete. This view controller implements the complete user experience for a MyDataHelps survey, including step navigation and sending results to MyDataHelps, and is intended for modal presentation.
 ///
-/// Surveys presented to the participant are identified by their [survey name](https://support.mydatahelps.org/hc/en-us/articles/360020984114). The survey must be [published to the project](https://support.mydatahelps.org/hc/en-us/articles/4882070156051-Survey-Versioning-and-Publishing) that the participant is currently interacting with.
+/// Surveys presented to the participant are identified by their [survey name](https://support.mydatahelps.org/hc/en-us/articles/360020984114). The survey must be [published to the project](https://support.mydatahelps.org/hc/en-us/articles/4882070156051-Survey-Versioning-and-Publishing) that the participant is currently interacting with. SurveyViewController is only compatible with surveys with features that are supported on the web; see [platform support](https://support.mydatahelps.org/hc/en-us/articles/360036738814-Comparison-of-Native-Apps-and-Web-Survey-Features) for more information.
+///
+/// If the participant was assigned this survey in a task, then completing the survey will close the assigned task. If no task already exists, the survey results will be stored without any associated task.
 ///
 /// SurveyViewController is not intended for subclassing.
 ///

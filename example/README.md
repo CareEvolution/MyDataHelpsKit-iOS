@@ -43,7 +43,7 @@ The headings below describe the functionality you can find in each subview acces
 
 ### MyDataHelps Surveys
 
-- **Survey Launcher** demonstrates presentation of MyDataHelps surveys from within your app. Tap on "Survey Launcher" and enter a survey name from your MyDataHelps project (found in MyDataHelps Designer). See SurveyViewController's documentation for more info on usage and links to relevant MyDataHelps documentation.
+- **Survey Launcher** demonstrates presentation of MyDataHelps surveys from within your app. Tap on "Survey Launcher" and enter a survey name from your MyDataHelps project (found in MyDataHelps Designer). See the documentation for `SurveyViewController` for more information on usage and links to relevant MyDataHelps documentation.
 
 ### External Accounts
 
