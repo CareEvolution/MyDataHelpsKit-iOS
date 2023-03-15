@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import RegexBuilder
 
 extension ParticipantSession {
     /// Prepares a model object used for presenting a `SurveyViewController`. See ``SurveyViewController`` documentation for more information.

@@ -30,7 +30,8 @@ struct SurveyTaskView: View {
     }
     
     let model: Model
-    @State var showingAnswers = false
+    @State private var showingAnswers = false
+    @State private var presentedSurvey: SurveyPresentation? = nil
     
     static let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -75,12 +76,24 @@ struct SurveyTaskView: View {
             Spacer()
         }
         .onTapGesture(perform: self.selected)
+        .sheet(item: $presentedSurvey) { presentation in
+            PresentedSurveyView(presentation: $presentedSurvey, resultMessage: nil)
+                .interactiveDismissDisabled()
+        }
     }
 
-    /// For completed surveys, shows a SurveyAnswerView (via the NavigationLink bound to `$showingAnswers`) filtered to the selected survey task.
+    /// For completed surveys, shows a SurveyAnswerView (via the NavigationLink bound to `$showingAnswers`) filtered to the selected survey task. For incomplete tasks, presents a `SurveyViewController` to allow completing the survey.
     private func selected() {
-        if model.status == .complete {
+        switch model.status {
+        case .complete:
             showingAnswers = true
+        case .incomplete:
+            // Ignore if using a stubbed session from a preview provider.
+            if let session = model.session as? ParticipantSession {
+                presentedSurvey = session.surveyPresentation(surveyName: model.surveyName)
+            }
+        default:
+            break
         }
     }
 }

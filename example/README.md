@@ -25,7 +25,8 @@ The headings below describe the functionality you can find in each subview acces
 ### Query Survey Tasks
 
 - Demonstrates usage of `ParticipantSession.querySurveyTasks`. Modify the `SurveyTaskView.pageView` function to experiment with different query parameters.
-- Demonstrates `ParticipantSession.querySurveyAnswers`, by tapping on completed surveys.
+- Tapping on completed surveys demonstrates `ParticipantSession.querySurveyAnswers`.
+- Tapping on incomplete surveys demonstrates launching and completing surveys via `SurveyViewController`.
 
 ### Query Survey Answers
 
