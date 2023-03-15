@@ -76,19 +76,17 @@ struct RootMenuView: View {
                 }
             }.roundRectComponent()
             
-            if case let .some(.success(info)) = participant.info {
-                /// Displays a simple form to enter a survey name and launch the survey with that name.
-                NavigationLink(destination: SurveyLauncherView(participant: participant)) {
-                    Text("Survey Launcher")
-                }.roundRectComponent()
-                
-                NavigationLink(
-                    destination: SurveyTaskView.pageView(session: participant.session, participantInfo: info)
-                        .navigationTitle("Query Survey Tasks")
-                ) {
-                    Label("Query Survey Tasks", systemImage: "checkmark.square")
-                }.roundRectComponent()
-            }
+            /// Displays a simple form to enter a survey name and launch the survey with that name.
+            NavigationLink(destination: SurveyLauncherView(participant: participant)) {
+                Text("Survey Launcher")
+            }.roundRectComponent()
+            
+            NavigationLink(
+                destination: SurveyTaskView.pageView(session: participant.session)
+                    .navigationTitle("Query Survey Tasks")
+            ) {
+                Label("Query Survey Tasks", systemImage: "checkmark.square")
+            }.roundRectComponent()
             
             /// This presents a list of all of the participant's survey answers.  See SurveyAnswerView.swift to further customize the query. The SurveyTaskView above also presents SurveyAnswerViews filtered to specific surveys.
             NavigationLink(

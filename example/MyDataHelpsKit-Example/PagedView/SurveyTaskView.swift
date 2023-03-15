@@ -9,12 +9,12 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct SurveyTaskView: View {
-    @MainActor static func pageView(session: ParticipantSessionType, participantInfo: ParticipantInfoViewModel) -> PagedView<SurveyTaskSource, SurveyTaskView> {
+    @MainActor static func pageView(session: ParticipantSessionType) -> PagedView<SurveyTaskSource, SurveyTaskView> {
         /// EXERCISE: Add parameters to this `SurveyTaskQuery` to customize filtering.
         let query = SurveyTaskQuery()
         let source = SurveyTaskSource(session: session, query: query)
         return PagedView(model: .init(source: source) { item in
-            SurveyTaskView(model: item, participantLinkIdentifier: participantInfo.linkIdentifier)
+            SurveyTaskView(model: item)
         })
     }
     
@@ -27,11 +27,9 @@ struct SurveyTaskView: View {
         let hasSavedProgress: Bool
         let status: SurveyTaskStatus
         let surveyName: String
-        let linkIdentifier: SurveyTaskLink.ID?
     }
     
     let model: Model
-    let participantLinkIdentifier: ParticipantLink.ID?
     @State var showingAnswers = false
     
     static let dateFormatter: DateFormatter = {
@@ -97,25 +95,15 @@ extension SurveyTaskView.Model {
         self.hasSavedProgress = task.hasSavedProgress
         self.status = task.status
         self.surveyName = task.surveyName
-        self.linkIdentifier = task.linkIdentifier
     }
 }
 
 struct SurveyTaskView_Previews: PreviewProvider {
-    struct ContainerView: View {
-        let model: SurveyTaskView.Model
-        let participantLinkIdentifier: ParticipantLink.ID?
-        var body: some View {
-            SurveyTaskView(model: model, participantLinkIdentifier: participantLinkIdentifier)
-                .padding()
-        }
-    }
-    
     static var previews: some View {
         NavigationView {
             VStack {
-                ContainerView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .incomplete, surveyName: "name", linkIdentifier: nil), participantLinkIdentifier: nil)
-                ContainerView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .complete, surveyName: "name", linkIdentifier: nil), participantLinkIdentifier: nil)
+                SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .incomplete, surveyName: "name"))
+                SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .complete, surveyName: "name"))
             }
         }
     }
