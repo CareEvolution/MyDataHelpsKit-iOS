@@ -18,9 +18,14 @@ struct ParticipantInfoViewModel {
 
 extension ParticipantInfoViewModel {
     init(info: ParticipantInfo) {
-        var tokens = [info.demographics.firstName, info.demographics.lastName]
-        if tokens.isEmpty { tokens = ["(no name)"] }
-        self.name = tokens.compactMap { $0 }.joined(separator: " ")
+        let tokens = [info.demographics.firstName, info.demographics.lastName]
+            .compactMap { $0 }
+            .filter { !$0.isEmpty }
+        if tokens.isEmpty {
+            self.name = "(no name)"
+        } else {
+            self.name = tokens.joined(separator: " ")
+        }
         self.email = info.demographics.email
         self.phone = info.demographics.mobilePhone
         self.enrollmentDate = info.enrollmentDate
@@ -31,13 +36,6 @@ extension ParticipantInfoViewModel {
 struct ParticipantInfoView: View {
     let model: ParticipantInfoViewModel
     
-    private static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .medium
-        df.timeStyle = .short
-        return df
-    }()
-    
     var body: some View {
         VStack(alignment: .leading) {
             Text(model.name)
@@ -46,10 +44,10 @@ struct ParticipantInfoView: View {
                 Label(email, systemImage: model.isUnsubscribedFromEmails ? "slash.circle" : "checkmark.circle")
             }
             if let phone = model.phone {
-                Text(phone)
+                Label(phone, systemImage: "phone")
             }
             if let enrollmentDate = model.enrollmentDate {
-                Text("Enrolled \(Self.dateFormatter.string(from: enrollmentDate))")
+                Label("Enrolled \(enrollmentDate.formatted())", systemImage: "person.crop.circle.badge.checkmark")
             }
         }
         .font(.caption)
