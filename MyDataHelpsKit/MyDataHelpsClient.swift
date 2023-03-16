@@ -35,6 +35,7 @@ public final class MyDataHelpsClient {
         return URLSession(configuration: configuration)
     }
     
+    /// An IETF language tag, such as `en-US`.
     internal var languageTag: String {
         var acceptLanguage = Locale.current.languageCode ?? "en"
         if let regionCode = Locale.current.regionCode {

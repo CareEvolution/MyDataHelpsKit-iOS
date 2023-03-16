@@ -45,7 +45,7 @@ class ParticipantSessionPreview: ParticipantSessionType {
     }
     
     func getParticipantInfoViewModel() async throws -> ParticipantInfoViewModel {
-        return .init(name: "name", linkIdentifier: nil, email: "email", phone: "phone", enrollmentDate: Date(), isUnsubscribedFromEmails: false)
+        return .init(name: "name", email: "email", phone: "phone", enrollmentDate: Date(), isUnsubscribedFromEmails: false)
     }
     
     func getProjectInfo() async throws -> ProjectInfo {

@@ -16,15 +16,17 @@ public enum MyDataHelpsError: Error {
     case decodingError(Error)
     /// Failure to encode a model object.
     case encodingError(Error)
+    /// Survey failed to present to the user because of an invalid survey name.
+    case invalidSurvey
     /// Unexpected server error, e.g. an HTTP 500 error. Check the included `HTTPResponseError` for details, and [contact support](https://developer.mydatahelps.org/help.html) if you need help determining the problem.
     case serverError(HTTPResponseError)
     /// Server request limit exceeded. The associated `APIRateLimit` indicates when throttling will reset, and the `HTTPResponseError` may include an error message (non-localized) suitable for debugging. [Contact support](https://developer.mydatahelps.org/help.html) with any questions.
     case tooManyRequests(APIRateLimit, HTTPResponseError)
     /// A server request timed out.
-    case timedOut(Error)
+    case timedOut(Error?)
     /// A server request had a missing or invalid access token. The access token should be refreshed and a new `ParticipantSession` created, if applicable.
     case unauthorizedRequest(HTTPResponseError)
-    /// Web content (e.g. an embeddable survey) unexpectedly failed to load, due to a network, server, or web content failure. Includes any underlying error, if available.
+    /// Web content (e.g. a MyDataHelps survey) unexpectedly failed to load, due to a network, server, or web content failure. Includes any underlying error, if available.
     case webContentError(Error?)
     /// A wrapper for unexpected errors. Includes the underlying Error object that triggered the unexpected error, if applicable.
     case unknown(Error?)

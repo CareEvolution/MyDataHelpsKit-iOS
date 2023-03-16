@@ -8,36 +8,42 @@
 import SwiftUI
 import MyDataHelpsKit
 
+extension MyDataHelpsError {
+    var localizedDescription: String {
+        switch self {
+        case let .decodingError(underlying):
+            return "Decoding error: \(underlying.localizedDescription)"
+        case let .encodingError(underlying):
+            return "Encoding error: \(underlying.localizedDescription)"
+        case .invalidSurvey:
+            return "Survey not found"
+        case let .serverError(underlying):
+            return "Server error: HTTP \(underlying.statusCode): \(underlying.message ?? underlying.localizedDescription)"
+        case let .tooManyRequests(limit, underlying):
+            return "Too many requests: exceeded \(limit.maxRequestsPerHour), reset at \(limit.nextReset.formatted(.dateTime.hour().minute().second())) [\(underlying.message ?? "")]"
+        case let .timedOut(.some(underlying)):
+            return "Timed out: \(underlying.localizedDescription)"
+        case .timedOut(.none):
+            return "Timed out"
+        case let .unauthorizedRequest(underlying):
+            return "Unauthorized: \(underlying.localizedDescription)"
+        case let .unknown(.some(underlying)):
+            return "Unknown error: \(underlying.localizedDescription)"
+        case .unknown(.none):
+            return "Unknown error"
+        case let .webContentError(.some(underlying)):
+            return "Web content error: \(underlying.localizedDescription)"
+        case .webContentError(.none):
+            return "Web content error"
+        }
+    }
+}
+
 struct ErrorView: View {
     struct Model: Identifiable {
         let id = UUID().uuidString
         let title: String
         let error: MyDataHelpsError
-        
-        var errorDescription: String {
-            switch error {
-            case let .decodingError(underlying):
-                return "Decoding error: \(underlying.localizedDescription)"
-            case let .encodingError(underlying):
-                return "Encoding error: \(underlying.localizedDescription)"
-            case let .serverError(underlying):
-                return "Server error: HTTP \(underlying.statusCode): \(underlying.message ?? underlying.localizedDescription)"
-            case let .tooManyRequests(limit, underlying):
-                return "Too many requests: exceeded \(limit.maxRequestsPerHour), reset at \(limit.nextReset.formatted(.dateTime.hour().minute().second())) [\(underlying.message ?? "")]"
-            case let .timedOut(underlying):
-                return "Timed out: \(underlying.localizedDescription)"
-            case let .unauthorizedRequest(underlying):
-                return "Unauthorized: \(underlying.localizedDescription)"
-            case let .unknown(.some(underlying)):
-                return "Unknown error: \(underlying.localizedDescription)"
-            case .unknown(.none):
-                return "Unknown error"
-            case let .webContentError(.some(underlying)):
-                return "Web content error: \(underlying.localizedDescription)"
-            case .webContentError(.none):
-                return "Web content error"
-            }
-        }
     }
     
     let model: Model
@@ -49,7 +55,7 @@ struct ErrorView: View {
                 .fontWeight(.semibold)
                 .foregroundColor(Color.red)
                 
-            Text(model.errorDescription)
+            Text(model.error.localizedDescription)
                 .font(.caption)
                 .foregroundColor(Color.red)
         }

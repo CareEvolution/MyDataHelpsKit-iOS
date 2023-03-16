@@ -25,7 +25,8 @@ The headings below describe the functionality you can find in each subview acces
 ### Query Survey Tasks
 
 - Demonstrates usage of `ParticipantSession.querySurveyTasks`. Modify the `SurveyTaskView.pageView` function to experiment with different query parameters.
-- Demonstrates `ParticipantSession.querySurveyAnswers`, by tapping on completed surveys.
+- Tapping on completed surveys demonstrates `ParticipantSession.querySurveyAnswers`.
+- Tapping on incomplete surveys demonstrates launching and completing surveys via `SurveyViewController`.
 
 ### Query Survey Answers
 
@@ -41,9 +42,9 @@ The headings below describe the functionality you can find in each subview acces
 
 - Demonstrates usage of `ParticipantSession.queryNotifications`. Modify the `NotificationHistoryView.pageView` function to experiment with different query parameters. `NotificationHistoryView.Model` demonstrates various ways to access the different types of notification content available.
 
-### MyDataHelps Embeddable Surveys
+### MyDataHelps Surveys
 
-To see examples of using `EmbeddableSurveyViewController` to present MyDataHelps embeddable surveys, tap on incomplete surveys in the Survey Tasks screen. To use this feature, embeddable survey functionality must be enabled in MyDataHelps for the project and the survey. See EmbeddableSurveyViewController's documentation for more info on usage and links to relevant MyDataHelps documentation.
+- **Survey Launcher** demonstrates presentation of MyDataHelps surveys from within your app. Tap on "Survey Launcher" and enter a survey name from your MyDataHelps project (found in MyDataHelps Designer). See the documentation for `SurveyViewController` for more information on usage and links to relevant MyDataHelps documentation.
 
 ### External Accounts
 

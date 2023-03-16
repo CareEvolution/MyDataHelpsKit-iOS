@@ -30,9 +30,6 @@ extension View {
 /// EXERCISE: This view configures the query objects for the content of various sub-views. Modify the query objects passed to various `pageView` functions here to see how filtering and sorting works in data queries.
 struct RootMenuView: View {
     @StateObject var participant: ParticipantModel
-    @State private var embeddableSurvey: EmbeddableSurveySelection? = nil
-    @State private var embeddableSurveyError: MyDataHelpsError? = nil
-    @State private var errorAlertModel: ErrorView.Model? = nil
     
     var body: some View {
         VStack {
@@ -79,25 +76,17 @@ struct RootMenuView: View {
                 }
             }.roundRectComponent()
             
-            if case let .some(.success(info)) = participant.info {
-                NavigationLink(
-                    destination: SurveyTaskView.pageView(session: participant.session, participantInfo: info, embeddableSurveySelection: $embeddableSurvey)
-                        .navigationTitle("Query Survey Tasks")
-                        .sheet(item: $embeddableSurvey, onDismiss: {
-                            // Delay presenting error alert until after sheet is fully dismissed
-                            if let embeddableErrorModel = embeddableSurveyError.map({ ErrorView.Model(title: "Survey error", error: $0) }) {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-                                    errorAlertModel = embeddableErrorModel
-                                }
-                            }
-                        }) { selection in
-                            /// RootView is responsible for modally presenting any Embeddable Survey that the user selects from the `SurveyTaskView`. See `EmbeddableSurveyViewController` documentation.
-                            EmbeddableSurveyViewRepresentable(model: selection, presentation: $embeddableSurvey, error: $embeddableSurveyError)
-                        }
-                ) {
-                    Label("Query Survey Tasks", systemImage: "checkmark.square")
-                }.roundRectComponent()
-            }
+            /// Displays a simple form to enter a survey name and launch the survey with that name.
+            NavigationLink(destination: SurveyLauncherView(participant: participant)) {
+                Text("Survey Launcher")
+            }.roundRectComponent()
+            
+            NavigationLink(
+                destination: SurveyTaskView.pageView(session: participant.session)
+                    .navigationTitle("Query Survey Tasks")
+            ) {
+                Label("Query Survey Tasks", systemImage: "checkmark.square")
+            }.roundRectComponent()
             
             /// This presents a list of all of the participant's survey answers.  See SurveyAnswerView.swift to further customize the query. The SurveyTaskView above also presents SurveyAnswerViews filtered to specific surveys.
             NavigationLink(
@@ -123,12 +112,9 @@ struct RootMenuView: View {
                 Label("External Accounts", systemImage: "link")
             }.roundRectComponent()
         }
-        .alert(item: $errorAlertModel) {
-            Alert(title: Text($0.title), message: Text($0.errorDescription), dismissButton: nil)
-        }
     }
     
-    func loadParticipantInfo() {
+    private func loadParticipantInfo() {
         participant.loadInfo()
         participant.loadProject()
         participant.loadDataCollectionSettings()
