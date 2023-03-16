@@ -139,9 +139,13 @@ struct ExternalAccountView: View {
     var body: some View {
         HStack(alignment: .center) {
             if let logoURL = account.provider.logoURL {
-                RemoteImageView(url: logoURL, placeholderImageName: "providerLogoPlaceholder")
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 45, height: 45)
+                AsyncImage(url: logoURL) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image.logoPlaceholder()
+                }
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 45, height: 45)
             }
             VStack(alignment: .leading) {
                 Text(account.provider.name)
@@ -163,26 +167,21 @@ struct ExternalAccountsListView_Previews: PreviewProvider {
         ExternalAccountView(account: ExternalAccount.previewList[0], listModel: ExternalAccountsListViewModel(session: ParticipantSessionPreview(), result: .success([]), accountChangeResult: nil))
             .padding()
             .previewLayout(.sizeThatFits)
-            .environmentObject(RemoteImageCache())
         NavigationView {
             ExternalAccountsListView(model: .init(session: ParticipantSessionPreview()))
                 .navigationTitle("External Accounts")
-                .environmentObject(RemoteImageCache())
         }
         NavigationView {
             ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .success(ExternalAccount.previewList), accountChangeResult: "Refreshed Account"))
                 .navigationTitle("External Accounts")
-                .environmentObject(RemoteImageCache())
         }
         NavigationView {
             ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .success([]), accountChangeResult: nil))
                 .navigationTitle("External Accounts")
-                .environmentObject(RemoteImageCache())
         }
         NavigationView {
             ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .failure(.unknown(nil)), accountChangeResult: nil))
                 .navigationTitle("External Accounts")
-                .environmentObject(RemoteImageCache())
         }
     }
 }

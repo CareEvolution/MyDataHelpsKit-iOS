@@ -13,7 +13,6 @@ struct MyDataHelpsKit_ExampleApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(SessionModel())
-                .environmentObject(RemoteImageCache())
         }
     }
 }

@@ -26,9 +26,13 @@ struct ExternalAccountProviderView: View {
     var body: some View {
         HStack(alignment: .center) {
             if let logoURL = provider.logoURL {
-                RemoteImageView(url: logoURL, placeholderImageName: "providerLogoPlaceholder")
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 45, height: 45)
+                AsyncImage(url: logoURL) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image.logoPlaceholder()
+                }
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 45, height: 45)
             }
             VStack(alignment: .leading) {
                 Text(provider.name)
@@ -148,6 +152,5 @@ struct ProvidersListView_Previews: PreviewProvider {
             ExternalAccountProviderView.pageView(session: ParticipantSessionPreview(), search: nil, category: nil)
                 .navigationTitle("External Providers")
         }
-        .environmentObject(RemoteImageCache())
     }
 }

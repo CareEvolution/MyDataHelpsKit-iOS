@@ -14,9 +14,14 @@ struct ProjectInfoView: View {
     
     var body: some View {
         HStack(alignment: .top) {
-            RemoteImageView(url: project.organization.logoURL, placeholderImageName: "providerLogoPlaceholder")
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 45, height: 45)
+            AsyncImage(url: project.organization.logoURL) { image in
+                image.resizable()
+            } placeholder: {
+                Image.logoPlaceholder()
+            }
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 45, height: 45)
+            
             VStack(alignment: .leading) {
                 Text(project.name)
                     .font(.subheadline)
@@ -89,6 +94,5 @@ struct ProjectInfoView_Previews: PreviewProvider {
     
     static var previews: some View {
         ProjectInfoView(project: project, dataCollectionSettings: projectDataCollectionSettings)
-            .environmentObject(RemoteImageCache())
     }
 }
