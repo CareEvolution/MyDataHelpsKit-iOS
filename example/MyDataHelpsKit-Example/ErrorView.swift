@@ -18,7 +18,7 @@ extension MyDataHelpsError {
         case .invalidSurvey:
             return "Survey not found"
         case let .serverError(underlying):
-            return "Server error: HTTP \(underlying.statusCode): \(underlying.message ?? underlying.localizedDescription)"
+            return "Server error: \(underlying.localizedDescription)"
         case let .tooManyRequests(limit, underlying):
             return "Too many requests: exceeded \(limit.maxRequestsPerHour), reset at \(limit.nextReset.formatted(.dateTime.hour().minute().second())) [\(underlying.message ?? "")]"
         case let .timedOut(.some(underlying)):
@@ -35,6 +35,16 @@ extension MyDataHelpsError {
             return "Web content error: \(underlying.localizedDescription)"
         case .webContentError(.none):
             return "Web content error"
+        }
+    }
+}
+
+extension HTTPResponseError {
+    var localizedDescription: String {
+        if let message {
+            return "HTTP \(statusCode): \(message)"
+        } else {
+            return "HTTP \(statusCode)"
         }
     }
 }

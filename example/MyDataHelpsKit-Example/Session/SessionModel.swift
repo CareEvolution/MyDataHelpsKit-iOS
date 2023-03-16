@@ -15,7 +15,10 @@ import MyDataHelpsKit
     @Published var session: ParticipantSession? = nil
     
     init() {
-         self.client = MyDataHelpsClient()
+        self.client = MyDataHelpsClient()
+        if !token.isEmpty {
+            authenticate()
+        }
     }
     
     func authenticate() {

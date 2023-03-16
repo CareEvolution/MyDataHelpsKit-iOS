@@ -44,6 +44,8 @@
 		ACBF66C427CFD37200BC6945 /* APIRateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBF66C327CFD37200BC6945 /* APIRateLimit.swift */; };
 		ACBF66C627CFE18800BC6945 /* APIRateLimitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBF66C527CFE18800BC6945 /* APIRateLimitTests.swift */; };
 		ACC2EB9B261252F50080A3B5 /* SDKVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */; };
+		ACD1686B29C3B5E5002709EE /* SurveyModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1686A29C3B5E5002709EE /* SurveyModelsTests.swift */; };
+		ACD1686D29C3C501002709EE /* ParticipantInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1686C29C3C501002709EE /* ParticipantInfoTests.swift */; };
 		ACEAF44C26D67CE0002F79AB /* ExternalAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */; };
 		ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */; };
 		ACEAF45926DD7E76002F79AB /* ConnectExternalAccountResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF45826DD7E76002F79AB /* ConnectExternalAccountResource.swift */; };
@@ -102,6 +104,8 @@
 		ACBF66C327CFD37200BC6945 /* APIRateLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRateLimit.swift; sourceTree = "<group>"; };
 		ACBF66C527CFE18800BC6945 /* APIRateLimitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRateLimitTests.swift; sourceTree = "<group>"; };
 		ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKVersion.swift; sourceTree = "<group>"; };
+		ACD1686A29C3B5E5002709EE /* SurveyModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyModelsTests.swift; sourceTree = "<group>"; };
+		ACD1686C29C3C501002709EE /* ParticipantInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantInfoTests.swift; sourceTree = "<group>"; };
 		ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccounts.swift; sourceTree = "<group>"; };
 		ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountsTests.swift; sourceTree = "<group>"; };
 		ACEAF45826DD7E76002F79AB /* ConnectExternalAccountResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectExternalAccountResource.swift; sourceTree = "<group>"; };
@@ -217,8 +221,10 @@
 				ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */,
 				AC83ABDD25F131DA00A668E4 /* Info.plist */,
 				AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */,
+				ACD1686C29C3C501002709EE /* ParticipantInfoTests.swift */,
 				AC2DAB0D28A57BF70023035E /* ProjectModelTests.swift */,
 				AC2DAB3428AD16D90023035E /* ScopedIdentifierTests.swift */,
+				ACD1686A29C3B5E5002709EE /* SurveyModelsTests.swift */,
 				AC83ABDB25F131DA00A668E4 /* URLRequestsTests.swift */,
 			);
 			path = MyDataHelpsKitTests;
@@ -414,9 +420,11 @@
 				AC2DAB3528AD16D90023035E /* ScopedIdentifierTests.swift in Sources */,
 				AC83ABDC25F131DA00A668E4 /* URLRequestsTests.swift in Sources */,
 				AC9DC9C0260A876F00C5D9E4 /* MyDataHelpsClientTests.swift in Sources */,
+				ACD1686D29C3C501002709EE /* ParticipantInfoTests.swift in Sources */,
 				ACBF66C627CFE18800BC6945 /* APIRateLimitTests.swift in Sources */,
 				ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */,
 				AC2DAB0E28A57BF70023035E /* ProjectModelTests.swift in Sources */,
+				ACD1686B29C3B5E5002709EE /* SurveyModelsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -620,6 +628,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MyDataHelpsKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -638,6 +647,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MyDataHelpsKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
