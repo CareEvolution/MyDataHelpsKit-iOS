@@ -46,6 +46,8 @@
 		ACC2EB9B261252F50080A3B5 /* SDKVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */; };
 		ACD1686B29C3B5E5002709EE /* SurveyModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1686A29C3B5E5002709EE /* SurveyModelsTests.swift */; };
 		ACD1686D29C3C501002709EE /* ParticipantInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1686C29C3C501002709EE /* ParticipantInfoTests.swift */; };
+		ACD1686F29C3EB52002709EE /* DeviceDataPointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1686E29C3EB52002709EE /* DeviceDataPointTests.swift */; };
+		ACD1687129C4A682002709EE /* NotificationHistoryModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1687029C4A682002709EE /* NotificationHistoryModelsTests.swift */; };
 		ACEAF44C26D67CE0002F79AB /* ExternalAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */; };
 		ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */; };
 		ACEAF45926DD7E76002F79AB /* ConnectExternalAccountResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF45826DD7E76002F79AB /* ConnectExternalAccountResource.swift */; };
@@ -106,6 +108,8 @@
 		ACC2EB9A261252F50080A3B5 /* SDKVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKVersion.swift; sourceTree = "<group>"; };
 		ACD1686A29C3B5E5002709EE /* SurveyModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyModelsTests.swift; sourceTree = "<group>"; };
 		ACD1686C29C3C501002709EE /* ParticipantInfoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantInfoTests.swift; sourceTree = "<group>"; };
+		ACD1686E29C3EB52002709EE /* DeviceDataPointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDataPointTests.swift; sourceTree = "<group>"; };
+		ACD1687029C4A682002709EE /* NotificationHistoryModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryModelsTests.swift; sourceTree = "<group>"; };
 		ACEAF44B26D67CE0002F79AB /* ExternalAccounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccounts.swift; sourceTree = "<group>"; };
 		ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountsTests.swift; sourceTree = "<group>"; };
 		ACEAF45826DD7E76002F79AB /* ConnectExternalAccountResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectExternalAccountResource.swift; sourceTree = "<group>"; };
@@ -218,9 +222,11 @@
 			isa = PBXGroup;
 			children = (
 				ACBF66C527CFE18800BC6945 /* APIRateLimitTests.swift */,
+				ACD1686E29C3EB52002709EE /* DeviceDataPointTests.swift */,
 				ACEAF44D26D683F7002F79AB /* ExternalAccountsTests.swift */,
 				AC83ABDD25F131DA00A668E4 /* Info.plist */,
 				AC9DC9BF260A876F00C5D9E4 /* MyDataHelpsClientTests.swift */,
+				ACD1687029C4A682002709EE /* NotificationHistoryModelsTests.swift */,
 				ACD1686C29C3C501002709EE /* ParticipantInfoTests.swift */,
 				AC2DAB0D28A57BF70023035E /* ProjectModelTests.swift */,
 				AC2DAB3428AD16D90023035E /* ScopedIdentifierTests.swift */,
@@ -425,6 +431,8 @@
 				ACEAF44E26D683F7002F79AB /* ExternalAccountsTests.swift in Sources */,
 				AC2DAB0E28A57BF70023035E /* ProjectModelTests.swift in Sources */,
 				ACD1686B29C3B5E5002709EE /* SurveyModelsTests.swift in Sources */,
+				ACD1686F29C3EB52002709EE /* DeviceDataPointTests.swift in Sources */,
+				ACD1687129C4A682002709EE /* NotificationHistoryModelsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
