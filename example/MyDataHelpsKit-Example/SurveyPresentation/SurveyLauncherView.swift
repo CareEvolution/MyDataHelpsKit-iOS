@@ -30,11 +30,14 @@ struct SurveyLauncherView: View {
                 Text("Enter a survey name to launch:")
                 TextField("Survey Name", text: $surveyName)
                     .focused($surveyNameFocus)
+            } footer: {
+                Text("Choose a survey that’s published to your project in MyDataHelps Designer.")
+            }
+            
+            Section {
                 Button("Launch Survey", action: launchSurvey)
                     .font(.headline)
                     .disabled(surveyName.isEmpty)
-            } footer: {
-                Text("Choose a survey that’s published to your project in MyDataHelps Designer.")
             }
             
             if (!log.isEmpty) {
@@ -54,7 +57,6 @@ struct SurveyLauncherView: View {
                 }
             }
         }
-        .navigationTitle("Survey Launcher")
         .onAppear {
             surveyNameFocus = true
         }
@@ -81,7 +83,7 @@ struct SurveyLauncherView: View {
 
 struct SurveyLauncherView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             SurveyLauncherView(participant: ParticipantModel(session: ParticipantSessionPreview()))
         }
     }

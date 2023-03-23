@@ -8,49 +8,130 @@
 import SwiftUI
 import MyDataHelpsKit
 
-/// Implements the paging idiom common to various list/query APIs in MyDataHelpsKit. Various `PagedModelSource` implementations in this example app perform the actual MyDataHelpsKit queries and produce the paged result objects. PagedView uses this source object to fetch data when it's first displayed, and to fetch the next page when scrolling to the bottom of the list view (infinite scrolling). PagedView uses a corresponding `PagedViewModel` implementation to produce appropriate SwiftUI views for individual items shown in the list view.
-struct PagedView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
+/// Implements the paging idiom common to various list/query APIs in MyDataHelpsKit. Various `PagedModelSource` implementations in this example app perform the actual MyDataHelpsKit queries and produce the paged result objects. PagedListView and its component views use this source object to fetch data when it's first displayed, and to fetch the next page when scrolling to the bottom of the list view (infinite scrolling). PagedListView uses a corresponding `PagedViewModel` implementation to produce appropriate SwiftUI views for individual items shown in the list view.
+///
+/// `PagedListView` handles all details of a paging view, including ownership of the model object and construction of the top-level `List`. To customize or embed within another list view, use the components below instead.
+struct PagedListView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
     @StateObject var model: PagedViewModel<SourceType, ViewType>
     
     var body: some View {
-        switch model.state {
-        case .empty:
-            Text("No results")
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .padding()
-        case let .failure(error):
-            ErrorView(model: .init(title: "Failed to load", error: error))
-        case let .normal(loadMore):
-            List {
-                Section {
-                    ForEach(model.items) { item in
-                        model.viewProvider(item)
-                            .onTapGesture { model.selectedItem = item }
-                            .onAppear(perform: {
-                                if model.isLastItem(item) {
-                                    model.loadNextPage()
-                                }
-                            })
-                    }
+        List {
+            Section {
+                switch model.state {
+                case .empty:
+                    PagedEmptyContentView()
+                case let .failure(error):
+                    PagedFailureContentView(error: error)
+                case .normal:
+                    PagedContentItemsView(model: model, inlineProgressView: false)
                 }
-                if loadMore {
-                    Section {
-                        ProgressView()
-                    }
-                }
+            } footer: {
+                PagedLoadingView(model: model)
+                    .padding(.vertical)
             }
         }
     }
 }
 
+/// Renders the items of a list view using a `PagedViewModel`. Use when the model's state is `.normal`. Place this inside a List or Section.
+struct PagedContentItemsView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
+    @ObservedObject var model: PagedViewModel<SourceType, ViewType>
+    let inlineProgressView: Bool
+    
+    var body: some View {
+        ForEach(model.items) { item in
+            model.viewProvider(item)
+                .onTapGesture { model.selectedItem = item }
+                .onAppear(perform: {
+                    if model.isLastItem(item) {
+                        model.loadNextPage()
+                    }
+                })
+        }
+        if inlineProgressView {
+            PagedLoadingView(model: model)
+        }
+    }
+}
+
+/// A loading indicator for a paged view that displays itself only when appropriate.
+struct PagedLoadingView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
+    @ObservedObject var model: PagedViewModel<SourceType, ViewType>
+    
+    var body: some View {
+        switch model.state {
+        case .normal(loadMore: true):
+            ProgressView()
+        default:
+            EmptyView()
+        }
+    }
+}
+
+/// Provides a default implementation for the `.empty` state of a `PagedViewModel`. Place this inside a List or Section.
+struct PagedEmptyContentView: View {
+    let text: String
+    
+    init(text: String = "No results") {
+        self.text = text
+    }
+    
+    var body: some View {
+        Text(text)
+            .font(.headline)
+            .fontWeight(.semibold)
+            .padding(.vertical)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .multilineTextAlignment(.center)
+    }
+}
+
+/// Provides a default implementation for the `.failure` state of a `PagedViewModel`. Place this inside a List or Section.
+struct PagedFailureContentView: View {
+    let error: MyDataHelpsError
+    
+    var body: some View {
+        ErrorView(model: .init(title: "Failed to load", error: error))
+    }
+}
+
 struct PagedView_Previews: PreviewProvider {
-    struct PreviewListItem: Identifiable {
+    static var previews: some View {
+        NavigationStack {
+            List {
+                Section("Empty") {
+                    PagedEmptyContentView(text: "No items")
+                }
+                Section("Failure") {
+                    PagedFailureContentView(error: .unknown(nil))
+                }
+                Section("Items") {
+                    PagedContentItemsView(model: .init(source: PreviewSource(empty: false), viewProvider: { Self.viewProvider($0) }), inlineProgressView: true)
+                }
+            }
+            .navigationTitle("Components")
+        }
+        
+        NavigationStack {
+            PagedListView(model: .init(source: PreviewSource(empty: false), viewProvider: { Self.viewProvider($0) }))
+                .navigationTitle("Page of Results")
+        }
+        NavigationStack {
+            PagedListView(model: .init(source: PreviewSource(empty: true), viewProvider: { Self.viewProvider($0) }))
+                .navigationTitle("Empty Paged View")
+        }
+        NavigationStack {
+            PagedListView(model: .init(source: FailureSource(), viewProvider: { Self.viewProvider($0) }))
+                .navigationTitle("Failure")
+        }
+    }
+    
+    private struct PreviewListItem: Identifiable {
         let id: String
         let text: String
     }
     
-    struct PreviewListPage: PageModelType {
+    private struct PreviewListPage: PageModelType {
         func pageItems(session: ParticipantSessionType) -> [PreviewListItem] {
             items
         }
@@ -58,22 +139,43 @@ struct PagedView_Previews: PreviewProvider {
         let nextPageID: ScopedIdentifier<PreviewListPage, String>? = nil
     }
     
-    class PreviewSource: PagedModelSource {
+    private class PreviewSource: PagedModelSource {
         let session: ParticipantSessionType = ParticipantSessionPreview()
+        let empty: Bool
+        
+        init(empty: Bool) {
+            self.empty = empty
+        }
         
         func loadPage(after page: PreviewListPage?) async throws -> PreviewListPage? {
-            return .init(items: [
-                .init(id: "1", text: "abc"),
-                .init(id: "2", text: "def")
-            ])
+            if empty {
+                return await delayedSuccess(page: .init(items: []))
+            } else {
+                return await delayedSuccess(page: .init(items: [
+                    .init(id: "1", text: "abc"),
+                    .init(id: "2", text: "def")
+                ]))
+            }
+        }
+        
+        private func delayedSuccess(page: PreviewListPage) async -> PreviewListPage {
+            return await withCheckedContinuation { continuation in
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    continuation.resume(returning: page)
+                }
+            }
         }
     }
     
-    private static func viewProvider(_ item: PreviewListItem) -> some View {
-        Text(item.text)
+    private class FailureSource: PagedModelSource {
+        let session: ParticipantSessionType = ParticipantSessionPreview()
+        
+        func loadPage(after page: PreviewListPage?) async throws -> PreviewListPage? {
+            throw MyDataHelpsError.unknown(nil)
+        }
     }
     
-    static var previews: some View {
-        PagedView(model: .init(source: PreviewSource(), viewProvider: { Self.viewProvider($0) }))
+    private static func viewProvider(_ item: PreviewListItem) -> Text {
+        Text(item.text)
     }
 }

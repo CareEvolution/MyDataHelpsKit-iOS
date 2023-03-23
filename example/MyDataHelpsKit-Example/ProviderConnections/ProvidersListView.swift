@@ -57,7 +57,7 @@ struct ExternalAccountProviderPagedView: View {
     @State private var errorModel: ErrorView.Model?
     
     var body: some View {
-        PagedView(model: model)
+        PagedListView(model: model)
             .sheet(item: $newConnection) { connection in
                 ProviderConnectionAuthViewRepresentable(url: connection.authorizationURL, presentation: $newConnection)
             }
@@ -98,7 +98,7 @@ struct ExternalAccountProvidersResultPageViewModel: PageModelType {
     let page: ExternalAccountProvidersResultPage
     let query: ExternalAccountProvidersQuery
     
-    /// For compatibility with PagedView; just indicates whether there is another page to load. The query itself uses numeric `pageNumber` instead of `nextPageID`.
+    /// For compatibility with PagedListView; just indicates whether there is another page to load. The query itself uses numeric `pageNumber` instead of `nextPageID`.
     var nextPageID: ScopedIdentifier<ExternalAccountProvidersResultPageViewModel, String>? {
         if query.page(after: page) == nil {
             return nil

@@ -6,7 +6,7 @@ To get started, open `MyDataHelpsKit-Example.xcworkspace` in Xcode and run the a
 
 Once you enter a participant token, the example app initializes a `ParticipantSession` and displays the RootMenuView, from which you can navigate to various other views to demonstrate each of the MyDataHelpsKit APIs.
 
-There are several ParticipantSession APIs that take query objects and produce paged arrays of results. These are all implemented in the example app with a generic `PagedView` SwiftUI view, and appropriate data source objects that perform the actual queries against ParticipantSession and construct individual SwiftUI views for each item in the results.
+There are several ParticipantSession APIs that take query objects and produce paged arrays of results. These are all implemented in the example app with a generic `PagedListView` SwiftUI view, and appropriate data source objects that perform the actual queries against ParticipantSession and construct individual SwiftUI views for each item in the results.
 
 ## Using this app to learn about MyDataHelpsKit
 

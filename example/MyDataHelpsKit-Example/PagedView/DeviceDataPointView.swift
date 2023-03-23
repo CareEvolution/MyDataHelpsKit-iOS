@@ -9,10 +9,10 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct DeviceDataPointView: View {
-    @MainActor static func pageView(session: ParticipantSessionType, namespace: DeviceDataNamespace, types: Set<String>?) -> PagedView<DeviceDataSource, DeviceDataPointView> {
+    @MainActor static func pageView(session: ParticipantSessionType, namespace: DeviceDataNamespace, types: Set<String>?) -> PagedListView<DeviceDataSource, DeviceDataPointView> {
         let query = DeviceDataQuery(namespace: namespace, types: types, limit: 25)
         let source = DeviceDataSource(session: session, query: query)
-        return PagedView(model: .init(source: source) { item in
+        return PagedListView(model: .init(source: source) { item in
             DeviceDataPointView(model: item)
         })
     }

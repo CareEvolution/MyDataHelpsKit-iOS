@@ -9,11 +9,11 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct SurveyAnswerView: View {
-    static func pageView(session: ParticipantSessionType, surveyID: Survey.ID?) -> PagedView<SurveyAnswersSource, SurveyAnswerView> {
+    static func pageView(session: ParticipantSessionType, surveyID: Survey.ID?) -> PagedListView<SurveyAnswersSource, SurveyAnswerView> {
         /// EXERCISE: Add parameters to this `SurveyAnswersQuery` to further customize filtering.
         let query = SurveyAnswersQuery(surveyID: surveyID)
         let source = SurveyAnswersSource(session: session, query: query)
-        return PagedView(model: .init(source: source) { item in
+        return PagedListView(model: .init(source: source) { item in
             SurveyAnswerView(model: item)
         })
     }

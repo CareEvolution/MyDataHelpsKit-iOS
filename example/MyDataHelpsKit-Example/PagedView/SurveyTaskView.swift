@@ -9,11 +9,11 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct SurveyTaskView: View {
-    @MainActor static func pageView(session: ParticipantSessionType) -> PagedView<SurveyTaskSource, SurveyTaskView> {
+    @MainActor static func pageView(session: ParticipantSessionType, statuses: Set<SurveyTaskStatus>? = nil) -> PagedListView<SurveyTaskSource, SurveyTaskView> {
         /// EXERCISE: Add parameters to this `SurveyTaskQuery` to customize filtering.
-        let query = SurveyTaskQuery()
+        let query = SurveyTaskQuery(statuses: statuses)
         let source = SurveyTaskSource(session: session, query: query)
-        return PagedView(model: .init(source: source) { item in
+        return PagedListView(model: .init(source: source) { item in
             SurveyTaskView(model: item)
         })
     }
@@ -41,6 +41,23 @@ struct SurveyTaskView: View {
     }()
     
     var body: some View {
+        Group {
+            if model.status == .complete {
+                NavigationLink(value: TasksNavigationPath.surveyAnswers(model.surveyID, model.surveyDisplayName)) {
+                    content
+                }
+            } else {
+                content
+                    .onTapGesture(perform: launchSurvey)
+            }
+        }
+        .sheet(item: $presentedSurvey) { presentation in
+            PresentedSurveyView(presentation: $presentedSurvey, resultMessage: nil)
+                .interactiveDismissDisabled()
+        }
+    }
+    
+    private var content: some View {
         HStack {
             switch (model.status, model.hasSavedProgress) {
             case (.incomplete, false):
@@ -64,37 +81,16 @@ struct SurveyTaskView: View {
                 }
             }
             Spacer()
-            
-            if model.status == .complete {
-                NavigationLink(
-                    "",
-                    destination: SurveyAnswerView.pageView(session: model.session, surveyID: model.surveyID)
-                        .navigationTitle("Answers for \(model.surveyDisplayName)"),
-                    isActive: $showingAnswers
-                )
-            }
-            Spacer()
-        }
-        .onTapGesture(perform: self.selected)
-        .sheet(item: $presentedSurvey) { presentation in
-            PresentedSurveyView(presentation: $presentedSurvey, resultMessage: nil)
-                .interactiveDismissDisabled()
         }
     }
 
-    /// For completed surveys, shows a SurveyAnswerView (via the NavigationLink bound to `$showingAnswers`) filtered to the selected survey task. For incomplete tasks, presents a `SurveyViewController` to allow completing the survey.
-    private func selected() {
-        switch model.status {
-        case .complete:
-            showingAnswers = true
-        case .incomplete:
-            // Ignore if using a stubbed session from a preview provider.
-            if let session = model.session as? ParticipantSession {
-                presentedSurvey = session.surveyPresentation(surveyName: model.surveyName)
-            }
-        default:
-            break
+    private func launchSurvey() {
+        // Ignore if using a stubbed session from a preview provider.
+        guard model.status == .incomplete,
+              let session = model.session as? ParticipantSession else {
+            return
         }
+        presentedSurvey = session.surveyPresentation(surveyName: model.surveyName)
     }
 }
 
@@ -113,8 +109,8 @@ extension SurveyTaskView.Model {
 
 struct SurveyTaskView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            VStack {
+        NavigationStack {
+            List {
                 SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .incomplete, surveyName: "name"))
                 SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .complete, surveyName: "name"))
             }
