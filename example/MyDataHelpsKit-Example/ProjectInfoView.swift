@@ -13,32 +13,34 @@ struct ProjectInfoView: View {
     let dataCollectionSettings: ProjectDataCollectionSettings
     
     var body: some View {
-        HStack(alignment: .top) {
-            AsyncImage(url: project.organization.logoURL) { image in
-                image.resizable()
-            } placeholder: {
-                Image.logoPlaceholder()
-            }
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 45, height: 45)
+        VStack(alignment: .leading) {
+            Text(project.name)
+                .font(.headline)
+                .padding(.bottom, 2)
             
-            VStack(alignment: .leading) {
-                Text(project.name)
-                    .font(.subheadline)
-                Text(project.organization.name)
-                    .font(.footnote)
-                Text(project.code)
-                    .font(.caption)
-                Text("Queryable data types: \(dataCollectionSettings.queryableDeviceDataTypes.count)")
-                    .font(.caption)
-                if let learnMoreURL = project.learnMoreURL,
-                   let learnMoreTitle = project.learnMoreTitle {
-                    Link(learnMoreTitle, destination: learnMoreURL)
-                        .font(.caption)
+            HStack(alignment: .top) {
+                AsyncImage(url: project.organization.logoURL) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image.logoPlaceholder()
                 }
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 45, height: 45)
                 
+                VStack(alignment: .leading) {
+                    Text(project.organization.name)
+                        .font(.footnote)
+                    Text(project.code)
+                    Text("Queryable data types: \(dataCollectionSettings.queryableDeviceDataTypes.count)")
+                    if let learnMoreURL = project.learnMoreURL,
+                       let learnMoreTitle = project.learnMoreTitle {
+                        Link(learnMoreTitle, destination: learnMoreURL)
+                    }
+                    
+                }
             }
         }
+        .font(.caption)
     }
 }
 

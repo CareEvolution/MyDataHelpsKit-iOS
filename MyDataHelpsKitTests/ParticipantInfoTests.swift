@@ -50,9 +50,9 @@ final class ParticipantInfoTests: XCTestCase {
         
         XCTAssertEqual(info.demographics.email, "email@example.com")
         XCTAssertEqual(info.demographics.mobilePhone, "(555) 555-1212")
-        XCTAssertEqual(info.demographics.firstName, "fname")
-        XCTAssertEqual(info.demographics.middleName, "mname")
-        XCTAssertEqual(info.demographics.lastName, "lname")
+        XCTAssertEqual(info.demographics.firstName, "FName")
+        XCTAssertEqual(info.demographics.middleName, "M")
+        XCTAssertEqual(info.demographics.lastName, "LName")
         XCTAssertEqual(info.demographics.street1, "123 Street St")
         XCTAssertEqual(info.demographics.street2, "Apt #1")
         XCTAssertEqual(info.demographics.city, "Anywhere")
@@ -95,9 +95,9 @@ final class ParticipantInfoTests: XCTestCase {
   "demographics": {
     "email": "email@example.com",
     "mobilePhone": "(555) 555-1212",
-    "firstName": "fname",
-    "middleName": "mname",
-    "lastName": "lname",
+    "firstName": "FName",
+    "middleName": "M",
+    "lastName": "LName",
     "street1": "123 Street St",
     "street2": "Apt #1",
     "city": "Anywhere",

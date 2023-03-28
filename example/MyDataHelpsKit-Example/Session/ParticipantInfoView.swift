@@ -40,6 +40,7 @@ struct ParticipantInfoView: View {
         VStack(alignment: .leading) {
             Text(model.name)
                 .font(.headline)
+                .padding(.bottom, 2)
             if let email = model.email {
                 Label(email, systemImage: model.isUnsubscribedFromEmails ? "slash.circle" : "checkmark.circle")
             }

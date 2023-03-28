@@ -18,18 +18,6 @@ import MyDataHelpsKit
     @Published var participantInfo: Result<ParticipantInfo, MyDataHelpsError>? = nil
     @Published var projectModel: Result<ProjectAndDataCollectionModel, MyDataHelpsError>? = nil
     
-    private var projectInfo: Result<ProjectInfo, MyDataHelpsError>? = nil {
-        didSet {
-            updateProjectModel()
-        }
-    }
-    
-    private var dataCollectionSettings: Result<ProjectDataCollectionSettings, MyDataHelpsError>? = nil {
-        didSet {
-            updateProjectModel()
-        }
-    }
-    
     init(session: ParticipantSessionType) {
         self.session = session
     }
@@ -41,26 +29,14 @@ import MyDataHelpsKit
         }
         
         Task {
-            if case .some(.success) = projectInfo { return }
-            projectInfo = await Result(wrapping: try await session.getProjectInfo())
-        }
-        
-        Task {
-            if case .some(.success) = dataCollectionSettings { return }
-            dataCollectionSettings = await Result(wrapping: try await session.getDataCollectionSettings())
-        }
-    }
-    
-    private func updateProjectModel() {
-        switch (projectInfo, dataCollectionSettings) {
-        case let (.some(.failure(error)), _):
-            projectModel = .failure(error)
-        case let (_, .some(.failure(error))):
-            projectModel = .failure(error)
-        case let (.some(.success(info)), .some(.success(settings))):
-            projectModel = .success(.init(info: info, dataCollectionSettings: settings))
-        default:
-            projectModel = .none
+            if case .some(.success) = projectModel { return }
+            do {
+                let info = try await session.getProjectInfo()
+                let dataCollectionSettings = try await session.getDataCollectionSettings()
+                projectModel = .success(.init(info: info, dataCollectionSettings: dataCollectionSettings))
+            } catch {
+                projectModel = .failure(MyDataHelpsError(error))
+            }
         }
     }
 }

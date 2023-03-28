@@ -77,7 +77,11 @@ class ParticipantSessionPreview: ParticipantSessionType {
     }
     
     func queryNotifications(_ query: NotificationHistoryQuery) async throws -> NotificationHistoryPage {
-        throw NotImplementedForSwiftUIPreviews()
+        if empty {
+            return try await delayedSuccess(data: PreviewData.emptyPage(modelKey: "notifications"))
+        } else {
+            return try await delayedSuccess(data: PreviewData.notificationHistoryPageJSON)
+        }
     }
     
     func persistDeviceData(_ dataPoints: [DeviceDataPointPersistModel]) async throws {
@@ -142,9 +146,9 @@ enum PreviewData {
       "demographics": {
         "email": "email@example.com",
         "mobilePhone": "(555) 555-1212",
-        "firstName": "fname",
-        "middleName": "m",
-        "lastName": "lname",
+        "firstName": "FName",
+        "middleName": "M",
+        "lastName": "LName",
         "street1": "123 Street St",
         "street2": "Apt #1",
         "city": "Anywhere",
@@ -281,6 +285,45 @@ enum PreviewData {
     }
   ],
   "nextPageID": "\(SurveyAnswersPage.PageID(UUID().uuidString))"
+}
+""".data(using: .utf8)! }
+    
+    static var notificationHistoryPageJSON: Data { """
+{
+  "notifications": [
+    {
+      "id": "\(UUID().uuidString)",
+      "identifier": "SMSExample1",
+      "sentDate": "2022-08-10T12:31:36.547+00:00",
+      "statusCode": "Succeeded",
+      "type": "Sms",
+      "content": {
+        "body": "A sample SMS notification."
+      }
+    },
+    {
+      "id": "\(UUID().uuidString)",
+      "identifier": "PushExample2",
+      "sentDate": "2022-06-30T17:16:20.52+00:00",
+      "statusCode": "Succeeded",
+      "type": "Push",
+      "content": {
+        "title": "Push Title",
+        "body": "A sample push notification."
+      }
+    },
+    {
+      "id": "\(UUID().uuidString)",
+      "identifier": "EmailExample3",
+      "sentDate": "2022-06-02T14:55:27.78+00:00",
+      "statusCode": "Succeeded",
+      "type": "Email",
+      "content": {
+        "subject": "A sample email subject line."
+      }
+    }
+  ],
+  "nextPageID": null
 }
 """.data(using: .utf8)! }
 }

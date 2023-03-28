@@ -47,10 +47,10 @@ struct TasksView: View {
             .navigationDestination(for: TasksNavigationPath.self) { destination in
                 switch destination {
                 case .surveyLauncher:
-                    SurveyLauncherView(participant: model.participant)
+                    SurveyLauncherView(session: model.session)
                         .navigationTitle("Launch a Survey")
                 case let .surveyAnswers(surveyID, surveyDisplayName):
-                    PagedListView(model: SurveyAnswersQuery(surveyID: surveyID).pagedListViewModel(model.participant.session)) { item in
+                    PagedListView(model: SurveyAnswersQuery(surveyID: surveyID).pagedListViewModel(model.session)) { item in
                         SurveyAnswerView(model: item, showSurveyDisplayName: false)
                     }
                     .navigationTitle("Answers for \(surveyDisplayName)")
@@ -64,14 +64,14 @@ struct TasksView: View {
     }
     
     private func launchSurvey(surveyName: String) {
-        guard let session = model.participant.session as? ParticipantSession else { return }
+        guard let session = model.session as? ParticipantSession else { return }
         presentedSurvey = session.surveyPresentation(surveyName: surveyName)
     }
 }
 
 struct TasksView_Previews: PreviewProvider {
     static var previews: some View {
-        TasksView(model: TasksViewModel(participant: ParticipantModel(session: ParticipantSessionPreview())))
-        TasksView(model: .init(participant: .init(session: ParticipantSessionPreview(empty: true))))
+        TasksView(model: TasksViewModel(session: ParticipantSessionPreview()))
+        TasksView(model: TasksViewModel(session: ParticipantSessionPreview(empty: true)))
     }
 }

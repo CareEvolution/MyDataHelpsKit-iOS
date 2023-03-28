@@ -62,7 +62,7 @@ public struct NotificationHistoryQuery: PagedQuery {
 public struct NotificationHistoryPage: PagedResult, Decodable {
     /// Identifies a specific page of notifications.
     public typealias PageID = ScopedIdentifier<NotificationHistoryPage, String>
-    /// A list of notifications filtered by the query criteria, ordered by date.
+    /// A list of notifications filtered by the query criteria, ordered by date, most recent first.
     public let notifications: [NotificationHistoryModel]
     /// An ID to be used with subsequent `NotificationHistoryQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
     public let nextPageID: PageID?

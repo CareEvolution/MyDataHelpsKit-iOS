@@ -16,7 +16,7 @@ struct SurveyLauncherView: View {
         let message: String
     }
     
-    @ObservedObject var participant: ParticipantModel
+    let session: ParticipantSessionType
     @FocusState private var surveyNameFocus: Bool
     
     @State private var surveyName = ""
@@ -73,7 +73,7 @@ struct SurveyLauncherView: View {
     
     private func launchSurvey() {
         // Ignore if using a stubbed session from a preview provider.
-        guard let session = participant.session as? ParticipantSession else { return }
+        guard let session = session as? ParticipantSession else { return }
         
         guard !surveyName.isEmpty else { return }
         log.append(SurveyLauncherLogItem(date: Date(), surveyName: surveyName, message: "Presenting survey"))
@@ -84,7 +84,7 @@ struct SurveyLauncherView: View {
 struct SurveyLauncherView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            SurveyLauncherView(participant: ParticipantModel(session: ParticipantSessionPreview()))
+            SurveyLauncherView(session: ParticipantSessionPreview())
         }
     }
 }
