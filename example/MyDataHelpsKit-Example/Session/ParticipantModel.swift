@@ -22,7 +22,7 @@ import MyDataHelpsKit
     func loadInfo() {
         if case .some(.success(_)) = info { return }
         Task {
-            info = await Result(wrapping: try await session.getParticipantInfoViewModel())
+            info = await Result(wrapping: ParticipantInfoViewModel(info: try await session.getParticipantInfo()))
         }
     }
     

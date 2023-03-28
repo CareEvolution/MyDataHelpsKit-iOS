@@ -10,7 +10,7 @@ import MyDataHelpsKit
 
 /// Protocol wrapping MyDataHelpsKit.ParticipantSession, to allow substituting stub implementations for SwiftUI Previews.
 protocol ParticipantSessionType {
-    func getParticipantInfoViewModel() async throws -> ParticipantInfoViewModel
+    func getParticipantInfo() async throws -> ParticipantInfo
     func getProjectInfo() async throws -> ProjectInfo
     func getDataCollectionSettings() async throws -> ProjectDataCollectionSettings
     func queryDeviceData(_ query: DeviceDataQuery) async throws -> DeviceDataResultPage
@@ -27,9 +27,6 @@ protocol ParticipantSessionType {
 }
 
 extension ParticipantSession: ParticipantSessionType {
-    func getParticipantInfoViewModel() async throws -> ParticipantInfoViewModel {
-        return .init(info: try await getParticipantInfo())
-    }
 }
 
 #if DEBUG
@@ -44,8 +41,8 @@ class ParticipantSessionPreview: ParticipantSessionType {
         self.empty = empty
     }
     
-    func getParticipantInfoViewModel() async throws -> ParticipantInfoViewModel {
-        return .init(name: "name", email: "email", phone: "phone", enrollmentDate: Date(), isUnsubscribedFromEmails: false)
+    func getParticipantInfo() async throws -> ParticipantInfo {
+        return try await delayedSuccess(data: PreviewData.participantInfoJSON)
     }
     
     func getProjectInfo() async throws -> ProjectInfo {
@@ -136,6 +133,38 @@ enum PreviewData {
         }
         """.data(using: .utf8)!
     }
+    
+    static let participantInfoJSON = """
+    {
+      "participantID": "\(UUID().uuidString)",
+      "participantIdentifier": "\(UUID().uuidString)",
+      "secondaryIdentifier": "secondary-1",
+      "demographics": {
+        "email": "email@example.com",
+        "mobilePhone": "(555) 555-1212",
+        "firstName": "fname",
+        "middleName": "m",
+        "lastName": "lname",
+        "street1": "123 Street St",
+        "street2": "Apt #1",
+        "city": "Anywhere",
+        "state": "MI",
+        "postalCode": "55555",
+        "dateOfBirth": "1999-12-31",
+        "preferredLanguage": "en",
+        "gender": "O",
+        "utcOffset": "-04:00:00",
+        "unsubscribedFromEmails": "true",
+        "unsubscribedFromSms": "false",
+        "timeZone": "America/New_York"
+      },
+      "customFields": {
+        "MOBILE_PHONE": "(555) 555-1212",
+      },
+      "enrollmentDate": "2020-05-12T16:50:55.528+00:00",
+      "projectID": "\(UUID().uuidString)"
+    }
+    """.data(using: .utf8)!
     
     static let provider1JSONText = """
         { "id": 1, "name": "MyDataHelps Demo Provider", "category": "Provider", "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png" }
