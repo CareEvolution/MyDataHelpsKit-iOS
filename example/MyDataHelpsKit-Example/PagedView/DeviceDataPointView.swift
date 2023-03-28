@@ -8,15 +8,13 @@
 import SwiftUI
 import MyDataHelpsKit
 
-struct DeviceDataPointView: View {
-    @MainActor static func pageView(session: ParticipantSessionType, namespace: DeviceDataNamespace, types: Set<String>?) -> PagedListView<DeviceDataSource, DeviceDataPointView> {
-        let query = DeviceDataQuery(namespace: namespace, types: types, limit: 25)
-        let source = DeviceDataSource(session: session, query: query)
-        return PagedListView(model: .init(source: source) { item in
-            DeviceDataPointView(model: item)
-        })
+extension DeviceDataQuery {
+    @MainActor func pagedListViewModel(_ session: ParticipantSessionType) -> PagedViewModel<DeviceDataSource> {
+        PagedViewModel(source: DeviceDataSource(session: session, query: self))
     }
-    
+}
+
+struct DeviceDataPointView: View {
     let model: DeviceDataSource.ItemModel
     
     static let dateFormatter: DateFormatter = {

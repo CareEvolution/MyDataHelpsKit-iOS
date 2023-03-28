@@ -18,7 +18,7 @@ struct TasksView: View {
     @StateObject var model: TasksViewModel
     @State private var presentedSurvey: SurveyPresentation? = nil
     
-    /// EXERCISE: populate persistentSurveys with surveys in your project that can be launched by name at any time without an assigned task. These surveys are presented to the participant using `SurveyViewController`, see that class's documentation for more information.
+    /// EXERCISE: Use persistentSurveys for surveys in your project that can be launched by name at any time without an assigned task. These surveys are presented to the participant using `SurveyViewController`, see that class's documentation for more information.
     private let persistentSurveys: [PersistentSurvey] = [
         PersistentSurvey(surveyName: "EMA1", surveyDisplayName: "Daily Mood Survey"),
         PersistentSurvey(surveyName: "EMA2", surveyDisplayName: "Daily Medication Survey")
@@ -42,14 +42,16 @@ struct TasksView: View {
                     Text("These surveys are presented by name, with no assigned task necessary.")
                 }
                 
-                Section("My Tasks") {
+                Section("Incomplete Tasks") {
                     switch model.tasksModel.state {
                     case .empty:
                         PagedEmptyContentView(text: "No assigned tasks")
                     case let .failure(error):
                         PagedFailureContentView(error: error)
                     case .normal:
-                        PagedContentItemsView(model: model.tasksModel, inlineProgressView: true)
+                        PagedContentItemsView(model: model.tasksModel, inlineProgressView: true) { task in
+                            SurveyTaskView(model: task, presentedSurvey: $presentedSurvey)
+                        }
                     }
                 }
             }
@@ -60,9 +62,11 @@ struct TasksView: View {
                     SurveyLauncherView(participant: model.participant)
                         .navigationTitle("Launch a Survey")
                 case let .surveyAnswers(surveyID, surveyDisplayName):
-                    SurveyAnswerView.pageView(session: model.participant.session, surveyID: surveyID)
-                        .navigationTitle("Answers for \(surveyDisplayName)")
-                        .navigationBarTitleDisplayMode(.inline)
+                    PagedListView(model: SurveyAnswersQuery(surveyID: surveyID).pagedListViewModel(model.participant.session)) { item in
+                        SurveyAnswerView(model: item)
+                    }
+                    .navigationTitle("Answers for \(surveyDisplayName)")
+                    .navigationBarTitleDisplayMode(.inline)
                 }
             }
             .sheet(item: $presentedSurvey) { presented in
@@ -80,7 +84,6 @@ struct TasksView: View {
 struct TasksView_Previews: PreviewProvider {
     static var previews: some View {
         TasksView(model: TasksViewModel(participant: ParticipantModel(session: ParticipantSessionPreview())))
-            .environmentObject(SessionModel())
         TasksView(model: .init(participant: .init(session: ParticipantSessionPreview(empty: true))))
     }
 }

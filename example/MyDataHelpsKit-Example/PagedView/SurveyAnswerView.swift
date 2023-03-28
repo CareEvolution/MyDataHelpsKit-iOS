@@ -8,16 +8,13 @@
 import SwiftUI
 import MyDataHelpsKit
 
-struct SurveyAnswerView: View {
-    static func pageView(session: ParticipantSessionType, surveyID: Survey.ID?) -> PagedListView<SurveyAnswersSource, SurveyAnswerView> {
-        /// EXERCISE: Add parameters to this `SurveyAnswersQuery` to further customize filtering.
-        let query = SurveyAnswersQuery(surveyID: surveyID)
-        let source = SurveyAnswersSource(session: session, query: query)
-        return PagedListView(model: .init(source: source) { item in
-            SurveyAnswerView(model: item)
-        })
+extension SurveyAnswersQuery {
+    @MainActor func pagedListViewModel(_ session: ParticipantSessionType) -> PagedViewModel<SurveyAnswersSource> {
+        PagedViewModel(source: SurveyAnswersSource(session: session, query: self))
     }
-    
+}
+
+struct SurveyAnswerView: View {
     @MainActor class Model: Identifiable, ObservableObject {
         enum DeletionState {
             case notDeleted

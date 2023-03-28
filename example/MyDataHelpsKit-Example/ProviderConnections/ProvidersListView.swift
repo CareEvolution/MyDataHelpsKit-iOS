@@ -12,16 +12,14 @@ extension ExternalAccountAuthorization: Identifiable {
     public var id: ExternalAccountProvider.ID { provider.id }
 }
 
+extension ExternalAccountProvidersQuery {
+    @MainActor func pagedListViewModel(_ session: ParticipantSessionType) -> PagedViewModel<ExternalAccountProvidersSource> {
+        PagedViewModel(source: ExternalAccountProvidersSource(session: session, query: self))
+    }
+}
+
 struct ExternalAccountProviderView: View {
     let provider: ExternalAccountProvider
-    
-    @MainActor static func pageView(session: ParticipantSessionType, search: String?, category: ExternalAccountProviderCategory?) -> some View {
-        let query = ExternalAccountProvidersQuery(search: search, category: category, limit: 25)
-        let source = ExternalAccountProvidersSource(session: session, query: query)
-        return ExternalAccountProviderPagedView(session: session, model: .init(source: source) { item in
-            ExternalAccountProviderView(provider: item)
-        })
-    }
     
     var body: some View {
         HStack(alignment: .center) {
@@ -52,27 +50,29 @@ struct ExternalAccountProviderView: View {
 struct ExternalAccountProviderPagedView: View {
     @AppStorage("settings_redirectURL") private var finalRedirectURLPreference: String = "linkprovideraccounts://sandbox"
     let session: ParticipantSessionType
-    @StateObject var model: PagedViewModel<ExternalAccountProvidersSource, ExternalAccountProviderView>
+    @StateObject var model: PagedViewModel<ExternalAccountProvidersSource>
     @State private var newConnection: ExternalAccountAuthorization?
     @State private var errorModel: ErrorView.Model?
     
     var body: some View {
-        PagedListView(model: model)
-            .sheet(item: $newConnection) { connection in
-                ProviderConnectionAuthViewRepresentable(url: connection.authorizationURL, presentation: $newConnection)
+        PagedListView(model: model) { item in
+            ExternalAccountProviderView(provider: item)
+        }
+        .sheet(item: $newConnection) { connection in
+            ProviderConnectionAuthViewRepresentable(url: connection.authorizationURL, presentation: $newConnection)
+        }
+        .alert(item: $errorModel, content: {
+            Alert(title: Text($0.error.localizedDescription))
+        })
+        // In a UIKit app, implement this in AppDelegate as part of `application(_:open:options:)` (for custom scheme URLs) or `application(_:continue:restorationHandler:)` (for Universal Links).
+        .onChange(of: model.selectedItem, perform: beginConnection)
+        .onOpenURL { url in
+            if url.scheme == newConnection?.finalRedirectURL.scheme,
+               url.path == newConnection?.finalRedirectURL.path {
+                newConnection = nil
+                model.selectedItem = nil
             }
-            .alert(item: $errorModel, content: {
-                Alert(title: Text($0.error.localizedDescription))
-            })
-            // In a UIKit app, implement this in AppDelegate as part of `application(_:open:options:)` (for custom scheme URLs) or `application(_:continue:restorationHandler:)` (for Universal Links).
-            .onChange(of: model.selectedItem, perform: beginConnection)
-            .onOpenURL { url in
-                if url.scheme == newConnection?.finalRedirectURL.scheme,
-                   url.path == newConnection?.finalRedirectURL.path {
-                    newConnection = nil
-                    model.selectedItem = nil
-                }
-            }
+        }
     }
     
     private func beginConnection(_ provider: ExternalAccountProvider?) {
@@ -149,8 +149,10 @@ extension ExternalAccountProvider: Equatable {
 struct ProvidersListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExternalAccountProviderView.pageView(session: ParticipantSessionPreview(), search: nil, category: nil)
-                .navigationTitle("External Providers")
+            PagedListView(model: ExternalAccountProvidersQuery(limit: 25).pagedListViewModel(ParticipantSessionPreview())) { item in
+                ExternalAccountProviderView(provider: item)
+            }
+            .navigationTitle("External Providers")
         }
     }
 }

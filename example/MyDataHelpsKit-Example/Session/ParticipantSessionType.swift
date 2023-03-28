@@ -217,7 +217,7 @@ enum PreviewData {
       "stepIdentifier": "Step 1",
       "resultIdentifier": "Step 1",
       "answers": [
-        "3"
+        "3.21"
       ],
       "insertedDate": "2023-03-15T14:26:13.753Z"
     },
@@ -233,7 +233,7 @@ enum PreviewData {
       "stepIdentifier": "FormStep1",
       "resultIdentifier": "FormStep1Item1",
       "answers": [
-        "2", "4"
+        "Choice 2", "Choice 4"
       ],
       "insertedDate": "2023-03-15T14:24:53.953Z"
     },

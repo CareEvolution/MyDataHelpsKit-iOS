@@ -8,15 +8,13 @@
 import SwiftUI
 import MyDataHelpsKit
 
-struct NotificationHistoryView: View {
-    @MainActor static func pageView(session: ParticipantSessionType) -> PagedListView<NotificationHistorySource, NotificationHistoryView> {
-        /// EXERCISE: add parameters to the query passed to NotificationHistorySource to filter by a specific notification identifier from your project's Notification Library, or try other filtering criteria.
-        let source = NotificationHistorySource(session: session, query: .init())
-        return PagedListView(model: .init(source: source) { item in
-            NotificationHistoryView(model: item)
-        })
+extension NotificationHistoryQuery {
+    @MainActor func pagedListViewModel(_ session: ParticipantSessionType) -> PagedViewModel<NotificationHistorySource> {
+        PagedViewModel(source: NotificationHistorySource(session: session, query: self))
     }
-    
+}
+
+struct NotificationHistoryView: View {
     struct Model: Identifiable {
         let id: NotificationHistoryModel.ID
         let identifier: String

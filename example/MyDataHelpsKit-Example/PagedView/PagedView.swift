@@ -12,7 +12,8 @@ import MyDataHelpsKit
 ///
 /// `PagedListView` handles all details of a paging view, including ownership of the model object and construction of the top-level `List`. To customize or embed within another list view, use the components below instead.
 struct PagedListView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
-    @StateObject var model: PagedViewModel<SourceType, ViewType>
+    @StateObject var model: PagedViewModel<SourceType>
+    let rowContent: (SourceType.PageModel.ItemType) -> ViewType
     
     var body: some View {
         List {
@@ -23,7 +24,7 @@ struct PagedListView<SourceType, ViewType>: View where SourceType: PagedModelSou
                 case let .failure(error):
                     PagedFailureContentView(error: error)
                 case .normal:
-                    PagedContentItemsView(model: model, inlineProgressView: false)
+                    PagedContentItemsView(model: model, inlineProgressView: false, rowContent: rowContent)
                 }
             } footer: {
                 PagedLoadingView(model: model)
@@ -35,12 +36,13 @@ struct PagedListView<SourceType, ViewType>: View where SourceType: PagedModelSou
 
 /// Renders the items of a list view using a `PagedViewModel`. Use when the model's state is `.normal`. Place this inside a List or Section.
 struct PagedContentItemsView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
-    @ObservedObject var model: PagedViewModel<SourceType, ViewType>
+    @ObservedObject var model: PagedViewModel<SourceType>
     let inlineProgressView: Bool
+    let rowContent: (SourceType.PageModel.ItemType) -> ViewType
     
     var body: some View {
         ForEach(model.items) { item in
-            model.viewProvider(item)
+            rowContent(item)
                 .onTapGesture { model.selectedItem = item }
                 .onAppear(perform: {
                     if model.isLastItem(item) {
@@ -55,8 +57,8 @@ struct PagedContentItemsView<SourceType, ViewType>: View where SourceType: Paged
 }
 
 /// A loading indicator for a paged view that displays itself only when appropriate.
-struct PagedLoadingView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
-    @ObservedObject var model: PagedViewModel<SourceType, ViewType>
+struct PagedLoadingView<SourceType>: View where SourceType: PagedModelSource {
+    @ObservedObject var model: PagedViewModel<SourceType>
     
     var body: some View {
         switch model.state {
@@ -106,23 +108,31 @@ struct PagedView_Previews: PreviewProvider {
                     PagedFailureContentView(error: .unknown(nil))
                 }
                 Section("Items") {
-                    PagedContentItemsView(model: .init(source: PreviewSource(empty: false), viewProvider: { Self.viewProvider($0) }), inlineProgressView: true)
+                    PagedContentItemsView(model: .init(source: PreviewSource(empty: false)), inlineProgressView: true) { item in
+                        Self.viewProvider(item)
+                    }
                 }
             }
             .navigationTitle("Components")
         }
         
         NavigationStack {
-            PagedListView(model: .init(source: PreviewSource(empty: false), viewProvider: { Self.viewProvider($0) }))
-                .navigationTitle("Page of Results")
+            PagedListView(model: .init(source: PreviewSource(empty: false))) {
+                Self.viewProvider($0)
+            }
+            .navigationTitle("Page of Results")
         }
         NavigationStack {
-            PagedListView(model: .init(source: PreviewSource(empty: true), viewProvider: { Self.viewProvider($0) }))
-                .navigationTitle("Empty Paged View")
+            PagedListView(model: .init(source: PreviewSource(empty: true))) {
+                Self.viewProvider($0)
+            }
+            .navigationTitle("Empty Paged View")
         }
         NavigationStack {
-            PagedListView(model: .init(source: FailureSource(), viewProvider: { Self.viewProvider($0) }))
-                .navigationTitle("Failure")
+            PagedListView(model: .init(source: FailureSource())) {
+                Self.viewProvider($0)
+            }
+            .navigationTitle("Failure")
         }
     }
     

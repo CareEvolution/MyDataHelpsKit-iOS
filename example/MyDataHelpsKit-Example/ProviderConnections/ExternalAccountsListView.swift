@@ -106,12 +106,13 @@ struct ExternalAccountsListView: View {
         .actionSheet(item: $selected) { account in
             ActionSheet(title: Text(account.provider.name), message: nil, buttons: actionButtons(account: account))
         }
-        /// EXERCISE: Try non-nil `search` and `category` values to customize filtering providers.
-        .navigationBarItems(trailing: NavigationLink(destination:
-            ExternalAccountProviderView.pageView(session: model.session, search: nil, category: nil)
-                .navigationTitle("External Account Providers"), label: {
-            Image(systemName: "plus")
-        }))
+        /// EXERCISE: Try non-nil `search` and `category` parameters in the query to customize filtering providers.
+        .navigationBarItems(trailing: NavigationLink(destination: PagedListView(model: ExternalAccountProvidersQuery(limit: 25).pagedListViewModel(model.session)) { item in
+            ExternalAccountProviderView(provider: item)
+        }
+            .navigationTitle("External Account Providers"), label: {
+                Image(systemName: "plus")
+            }))
     }
     
     private func actionButtons(account: ExternalAccount) -> [ActionSheet.Button] {

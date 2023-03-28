@@ -16,13 +16,11 @@ enum TasksNavigationPath: Codable, Hashable {
 @MainActor class TasksViewModel: ObservableObject {
     @Published var path = NavigationPath()
     @Published var participant: ParticipantModel
-    @Published var tasksModel: PagedViewModel<SurveyTaskSource, SurveyTaskView>
+    @Published var tasksModel: PagedViewModel<SurveyTaskSource>
     
     init(participant: ParticipantModel) {
         self.participant = participant
-        let taskQuery = SurveyTaskQuery(statuses: .init([.incomplete]))
-        self.tasksModel = PagedViewModel(source: SurveyTaskSource(session: participant.session, query: taskQuery)) { task in
-            SurveyTaskView(model: task)
-        }
+        self.tasksModel = SurveyTaskQuery(statuses: .init([.incomplete]))
+            .pagedListViewModel(participant.session)
     }
 }

@@ -20,7 +20,7 @@ protocol PagedModelSource {
     func loadPage(after page: PageModel?) async throws -> PageModel?
 }
 
-@MainActor class PagedViewModel<SourceType: PagedModelSource, ItemViewType: View>: ObservableObject {
+@MainActor class PagedViewModel<SourceType: PagedModelSource>: ObservableObject {
     typealias ItemType = SourceType.PageModel.ItemType
     
     enum State {
@@ -30,7 +30,6 @@ protocol PagedModelSource {
     }
     
     let source: SourceType
-    let viewProvider: (ItemType) -> ItemViewType
     private var loading: Bool
     private var lastPage: SourceType.PageModel?
     
@@ -38,9 +37,8 @@ protocol PagedModelSource {
     @Published var items: [ItemType]
     @Published var selectedItem: ItemType?
     
-    init(source: SourceType, viewProvider: @escaping (ItemType) -> ItemViewType) {
+    init(source: SourceType) {
         self.source = source
-        self.viewProvider = viewProvider
         self.lastPage = nil
         self.state = .normal(loadMore: true)
         self.items = []

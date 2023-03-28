@@ -8,16 +8,13 @@
 import SwiftUI
 import MyDataHelpsKit
 
-struct SurveyTaskView: View {
-    @MainActor static func pageView(session: ParticipantSessionType, statuses: Set<SurveyTaskStatus>? = nil) -> PagedListView<SurveyTaskSource, SurveyTaskView> {
-        /// EXERCISE: Add parameters to this `SurveyTaskQuery` to customize filtering.
-        let query = SurveyTaskQuery(statuses: statuses)
-        let source = SurveyTaskSource(session: session, query: query)
-        return PagedListView(model: .init(source: source) { item in
-            SurveyTaskView(model: item)
-        })
+extension SurveyTaskQuery {
+    @MainActor func pagedListViewModel(_ session: ParticipantSessionType) -> PagedViewModel<SurveyTaskSource> {
+        PagedViewModel(source: SurveyTaskSource(session: session, query: self))
     }
-    
+}
+
+struct SurveyTaskView: View {
     struct Model: Identifiable {
         let session: ParticipantSessionType
         let id: SurveyTask.ID
@@ -30,8 +27,7 @@ struct SurveyTaskView: View {
     }
     
     let model: Model
-    @State private var showingAnswers = false
-    @State private var presentedSurvey: SurveyPresentation? = nil
+    var presentedSurvey: Binding<SurveyPresentation?>
     
     static let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -50,10 +46,6 @@ struct SurveyTaskView: View {
                 content
                     .onTapGesture(perform: launchSurvey)
             }
-        }
-        .sheet(item: $presentedSurvey) { presentation in
-            PresentedSurveyView(presentation: $presentedSurvey, resultMessage: nil)
-                .interactiveDismissDisabled()
         }
     }
     
@@ -90,7 +82,7 @@ struct SurveyTaskView: View {
               let session = model.session as? ParticipantSession else {
             return
         }
-        presentedSurvey = session.surveyPresentation(surveyName: model.surveyName)
+        presentedSurvey.wrappedValue = session.surveyPresentation(surveyName: model.surveyName)
     }
 }
 
@@ -108,11 +100,16 @@ extension SurveyTaskView.Model {
 }
 
 struct SurveyTaskView_Previews: PreviewProvider {
+    @State private static var presentedSurvey: SurveyPresentation? = nil
+    
     static var previews: some View {
         NavigationStack {
             List {
-                SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .incomplete, surveyName: "name"))
-                SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .complete, surveyName: "name"))
+                SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .incomplete, surveyName: "name"), presentedSurvey: $presentedSurvey)
+                SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .complete, surveyName: "name"), presentedSurvey: $presentedSurvey)
+            }
+            .sheet(item: $presentedSurvey) { presented in
+                Text("Present survey: \(presented.surveyName)")
             }
         }
     }
