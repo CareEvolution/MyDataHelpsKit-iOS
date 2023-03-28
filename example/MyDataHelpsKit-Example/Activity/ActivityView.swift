@@ -9,10 +9,12 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct ActivityView: View {
+    static let tabTitle = "Activity"
+    
     @StateObject var model: ActivityViewModel
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $model.path) {
             List {
                 Section("Recent Notifications") {
                     AsyncCardView(result: model.recentNotifications, failureTitle: "Failed to load notifications") { page in
@@ -51,7 +53,7 @@ struct ActivityView: View {
                     }
                 }
             }
-            .navigationTitle("Activity")
+            .navigationTitle(Self.tabTitle)
             .navigationDestination(for: ActivityNavigationPath.self) { destination in
                 switch destination {
                 case .allNotifications:

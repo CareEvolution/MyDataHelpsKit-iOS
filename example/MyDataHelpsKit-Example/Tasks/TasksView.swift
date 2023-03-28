@@ -9,6 +9,8 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct TasksView: View {
+    static let tabTitle = "Tasks"
+    
     @StateObject var model: TasksViewModel
     @State private var presentedSurvey: SurveyPresentation? = nil
     
@@ -43,7 +45,7 @@ struct TasksView: View {
                     }
                 }
             }
-            .navigationTitle("Tasks")
+            .navigationTitle(Self.tabTitle)
             .navigationDestination(for: TasksNavigationPath.self) { destination in
                 switch destination {
                 case .surveyLauncher:

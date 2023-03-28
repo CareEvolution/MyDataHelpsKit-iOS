@@ -9,6 +9,8 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct AccountView: View {
+    static let tabTitle = "Account"
+    
     @EnvironmentObject var session: SessionModel
     @StateObject var model: AccountViewModel
     
@@ -26,7 +28,7 @@ struct AccountView: View {
                     }
                 }
             }
-            .navigationTitle("Account")
+            .navigationTitle(Self.tabTitle)
             .toolbar {
                 ToolbarItemGroup(placement: .destructiveAction) {
                     Button("Log Out", role: .destructive, action: logOut)

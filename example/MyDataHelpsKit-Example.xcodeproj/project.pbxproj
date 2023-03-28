@@ -43,6 +43,8 @@
 		ACD1688029D351E1002709EE /* AsyncCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1687F29D351E1002709EE /* AsyncCardView.swift */; };
 		ACD1688329D3685B002709EE /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1688229D3685B002709EE /* ActivityView.swift */; };
 		ACD1688529D36A0D002709EE /* ActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1688429D36A0D002709EE /* ActivityViewModel.swift */; };
+		ACD1688929D38070002709EE /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1688829D38070002709EE /* DataView.swift */; };
+		ACD1688B29D3807F002709EE /* DataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD1688A29D3807F002709EE /* DataViewModel.swift */; };
 		ACEAF44826D595B0002F79AB /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ACEAF44726D595B0002F79AB /* Settings.bundle */; };
 		ACEAF44A26D67C95002F79AB /* ExternalAccountsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF44926D67C95002F79AB /* ExternalAccountsListView.swift */; };
 		ACEAF45126D81BDD002F79AB /* ProviderConnectionAuthViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACEAF45026D81BDD002F79AB /* ProviderConnectionAuthViewRepresentable.swift */; };
@@ -89,6 +91,8 @@
 		ACD1687F29D351E1002709EE /* AsyncCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncCardView.swift; sourceTree = "<group>"; };
 		ACD1688229D3685B002709EE /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		ACD1688429D36A0D002709EE /* ActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewModel.swift; sourceTree = "<group>"; };
+		ACD1688829D38070002709EE /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
+		ACD1688A29D3807F002709EE /* DataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewModel.swift; sourceTree = "<group>"; };
 		ACEAF44726D595B0002F79AB /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		ACEAF44926D67C95002F79AB /* ExternalAccountsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountsListView.swift; sourceTree = "<group>"; };
 		ACEAF45026D81BDD002F79AB /* ProviderConnectionAuthViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderConnectionAuthViewRepresentable.swift; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 				AC9DC9E5260E374F00C5D9E4 /* Assets.xcassets */,
 				ACD1687F29D351E1002709EE /* AsyncCardView.swift */,
 				AC9DC9E3260E374E00C5D9E4 /* ContentView.swift */,
+				ACD1688629D38061002709EE /* Data */,
 				AC9DCA13260E3E5700C5D9E4 /* ErrorView.swift */,
 				AC139DFA28C7A34E002F456E /* FoundationExtensions.swift */,
 				AC9DC9EA260E374F00C5D9E4 /* Info.plist */,
@@ -244,6 +249,15 @@
 			path = Activity;
 			sourceTree = "<group>";
 		};
+		ACD1688629D38061002709EE /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				ACD1688829D38070002709EE /* DataView.swift */,
+				ACD1688A29D3807F002709EE /* DataViewModel.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -340,11 +354,13 @@
 				ACCD97F6260E5D0100FF7438 /* SurveyTaskSource.swift in Sources */,
 				ACCD97E6260E492100FF7438 /* PagedView.swift in Sources */,
 				AC9DC9FB260E39AF00C5D9E4 /* SessionModel.swift in Sources */,
+				ACD1688B29D3807F002709EE /* DataViewModel.swift in Sources */,
 				AC9DCA03260E3A7D00C5D9E4 /* RootMenuView.swift in Sources */,
 				ACD1687C29D3491A002709EE /* AccountView.swift in Sources */,
 				ACD1686929C3B510002709EE /* TasksView.swift in Sources */,
 				ACCD97EA260E4DFE00FF7438 /* DeviceDataSource.swift in Sources */,
 				ACCD97F9260E5F3000FF7438 /* SurveyAnswerView.swift in Sources */,
+				ACD1688929D38070002709EE /* DataView.swift in Sources */,
 				AC9DCA0A260E3BBA00C5D9E4 /* LoadingView.swift in Sources */,
 				AC9DCA14260E3E5700C5D9E4 /* ErrorView.swift in Sources */,
 				ACCD97F3260E5AE300FF7438 /* SurveyTaskView.swift in Sources */,

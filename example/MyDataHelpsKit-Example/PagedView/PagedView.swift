@@ -21,6 +21,9 @@ struct PagedListView<SourceType, Content>: View where SourceType: PagedModelSour
                 switch model.state {
                 case .empty:
                     PagedEmptyContentView()
+                        .padding(.vertical)
+                        .foregroundColor(.secondary)
+                        .listRowBackground(EmptyView())
                 case let .failure(error):
                     PagedFailureContentView(error: error)
                 case .normal:

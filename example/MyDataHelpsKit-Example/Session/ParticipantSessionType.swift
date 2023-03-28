@@ -54,7 +54,11 @@ class ParticipantSessionPreview: ParticipantSessionType {
     }
     
     func queryDeviceData(_ query: DeviceDataQuery) async throws -> DeviceDataResultPage {
-        throw NotImplementedForSwiftUIPreviews()
+        if empty || query.pageID != nil {
+            return try await delayedSuccess(data: PreviewData.emptyPage(modelKey: "deviceDataPoints"))
+        } else {
+            return try await delayedSuccess(data: PreviewData.deviceDataResultPageJSON)
+        }
     }
     
     func querySurveyTasks(_ query: SurveyTaskQuery) async throws -> SurveyTaskResultPage {
@@ -186,6 +190,77 @@ enum PreviewData {
         { "id": 100, "status": "fetchComplete", "provider": \(provider1JSONText), "lastRefreshDate": "2021-08-01T12:34:56.000Z" }
     ]
     """.data(using: .utf8)!
+    
+    static var deviceDataResultPageJSON: Data { """
+{
+  "deviceDataPoints": [
+    {
+      "id": "\(UUID().uuidString)",
+      "namespace": "Project",
+      "deviceDataContextID": null,
+      "insertedDate": "2021-04-01T14:57:26.243Z",
+      "modifiedDate": "2021-04-02T14:57:26.243Z",
+      "identifier": null,
+      "type": "PersistType1",
+      "value": "VALUE_1",
+      "units": null,
+      "properties": {},
+      "source": {
+        "identifier": "sourceID1",
+        "properties": {}
+      },
+      "startDate": null,
+      "observationDate": "2021-04-01T10:57:03.541-04:00"
+    },
+    {
+      "id": "\(UUID().uuidString)",
+      "namespace": "AppleHealth",
+      "deviceDataContextID": null,
+      "insertedDate": "2022-08-08T23:54:31.747Z",
+      "modifiedDate": "2022-08-08T23:54:31.747Z",
+      "identifier": "identifier2",
+      "type": "HeartRate",
+      "value": "62",
+      "units": "count/min",
+      "properties": {
+        "Metadata_HKMetadataKeyHeartRateMotionContext": "1"
+      },
+      "source": {
+        "identifier": "sourceID2",
+        "properties": {
+          "SourceIdentifier": "...",
+          "SourceName": "...",
+          "SourceOperatingSystemVersion": "8.6.0",
+          "SourceProductType": "Watch6,6",
+          "SourceVersion": "8.6",
+          "DeviceHardwareVersion": "Watch6,6",
+          "DeviceManufacturer": "Apple Inc.",
+          "DeviceModel": "Watch",
+          "DeviceName": "Apple Watch",
+          "DeviceSoftwareVersion": "8.6"
+        }
+      },
+      "startDate": "2022-08-08T11:10:32-04:00",
+      "observationDate": "2022-08-08T11:10:32-04:00"
+    },
+    {
+      "id": "\(UUID().uuidString)",
+      "namespace": "Project",
+      "deviceDataContextID": "\(UUID().uuidString)",
+      "insertedDate": "2021-03-25T22:43:45.687Z",
+      "modifiedDate": "2021-03-25T22:43:45.687Z",
+      "identifier": "identifier3",
+      "type": "TestType1",
+      "value": "",
+      "units": "",
+      "properties": {},
+      "startDate": "2021-03-24T18:27:45.58-04:00",
+      "observationDate": "2021-03-24T18:46:45.58-04:00"
+    }
+  ],
+  "nextPageID": "\(UUID().uuidString)"
+}
+""".data(using: .utf8)! }
     
     static var surveyTasksPageJSON: Data { """
 {

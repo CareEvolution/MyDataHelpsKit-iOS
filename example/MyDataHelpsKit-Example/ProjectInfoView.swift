@@ -78,6 +78,10 @@ struct ProjectInfoView_Previews: PreviewProvider {
             "type": "HeartRate"
         },
         {
+            "namespace": "Project",
+            "type": "ProjectType1"
+        },
+        {
             "namespace": "AppleHealth",
             "type": "Steps"
         }

@@ -25,8 +25,18 @@ struct DeviceDataPointView: View {
     }()
     
     var body: some View {
+        if model.namespace.isEditable {
+            NavigationLink(value: DataNavigationPath.editDeviceData(model)) {
+                content
+            }
+        } else {
+            content
+        }
+    }
+    
+    private var content: some View {
         VStack(alignment: .leading) {
-            /// EXERCISE: Add or modify `Text` views here to see the values of other `DeviceDataPoint` properties.
+            /// EXERCISE: Add or modify views here to see the values of other `DeviceDataPoint` properties.
             if let date = model.observationDate {
                 Text("\(model.value) at \(Self.dateFormatter.string(from: date))")
             } else {
@@ -35,20 +45,17 @@ struct DeviceDataPointView: View {
             Text(model.type)
                 .font(.footnote)
                 .foregroundColor(Color.gray)
-            if model.namespace == .project {
-                NavigationLink(
-                    "",
-                    destination: PersistDeviceDataView(model: .init(existing: model))
-                )
-            }
         }
     }
 }
 
 struct DeviceDataPointView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            DeviceDataPointView(model: .init(session: ParticipantSessionPreview(), namespace: .project, id: .init("1"), identifier: "1", type: "HeartRate", value: "62", units: nil, source: .init(identifier: "", properties: [:]), startDate: Date(), observationDate: Date()))
+        NavigationStack {
+            List {
+                DeviceDataPointView(model: .init(session: ParticipantSessionPreview(), namespace: .appleHealth, id: .init("1"), identifier: "1", type: "HeartRate", value: "62", units: nil, source: .init(identifier: "", properties: [:]), startDate: Date(), observationDate: Date()))
+                DeviceDataPointView(model: .init(session: ParticipantSessionPreview(), namespace: .project, id: .init("1"), identifier: "1", type: "PersistType1", value: "62", units: nil, source: .init(identifier: "", properties: [:]), startDate: Date(), observationDate: Date()))
+            }
         }
     }
 }

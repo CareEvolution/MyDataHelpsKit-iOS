@@ -8,6 +8,13 @@
 import SwiftUI
 import MyDataHelpsKit
 
+extension DeviceDataNamespace {
+    /// Only `project` device data can be directly edited via the SDK.
+    var isEditable: Bool {
+        self == .project
+    }
+}
+
 @MainActor class PersistDeviceDataViewModel: ObservableObject {
     @Published var identifier = ""
     @Published var type = ""
@@ -54,12 +61,12 @@ struct PersistDeviceDataView: View {
         case failure(MyDataHelpsError)
     }
     
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject var model: PersistDeviceDataViewModel
-    @State var result = PersistResult.notPersisted
+    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
+    @State private var result = PersistResult.notPersisted
     
     var body: some View {
-        VStack(alignment: .leading) {
+        Form {
             Text("Identifier:")
             TextField("Optional", text: $model.identifier)
                 .padding(.bottom, 20)
@@ -76,7 +83,6 @@ struct PersistDeviceDataView: View {
             case .notPersisted: Text("")
             }
         }
-        .padding()
         .navigationTitle(title)
         .navigationBarItems(trailing: Button("Save", action: save))
     }
@@ -103,7 +109,7 @@ struct PersistDeviceDataView: View {
 
 struct PersistDeviceDataView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             PersistDeviceDataView(model: .init(session: ParticipantSessionPreview()))
         }
     }
