@@ -11,9 +11,9 @@ import MyDataHelpsKit
 /// Implements the paging idiom common to various list/query APIs in MyDataHelpsKit. Various `PagedModelSource` implementations in this example app perform the actual MyDataHelpsKit queries and produce the paged result objects. PagedListView and its component views use this source object to fetch data when it's first displayed, and to fetch the next page when scrolling to the bottom of the list view (infinite scrolling). PagedListView uses a corresponding `PagedViewModel` implementation to produce appropriate SwiftUI views for individual items shown in the list view.
 ///
 /// `PagedListView` handles all details of a paging view, including ownership of the model object and construction of the top-level `List`. To customize or embed within another list view, use the components below instead.
-struct PagedListView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
+struct PagedListView<SourceType, Content>: View where SourceType: PagedModelSource, Content: View {
     @StateObject var model: PagedViewModel<SourceType>
-    let rowContent: (SourceType.PageModel.ItemType) -> ViewType
+    @ViewBuilder var rowContent: (SourceType.PageModel.ItemType) -> Content
     
     var body: some View {
         List {
@@ -35,10 +35,10 @@ struct PagedListView<SourceType, ViewType>: View where SourceType: PagedModelSou
 }
 
 /// Renders the items of a list view using a `PagedViewModel`. Use when the model's state is `.normal`. Place this inside a List or Section.
-struct PagedContentItemsView<SourceType, ViewType>: View where SourceType: PagedModelSource, ViewType: View {
+struct PagedContentItemsView<SourceType, Content>: View where SourceType: PagedModelSource, Content: View {
     @ObservedObject var model: PagedViewModel<SourceType>
     let inlineProgressView: Bool
-    let rowContent: (SourceType.PageModel.ItemType) -> ViewType
+    @ViewBuilder var rowContent: (SourceType.PageModel.ItemType) -> Content
     
     var body: some View {
         ForEach(model.items) { item in
@@ -119,6 +119,7 @@ struct PagedView_Previews: PreviewProvider {
         NavigationStack {
             PagedListView(model: .init(source: PreviewSource(empty: false))) {
                 Self.viewProvider($0)
+                    .padding(.vertical)
             }
             .navigationTitle("Page of Results")
         }
@@ -185,7 +186,7 @@ struct PagedView_Previews: PreviewProvider {
         }
     }
     
-    private static func viewProvider(_ item: PreviewListItem) -> Text {
+    private static func viewProvider(_ item: PreviewListItem) -> some View {
         Text(item.text)
     }
 }

@@ -9,32 +9,20 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct TasksView: View {
-    private struct PersistentSurvey: Identifiable {
-        var id: String { surveyName }
-        let surveyName: String
-        let surveyDisplayName: String
-    }
-    
     @StateObject var model: TasksViewModel
     @State private var presentedSurvey: SurveyPresentation? = nil
-    
-    /// EXERCISE: Use persistentSurveys for surveys in your project that can be launched by name at any time without an assigned task. These surveys are presented to the participant using `SurveyViewController`, see that class's documentation for more information.
-    private let persistentSurveys: [PersistentSurvey] = [
-        PersistentSurvey(surveyName: "EMA1", surveyDisplayName: "Daily Mood Survey"),
-        PersistentSurvey(surveyName: "EMA2", surveyDisplayName: "Daily Medication Survey")
-    ]
     
     var body: some View {
         NavigationStack(path: $model.path) {
             List {
                 Section {
-                    ForEach(persistentSurveys) { survey in
+                    ForEach(model.persistentSurveys) { survey in
                         Button(survey.surveyDisplayName) {
                             launchSurvey(surveyName: survey.surveyName)
                         }
                         .buttonStyle(.plain)
                     }
-                    if persistentSurveys.isEmpty {
+                    if model.persistentSurveys.isEmpty {
                         Text("EXERCISE: populate var persistentSurveys")
                     }
                     NavigationLink("Launch Another Survey", value: TasksNavigationPath.surveyLauncher)
@@ -63,7 +51,7 @@ struct TasksView: View {
                         .navigationTitle("Launch a Survey")
                 case let .surveyAnswers(surveyID, surveyDisplayName):
                     PagedListView(model: SurveyAnswersQuery(surveyID: surveyID).pagedListViewModel(model.participant.session)) { item in
-                        SurveyAnswerView(model: item)
+                        SurveyAnswerView(model: item, showSurveyDisplayName: false)
                     }
                     .navigationTitle("Answers for \(surveyDisplayName)")
                     .navigationBarTitleDisplayMode(.inline)

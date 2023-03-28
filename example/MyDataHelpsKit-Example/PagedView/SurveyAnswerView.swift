@@ -63,16 +63,24 @@ struct SurveyAnswerView: View {
         }
     }
     
-    @StateObject var model: Model
+    @ObservedObject var model: Model
+    let showSurveyDisplayName: Bool
+    
+    init(model: SurveyAnswerView.Model, showSurveyDisplayName: Bool = true) {
+        self.model = model
+        self.showSurveyDisplayName = showSurveyDisplayName
+    }
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
+                /// EXERCISE: Add or modify views here to see the values of other `SurveyAnswer` properties.
                 Text(model.value)
-                /// EXERCISE: Add or modify `Text` views here to see the values of other `SurveyAnswer` properties.
-                Text(model.surveyDisplayName)
-                    .font(.footnote)
-                    .foregroundColor(Color.gray)
+                if showSurveyDisplayName {
+                    Text(model.surveyDisplayName)
+                        .font(.footnote)
+                        .foregroundColor(Color.gray)
+                }
             }
             Spacer()
             switch model.deletionState {
@@ -104,7 +112,7 @@ struct SurveyAnswerView_Previews: PreviewProvider {
                 .padding()
             SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .deleted))
                 .padding()
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .failure(.unknown(nil))))
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .failure(.unknown(nil))), showSurveyDisplayName: false)
                 .padding()
         }
     }
