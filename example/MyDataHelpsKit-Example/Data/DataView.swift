@@ -6,15 +6,31 @@
 //
 
 import SwiftUI
+import MyDataHelpsKit
 
 struct DataView: View {
     static let tabTitle = "My Data"
+    
+    static func summaryText(query: DeviceDataQuery) -> String {
+        if let types = query.types,
+           !types.isEmpty {
+            return "\(query.namespace.rawValue): \(types.joined(separator: ", "))"
+        } else {
+            return query.namespace.rawValue;
+        }
+    }
     
     @StateObject var model: DataViewModel
     
     var body: some View {
         NavigationStack(path: $model.path) {
             List {
+                Section("Highlights") {
+                    AsyncCardView(result: model.chartModel, failureTitle: "Failed to load chart data") { chartModel in
+                        DeviceDataChartView(model: chartModel)
+                    }
+                }
+                
                 ProjectDeviceDataSectionView(projectDataModel: model.projectDataModel)
                 
                 SensorDataSectionView(allQueryableDataTypes: model.allQueryableDataTypes)
@@ -23,14 +39,14 @@ struct DataView: View {
             .navigationTitle(Self.tabTitle)
             .navigationDestination(for: DataNavigationPath.self) { destination in
                 switch destination {
-                case let .browseDeviceData(type):
-                    PagedListView(model: model.deviceDataQuery(browsing: type).pagedListViewModel(model.session)) { item in
+                case let .browseDeviceData(query):
+                    PagedListView(model: query.pagedListViewModel(model.session)) { item in
                         DeviceDataPointView(model: item)
                     }
-                    .navigationTitle(type.type)
+                    .navigationTitle(Self.summaryText(query: query))
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
-                        if type.namespace.isEditable {
+                        if query.namespace.isEditable {
                             ToolbarItemGroup(placement: .navigationBarTrailing) {
                                 Button("Add Data") {
                                     model.path.append(DataNavigationPath.addDeviceData)

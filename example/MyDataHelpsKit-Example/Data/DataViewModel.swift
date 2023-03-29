@@ -9,30 +9,53 @@ import SwiftUI
 import MyDataHelpsKit
 
 enum DataNavigationPath {
-    case browseDeviceData(QueryableDeviceDataType)
+    case browseDeviceData(DeviceDataQuery)
     case editDeviceData(DeviceDataSource.ItemModel)
     case addDeviceData
+    
+    static func browsing(dataType: QueryableDeviceDataType) -> DataNavigationPath {
+        .browseDeviceData(DeviceDataQuery(namespace: dataType.namespace, types: Set([dataType.type])))
+    }
 }
 
 @MainActor class DataViewModel: ObservableObject {
+    static func projectDeviceDataQuery(summaryView: Bool) -> DeviceDataQuery {
+        DeviceDataQuery(namespace: .project, limit: summaryView ? 5 : DeviceDataQuery.defaultLimit)
+    }
+    
     let session: ParticipantSessionType
     
     @Published var path = NavigationPath()
-    @Published var allQueryableDataTypes: Result<[QueryableDeviceDataType], MyDataHelpsError>? = nil
+    @Published var chartModel: Result<DeviceDataChartModel, MyDataHelpsError>? = nil
     @Published var projectDataModel: PagedViewModel<DeviceDataSource>
+    @Published var allQueryableDataTypes: Result<[QueryableDeviceDataType], MyDataHelpsError>? = nil
     
     init(session: ParticipantSessionType) {
         self.session = session
         /// EXERCISE: projectDataModel will show any custom project-scoped device data found for the participant. Try customizing the DeviceDataQuery to filter this data.
-        self.projectDataModel = DeviceDataQuery(namespace: .project)
+        self.projectDataModel = Self.projectDeviceDataQuery(summaryView: true)
             .pagedListViewModel(session)
     }
     
-    func deviceDataQuery(browsing: QueryableDeviceDataType) -> DeviceDataQuery {
-        DeviceDataQuery(namespace: browsing.namespace, types: Set([browsing.type]))
-    }
-    
     func loadData() {
+        Task {
+            if case .some(.success) = chartModel { return }
+            /// EXERCISE: customize the query and chartModel to explore using the SDK to visualize device data. To find `DeviceDataNamespace` + `type` values available for querying in your project, use the `getDataCollectionSettings` API or browse the `SensorDataSectionView`.
+            let query = DeviceDataQuery(namespace: .appleHealth, types: Set(["RestingHeartRate"]), limit: 15)
+            do {
+                let result = try await session.queryDeviceData(query)
+                chartModel = .success(DeviceDataChartModel(
+                    title: "Resting Heart Rate",
+                    xAxisLabel: "Date",
+                    yAxisLabel: "bpm",
+                    accentColor: .red,
+                    allDataQuery: DeviceDataQuery(namespace: query.namespace, types: query.types),
+                    deviceDataResult: result))
+            } catch {
+                chartModel = .failure(MyDataHelpsError(error))
+            }
+        }
+        
         Task {
             if case .some(.success) = allQueryableDataTypes { return }
             do {
@@ -61,8 +84,8 @@ extension DataNavigationPath: Codable, Hashable, RawRepresentable {
     
     var rawValue: String {
         switch self {
-        case let .browseDeviceData(type):
-            return "browseDeviceData \(type.namespace) \(type.type)"
+        case let .browseDeviceData(query):
+            return "browseDeviceData \(DataView.summaryText(query: query))"
         case let .editDeviceData(point):
             return "editDeviceData \(point.id)"
         case .addDeviceData:

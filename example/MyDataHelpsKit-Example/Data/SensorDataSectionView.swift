@@ -19,7 +19,7 @@ struct SensorDataSectionView: View {
                         .foregroundColor(.secondary)
                 } else {
                     ForEach(Array(types)) { item in
-                        NavigationLink(value: DataNavigationPath.browseDeviceData(item)) {
+                        NavigationLink(value: DataNavigationPath.browsing(dataType: item)) {
                             VStack(alignment: .leading) {
                                 Text(item.type)
                                 Text(item.namespace.rawValue)

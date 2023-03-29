@@ -13,9 +13,6 @@ struct ProjectDeviceDataSectionView: View {
     
     var body: some View {
         Section {
-            NavigationLink(value: DataNavigationPath.addDeviceData) {
-                Text("Add Project Data Point")
-            }
             switch projectDataModel.state {
             case .empty:
                 PagedEmptyContentView(text: "No project data")
@@ -24,6 +21,9 @@ struct ProjectDeviceDataSectionView: View {
             case .normal:
                 PagedContentItemsView(model: projectDataModel, inlineProgressView: true) { item in
                     DeviceDataPointView(model: item)
+                }
+                NavigationLink(value: DataNavigationPath.browseDeviceData(DataViewModel.projectDeviceDataQuery(summaryView: false))) {
+                    Text("All Project Data")
                 }
             }
         } header: {

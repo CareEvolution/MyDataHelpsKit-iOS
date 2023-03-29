@@ -57,7 +57,12 @@ class ParticipantSessionPreview: ParticipantSessionType {
         if empty || query.pageID != nil {
             return try await delayedSuccess(data: PreviewData.emptyPage(modelKey: "deviceDataPoints"))
         } else {
-            return try await delayedSuccess(data: PreviewData.deviceDataResultPageJSON)
+            switch query.namespace {
+            case .project:
+                return try await delayedSuccess(data: PreviewData.projectDeviceDataResultPageJSON)
+            default:
+                return try await delayedSuccess(data: PreviewData.sensorDeviceDataResultPageJSON)
+            }
         }
     }
     
@@ -191,36 +196,33 @@ enum PreviewData {
     ]
     """.data(using: .utf8)!
     
-    static var deviceDataResultPageJSON: Data { """
+    static var sensorDeviceDataResultPageJSON: Data {
+        let startDate = Date().addingTimeInterval(-86400 * 30)
+        let heartRates = [60, 62, 67, 59, 63, 70, 74, 79, 85, 88, 75, 68, 64, 63]
+        let dataPointsJSON = heartRates.enumerated().map { (index, value) in
+            heartRateJSON(date: startDate.addingTimeInterval(TimeInterval(index * 86400)), value: value)
+        }
+        return """
 {
   "deviceDataPoints": [
-    {
-      "id": "\(UUID().uuidString)",
-      "namespace": "Project",
-      "deviceDataContextID": null,
-      "insertedDate": "2021-04-01T14:57:26.243Z",
-      "modifiedDate": "2021-04-02T14:57:26.243Z",
-      "identifier": null,
-      "type": "PersistType1",
-      "value": "VALUE_1",
-      "units": null,
-      "properties": {},
-      "source": {
-        "identifier": "sourceID1",
-        "properties": {}
-      },
-      "startDate": null,
-      "observationDate": "2021-04-01T10:57:03.541-04:00"
-    },
+    \(dataPointsJSON.joined(separator: ", "))
+  ],
+  "nextPageID": "\(UUID().uuidString)"
+}
+""".data(using: .utf8)! }
+    
+    static func heartRateJSON(date: Date, value: Int) -> String {
+        let isoDate = date.formatted(.iso8601)
+        return """
     {
       "id": "\(UUID().uuidString)",
       "namespace": "AppleHealth",
       "deviceDataContextID": null,
-      "insertedDate": "2022-08-08T23:54:31.747Z",
-      "modifiedDate": "2022-08-08T23:54:31.747Z",
+      "insertedDate": "\(isoDate)",
+      "modifiedDate": "\(isoDate)",
       "identifier": "identifier2",
       "type": "HeartRate",
-      "value": "62",
+      "value": "\(value)",
       "units": "count/min",
       "properties": {
         "Metadata_HKMetadataKeyHeartRateMotionContext": "1"
@@ -240,8 +242,46 @@ enum PreviewData {
           "DeviceSoftwareVersion": "8.6"
         }
       },
-      "startDate": "2022-08-08T11:10:32-04:00",
-      "observationDate": "2022-08-08T11:10:32-04:00"
+      "startDate": "\(isoDate)",
+      "observationDate": "\(isoDate)"
+    }
+"""
+    }
+    
+    static var projectDeviceDataResultPageJSON: Data { """
+{
+  "deviceDataPoints": [
+    {
+      "id": "\(UUID().uuidString)",
+      "namespace": "Project",
+      "deviceDataContextID": null,
+      "insertedDate": "2023-04-01T14:57:26.243Z",
+      "modifiedDate": "2023-04-02T14:57:26.243Z",
+      "identifier": null,
+      "type": "TestType1",
+      "value": "VALUE_1",
+      "units": null,
+      "properties": {},
+      "source": {
+        "identifier": "sourceID1",
+        "properties": {}
+      },
+      "startDate": null,
+      "observationDate": "2023-04-01T10:57:03.541-04:00"
+    },
+    {
+      "id": "\(UUID().uuidString)",
+      "namespace": "Project",
+      "deviceDataContextID": "\(UUID().uuidString)",
+      "insertedDate": "2022-03-25T22:43:45.687Z",
+      "modifiedDate": "2022-03-25T22:43:45.687Z",
+      "identifier": "identifier2",
+      "type": "TestType2",
+      "value": "1.23",
+      "units": "",
+      "properties": {},
+      "startDate": "2021-03-24T18:27:45.58-04:00",
+      "observationDate": "2022-03-24T18:46:45.58-04:00"
     },
     {
       "id": "\(UUID().uuidString)",
@@ -250,7 +290,7 @@ enum PreviewData {
       "insertedDate": "2021-03-25T22:43:45.687Z",
       "modifiedDate": "2021-03-25T22:43:45.687Z",
       "identifier": "identifier3",
-      "type": "TestType1",
+      "type": "TestType2",
       "value": "",
       "units": "",
       "properties": {},
