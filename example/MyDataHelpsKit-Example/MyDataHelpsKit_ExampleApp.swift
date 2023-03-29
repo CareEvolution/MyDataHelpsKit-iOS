@@ -9,10 +9,21 @@ import SwiftUI
 
 @main
 struct MyDataHelpsKit_ExampleApp: App {
+    @StateObject var sessionModel = SessionModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(SessionModel())
+            if let session = sessionModel.session {
+                ContentView(session: session)
+                    .environmentObject(sessionModel)
+            } else {
+                NavigationStack {
+                    TokenView()
+                        .navigationTitle("Example App")
+                        .navigationBarTitleDisplayMode(.inline)
+                }
+                .environmentObject(sessionModel)
+            }
         }
     }
 }

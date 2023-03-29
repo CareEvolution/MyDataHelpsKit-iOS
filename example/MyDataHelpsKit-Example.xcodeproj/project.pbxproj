@@ -19,9 +19,7 @@
 		AC9DC9E9260E374F00C5D9E4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC9DC9E8260E374F00C5D9E4 /* Preview Assets.xcassets */; };
 		AC9DC9F7260E37C700C5D9E4 /* TokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DC9F6260E37C700C5D9E4 /* TokenView.swift */; };
 		AC9DC9FB260E39AF00C5D9E4 /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DC9FA260E39AF00C5D9E4 /* SessionModel.swift */; };
-		AC9DCA03260E3A7D00C5D9E4 /* RootMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DCA02260E3A7D00C5D9E4 /* RootMenuView.swift */; };
 		AC9DCA07260E3BAC00C5D9E4 /* ParticipantInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DCA06260E3BAC00C5D9E4 /* ParticipantInfoView.swift */; };
-		AC9DCA0D260E3CE700C5D9E4 /* ParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DCA0C260E3CE700C5D9E4 /* ParticipantModel.swift */; };
 		AC9DCA14260E3E5700C5D9E4 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DCA13260E3E5700C5D9E4 /* ErrorView.swift */; };
 		ACA1A86C26D5454400CBD7EA /* ProvidersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA1A86B26D5454400CBD7EA /* ProvidersListView.swift */; };
 		ACCD97E6260E492100FF7438 /* PagedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCD97E5260E492100FF7438 /* PagedView.swift */; };
@@ -71,9 +69,7 @@
 		AC9DC9EA260E374F00C5D9E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC9DC9F6260E37C700C5D9E4 /* TokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenView.swift; sourceTree = "<group>"; };
 		AC9DC9FA260E39AF00C5D9E4 /* SessionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionModel.swift; sourceTree = "<group>"; };
-		AC9DCA02260E3A7D00C5D9E4 /* RootMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootMenuView.swift; sourceTree = "<group>"; };
 		AC9DCA06260E3BAC00C5D9E4 /* ParticipantInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantInfoView.swift; sourceTree = "<group>"; };
-		AC9DCA0C260E3CE700C5D9E4 /* ParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantModel.swift; sourceTree = "<group>"; };
 		AC9DCA13260E3E5700C5D9E4 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		ACA1A86B26D5454400CBD7EA /* ProvidersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvidersListView.swift; sourceTree = "<group>"; };
 		ACCD97E5260E492100FF7438 /* PagedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagedView.swift; sourceTree = "<group>"; };
@@ -160,7 +156,6 @@
 				AC9DC9EA260E374F00C5D9E4 /* Info.plist */,
 				AC9DC9E1260E374E00C5D9E4 /* MyDataHelpsKit_ExampleApp.swift */,
 				ACCD97E4260E490E00FF7438 /* PagedView */,
-				AC44F560261610A10065075C /* PersistDeviceDataView.swift */,
 				AC9DC9E7260E374F00C5D9E4 /* Preview Content */,
 				AC0D4E6C28A560C700FE145B /* ProjectInfoView.swift */,
 				ACA1A86A26D5452900CBD7EA /* ProviderConnections */,
@@ -184,9 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				AC9DCA06260E3BAC00C5D9E4 /* ParticipantInfoView.swift */,
-				AC9DCA0C260E3CE700C5D9E4 /* ParticipantModel.swift */,
 				ACEAF45626D91B9B002F79AB /* ParticipantSessionType.swift */,
-				AC9DCA02260E3A7D00C5D9E4 /* RootMenuView.swift */,
 				AC9DC9FA260E39AF00C5D9E4 /* SessionModel.swift */,
 				AC9DC9F6260E37C700C5D9E4 /* TokenView.swift */,
 			);
@@ -264,6 +257,7 @@
 				ACD1688829D38070002709EE /* DataView.swift */,
 				ACD1688A29D3807F002709EE /* DataViewModel.swift */,
 				ACD1689029D3C646002709EE /* DeviceDataChartView.swift */,
+				AC44F560261610A10065075C /* PersistDeviceDataView.swift */,
 				ACD1688C29D3BB86002709EE /* ProjectDeviceDataSectionView.swift */,
 				ACD1688E29D3BC83002709EE /* SensorDataSectionView.swift */,
 			);
@@ -352,7 +346,6 @@
 				ACEAF44A26D67C95002F79AB /* ExternalAccountsListView.swift in Sources */,
 				ACD1686129BBE83D002709EE /* PresentedSurveyView.swift in Sources */,
 				ACCD9801260E6E3000FF7438 /* NotificationHistoryView.swift in Sources */,
-				AC9DCA0D260E3CE700C5D9E4 /* ParticipantModel.swift in Sources */,
 				AC3C8BA329D4C76C0014C545 /* ExternalAccountProviderView.swift in Sources */,
 				AC0D4E6D28A560C700FE145B /* ProjectInfoView.swift in Sources */,
 				ACD1688F29D3BC83002709EE /* SensorDataSectionView.swift in Sources */,
@@ -370,7 +363,6 @@
 				ACCD97E6260E492100FF7438 /* PagedView.swift in Sources */,
 				AC9DC9FB260E39AF00C5D9E4 /* SessionModel.swift in Sources */,
 				ACD1688B29D3807F002709EE /* DataViewModel.swift in Sources */,
-				AC9DCA03260E3A7D00C5D9E4 /* RootMenuView.swift in Sources */,
 				ACD1687C29D3491A002709EE /* AccountView.swift in Sources */,
 				ACD1686929C3B510002709EE /* TasksView.swift in Sources */,
 				ACCD97EA260E4DFE00FF7438 /* DeviceDataSource.swift in Sources */,
