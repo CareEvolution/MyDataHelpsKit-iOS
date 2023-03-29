@@ -29,7 +29,7 @@ protocol PagedModelSource {
         case failure(MyDataHelpsError)
     }
     
-    let source: SourceType
+    @Published private(set) var source: SourceType
     private var loading: Bool
     private var lastPage: SourceType.PageModel?
     
@@ -43,6 +43,18 @@ protocol PagedModelSource {
         self.state = .normal(loadMore: true)
         self.items = []
         self.loading = false
+        loadNextPage()
+    }
+    
+    func reset(newSource: SourceType? = nil) {
+        // TODO: wait if loading == true
+        lastPage = nil
+        state = .normal(loadMore: true)
+        items = []
+        loading = false
+        if let newSource {
+            source = newSource
+        }
         loadNextPage()
     }
     

@@ -15,7 +15,7 @@ struct AccountView: View {
     @StateObject var model: AccountViewModel
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $model.path) {
             List {
                 Section("Participant:") {
                     AsyncCardView(result: model.participantInfo, failureTitle: "Failed to load participant info") {
@@ -27,6 +27,20 @@ struct AccountView: View {
                         ProjectInfoView(project: $0.info, dataCollectionSettings: $0.dataCollectionSettings)
                     }
                 }
+                
+                if let ehrConnectionsEnabled = model.ehrConnectionsEnabled {
+                    Section {
+                        NavigationLink(value: ehrConnectionsEnabled ? AccountNavigationPath.externalAccounts : nil) {
+                            Text("External Accounts")
+                        }
+                    } footer: {
+                        if ehrConnectionsEnabled {
+                            Text("View connected external accounts, and add provider connections.")
+                        } else {
+                            Text("EHR connection features are disabled for your project.")
+                        }
+                    }
+                }
             }
             .navigationTitle(Self.tabTitle)
             .toolbar {
@@ -35,6 +49,19 @@ struct AccountView: View {
                 }
             }
             .onAppear { model.loadData() }
+            .navigationDestination(for: AccountNavigationPath.self) { destination in
+                switch destination {
+                case .externalAccounts:
+                    ExternalAccountsListView(model: ExternalAccountsListViewModel(session: model.session))
+                        .navigationTitle("External Accounts")
+                    
+                case .providerSearch:
+                    /// EXERCISE: Modify the ExternalAccountProvidersQuery parameters to customize filtering providers.
+                    ExternalAccountProviderPagedView(model: ExternalAccountProvidersQuery(limit: 25).pagedListViewModel(model.session))
+                    .navigationTitle("Connect to a Provider")
+                    .navigationBarTitleDisplayMode(.inline)
+                }
+            }
         }
     }
     

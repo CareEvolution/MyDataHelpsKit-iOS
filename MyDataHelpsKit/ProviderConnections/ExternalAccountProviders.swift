@@ -89,9 +89,9 @@ public struct ExternalAccountProvidersQuery {
 ///
 /// Call `page(after:)` on the original `ExternalAccountProvidersQuery` that produced these results to construct a query that will fetch the next page.
 public struct ExternalAccountProvidersResultPage {
-    internal struct APIResponse: Decodable {
-        let externalAccountProviders: [ExternalAccountProvider]
-        let totalExternalAccountProviders: Int
+    public struct APIResponse: Decodable {
+        public let externalAccountProviders: [ExternalAccountProvider]
+        public let totalExternalAccountProviders: Int
     }
     
     /// A list of providers filtered by the query criteria.
@@ -102,7 +102,7 @@ public struct ExternalAccountProvidersResultPage {
     public let pageNumber: Int
     
     /// `APIResponse`—the data returned from the API endpoint—does not include a `pageNumber`. Combine the APIResponse with the query that produced the response so the caller has access to the `pageNumber` to safely perform paging.
-    internal init(result: APIResponse, query: ExternalAccountProvidersQuery) {
+    public init(result: APIResponse, query: ExternalAccountProvidersQuery) {
         self.externalAccountProviders = result.externalAccountProviders
         self.totalCount = result.totalExternalAccountProviders
         self.pageNumber = query.pageNumber

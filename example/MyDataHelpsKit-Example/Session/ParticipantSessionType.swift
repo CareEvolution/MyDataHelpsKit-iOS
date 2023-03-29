@@ -97,7 +97,13 @@ class ParticipantSessionPreview: ParticipantSessionType {
     }
     
     func queryExternalAccountProviders(_ query: ExternalAccountProvidersQuery) async throws -> ExternalAccountProvidersResultPage {
-        throw NotImplementedForSwiftUIPreviews()
+        if empty {
+            let response: ExternalAccountProvidersResultPage.APIResponse = try await delayedSuccess(data: PreviewData.emptyProvidersJSON)
+            return ExternalAccountProvidersResultPage(result: response, query: query)
+        } else {
+            let response: ExternalAccountProvidersResultPage.APIResponse = try await delayedSuccess(data: PreviewData.providersJSON)
+            return ExternalAccountProvidersResultPage(result: response, query: query)
+        }
     }
     
     func connectExternalAccount(provider: ExternalAccountProvider, finalRedirectURL: URL) async throws -> ExternalAccountAuthorization {
@@ -179,6 +185,10 @@ enum PreviewData {
     }
     """.data(using: .utf8)!
     
+    static var externalAccountProvider: ExternalAccountProvider {
+        try! JSONDecoder.myDataHelpsDecoder.decode(ExternalAccountProvider.self, from: provider1JSONText.data(using: .utf8)!)
+    }
+    
     static let provider1JSONText = """
         { "id": 1, "name": "MyDataHelps Demo Provider", "category": "Provider", "logoUrl": "https://developer.mydatahelps.org/assets/images/mydatahelps-logo.png" }
     """
@@ -190,6 +200,13 @@ enum PreviewData {
     }
     """.data(using: .utf8)!
     
+    static let emptyProvidersJSON = """
+    {
+        "externalAccountProviders": [ ],
+        "totalExternalAccountProviders": 0
+    }
+    """.data(using: .utf8)!
+    
     static let accountsJSON = """
     [
         { "id": 100, "status": "fetchComplete", "provider": \(provider1JSONText), "lastRefreshDate": "2021-08-01T12:34:56.000Z" }
@@ -197,11 +214,11 @@ enum PreviewData {
     """.data(using: .utf8)!
     
     static var sensorDeviceDataResultPageJSON: Data {
-        let startDate = Date().addingTimeInterval(-86400 * 30)
+        let startDate = Date().addingTimeInterval(-86400 * 15)
         let heartRates = [60, 62, 67, 59, 63, 70, 74, 79, 85, 88, 75, 68, 64, 63]
         let dataPointsJSON = heartRates.enumerated().map { (index, value) in
             heartRateJSON(date: startDate.addingTimeInterval(TimeInterval(index * 86400)), value: value)
-        }
+        }.reversed()
         return """
 {
   "deviceDataPoints": [

@@ -27,7 +27,11 @@ struct DataView: View {
             List {
                 Section("Highlights") {
                     AsyncCardView(result: model.chartModel, failureTitle: "Failed to load chart data") { chartModel in
-                        DeviceDataChartView(model: chartModel)
+                        if chartModel.dataPoints.isEmpty {
+                            PagedEmptyContentView(text: "No data available for chart")
+                        } else {
+                            DeviceDataChartView(model: chartModel)
+                        }
                     }
                 }
                 
@@ -47,7 +51,7 @@ struct DataView: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         if query.namespace.isEditable {
-                            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            ToolbarItemGroup(placement: .primaryAction) {
                                 Button("Add Data") {
                                     model.path.append(DataNavigationPath.addDeviceData)
                                 }

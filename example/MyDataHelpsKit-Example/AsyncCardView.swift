@@ -16,7 +16,7 @@ struct AsyncCardView<Model, Content>: View where Content: View {
     var body: some View {
         switch result {
         case .none:
-            LoadingView()
+            ProgressView()
         case let .some(.success(model)):
             content(model)
         case let .some(.failure(error)):

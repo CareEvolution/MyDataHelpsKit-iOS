@@ -8,15 +8,22 @@
 import SwiftUI
 import MyDataHelpsKit
 
+enum AccountNavigationPath: Codable, Hashable {
+    case externalAccounts
+    case providerSearch
+}
+
 @MainActor class AccountViewModel: ObservableObject {
     struct ProjectAndDataCollectionModel {
         let info: ProjectInfo
         let dataCollectionSettings: ProjectDataCollectionSettings
     }
     
-    private let session: ParticipantSessionType
+    let session: ParticipantSessionType
+    @Published var path = NavigationPath()
     @Published var participantInfo: Result<ParticipantInfo, MyDataHelpsError>? = nil
     @Published var projectModel: Result<ProjectAndDataCollectionModel, MyDataHelpsError>? = nil
+    @Published var ehrConnectionsEnabled: Bool? = nil
     
     init(session: ParticipantSessionType) {
         self.session = session
@@ -34,8 +41,10 @@ import MyDataHelpsKit
                 let info = try await session.getProjectInfo()
                 let dataCollectionSettings = try await session.getDataCollectionSettings()
                 projectModel = .success(.init(info: info, dataCollectionSettings: dataCollectionSettings))
+                ehrConnectionsEnabled = dataCollectionSettings.ehrEnabled
             } catch {
                 projectModel = .failure(MyDataHelpsError(error))
+                ehrConnectionsEnabled = nil
             }
         }
     }

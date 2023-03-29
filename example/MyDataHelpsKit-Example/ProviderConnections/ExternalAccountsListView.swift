@@ -80,39 +80,41 @@ struct ExternalAccountsListView: View {
     @State private var selected: ExternalAccount?
     
     var body: some View {
-        Group {
-            switch model.accounts {
-            case .none:
-                ProgressView()
-            case let .some(.failure(error)):
-                List {
-                    ErrorView(model: .init(title: "Failed to load accounts", error: error))
-                }
-            case let .some(.success(accounts)) where accounts.isEmpty:
-                List {
-                    Text("No connected accounts. Tap + to connect to a provider.")
-                }
-            case let .some(.success(accounts)):
-                List {
-                    Section(model.accountChangeResult ?? "") {
+        List {
+            Section {
+                AsyncCardView(result: model.accounts, failureTitle: "Failed to load accounts") { accounts in
+                    if accounts.isEmpty {
+                        PagedEmptyContentView(text: "No connected accounts. Tap + to connect to a provider.")
+                            .padding(.vertical)
+                            .foregroundColor(.secondary)
+                            .listRowBackground(EmptyView())
+                    } else {
                         ForEach(accounts) { account in
                             ExternalAccountView(account: account, listModel: model)
-                                .onTapGesture(perform: { self.selected = account })
+                                .onTapGesture {
+                                    self.selected = account
+                                }
                         }
                     }
-                }.listStyle(.insetGrouped)
+                }
+            } header: {
+                if let accountChangeResult = model.accountChangeResult {
+                    Text(accountChangeResult)
+                } else {
+                    EmptyView()
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .primaryAction) {
+                NavigationLink(value: AccountNavigationPath.providerSearch) {
+                    Image(systemName: "plus")
+                }
             }
         }
         .actionSheet(item: $selected) { account in
             ActionSheet(title: Text(account.provider.name), message: nil, buttons: actionButtons(account: account))
         }
-        /// EXERCISE: Try non-nil `search` and `category` parameters in the query to customize filtering providers.
-        .navigationBarItems(trailing: NavigationLink(destination: PagedListView(model: ExternalAccountProvidersQuery(limit: 25).pagedListViewModel(model.session)) { item in
-            ExternalAccountProviderView(provider: item)
-        }
-            .navigationTitle("External Account Providers"), label: {
-                Image(systemName: "plus")
-            }))
     }
     
     private func actionButtons(account: ExternalAccount) -> [ActionSheet.Button] {
@@ -168,19 +170,19 @@ struct ExternalAccountsListView_Previews: PreviewProvider {
         ExternalAccountView(account: ExternalAccount.previewList[0], listModel: ExternalAccountsListViewModel(session: ParticipantSessionPreview(), result: .success([]), accountChangeResult: nil))
             .padding()
             .previewLayout(.sizeThatFits)
-        NavigationView {
+        NavigationStack {
             ExternalAccountsListView(model: .init(session: ParticipantSessionPreview()))
                 .navigationTitle("External Accounts")
         }
-        NavigationView {
+        NavigationStack {
             ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .success(ExternalAccount.previewList), accountChangeResult: "Refreshed Account"))
                 .navigationTitle("External Accounts")
         }
-        NavigationView {
+        NavigationStack {
             ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .success([]), accountChangeResult: nil))
                 .navigationTitle("External Accounts")
         }
-        NavigationView {
+        NavigationStack {
             ExternalAccountsListView(model: .init(session: ParticipantSessionPreview(), result: .failure(.unknown(nil)), accountChangeResult: nil))
                 .navigationTitle("External Accounts")
         }
