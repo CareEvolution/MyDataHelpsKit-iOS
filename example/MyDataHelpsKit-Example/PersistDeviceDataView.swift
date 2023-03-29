@@ -16,8 +16,13 @@ extension DeviceDataNamespace {
 }
 
 @MainActor class PersistDeviceDataViewModel: ObservableObject {
+    @Published var isValid = false
     @Published var identifier = ""
-    @Published var type = ""
+    @Published var type = "" {
+        didSet {
+            validate()
+        }
+    }
     @Published var value = ""
     
     let session: ParticipantSessionType
@@ -47,6 +52,11 @@ extension DeviceDataNamespace {
         self.source = model.source
         self.startDate = model.startDate
         self.observationDate = model.observationDate
+        validate()
+    }
+    
+    func validate() {
+        isValid = !type.trimmingCharacters(in: .whitespaces).isEmpty
     }
     
     var persistModel: DeviceDataPointPersistModel {
@@ -62,29 +72,50 @@ struct PersistDeviceDataView: View {
     }
     
     @StateObject var model: PersistDeviceDataViewModel
-    @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     @State private var result = PersistResult.notPersisted
+    @FocusState private var typeFocus: Bool
+    @FocusState private var valueFocus: Bool
     
     var body: some View {
         Form {
-            Text("Identifier:")
-            TextField("Optional", text: $model.identifier)
-                .padding(.bottom, 20)
-            Text("Type:")
-            TextField("Type", text: $model.type)
-                .padding(.bottom, 20)
-            Text("Value:")
-            TextField("Value", text: $model.value)
-            switch result {
-            case .persisted: Text("Saved!")
-            case let .failure(error):
-                Text(error.localizedDescription)
-                    .foregroundColor(Color(.systemRed))
-            case .notPersisted: Text("")
+            Section("Identity") {
+                TextField("Type", text: $model.type)
+                    .focused($typeFocus)
+                    .autocorrectionDisabled()
+                TextField("Identifier (optional)", text: $model.identifier)
+                    .autocorrectionDisabled()
+            }
+            
+            Section("Value") {
+                TextField("Value", text: $model.value)
+                    .focused($valueFocus)
+            }
+            
+            Section {
+                switch result {
+                case .persisted:
+                    Text("Saved!")
+                case let .failure(error):
+                    ErrorView(model: .init(title: "Failed to save data point", error: error))
+                case .notPersisted:
+                    EmptyView()
+                }
             }
         }
         .navigationTitle(title)
-        .navigationBarItems(trailing: Button("Save", action: save))
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Save", action: save)
+                    .disabled(!model.isValid)
+            }
+        }
+        .onAppear {
+            if model.isNew {
+                typeFocus = true
+            } else {
+                valueFocus = true
+            }
+        }
     }
     
     var title: String {
@@ -97,9 +128,6 @@ struct PersistDeviceDataView: View {
             do {
                 try await model.session.persistDeviceData([persistModel])
                 result = .persisted
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                    presentationMode.wrappedValue.dismiss()
-                }
             } catch {
                 result = .failure(MyDataHelpsError(error))
             }
@@ -111,6 +139,9 @@ struct PersistDeviceDataView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             PersistDeviceDataView(model: .init(session: ParticipantSessionPreview()))
+        }
+        NavigationStack {
+            PersistDeviceDataView(model: .init(existing: .init(session: ParticipantSessionPreview(), namespace: .project, id: .init(UUID().uuidString), identifier: nil, type: "DataType1", value: "ExistingValue", units: nil, source: nil, startDate: nil, observationDate: Date())))
         }
     }
 }

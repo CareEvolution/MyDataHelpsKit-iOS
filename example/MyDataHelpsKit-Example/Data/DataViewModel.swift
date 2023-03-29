@@ -19,9 +19,13 @@ enum DataNavigationPath {
     
     @Published var path = NavigationPath()
     @Published var allQueryableDataTypes: Result<[QueryableDeviceDataType], MyDataHelpsError>? = nil
+    @Published var projectDataModel: PagedViewModel<DeviceDataSource>
     
     init(session: ParticipantSessionType) {
         self.session = session
+        /// EXERCISE: projectDataModel will show any custom project-scoped device data found for the participant. Try customizing the DeviceDataQuery to filter this data.
+        self.projectDataModel = DeviceDataQuery(namespace: .project)
+            .pagedListViewModel(session)
     }
     
     func deviceDataQuery(browsing: QueryableDeviceDataType) -> DeviceDataQuery {

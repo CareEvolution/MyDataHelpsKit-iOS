@@ -95,6 +95,8 @@ public struct ProjectDataCollectionSettings: Decodable {
     /// Indicates whether Weather data collection is enabled for this project.
     public let weatherEnabled: Bool
     /// A collection of device data types that are supported by the current project configuration and can be queried using `ParticipantSession.queryDeviceData`. A participant may not have data available for all data types.
+    ///
+    /// This includes data types for all DeviceDataNamespaces, except for the `project` namespace: although project-scoped device data can also be fetched using `queryDeviceData`, SDK developers must manage their own configuration for which device data types exist within their project's namespace.
     public let queryableDeviceDataTypes: Set<QueryableDeviceDataType>
     /// Date when sensor data collection ended or will end for this participant.
     ///

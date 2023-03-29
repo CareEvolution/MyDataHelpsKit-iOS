@@ -15,31 +15,11 @@ struct DataView: View {
     var body: some View {
         NavigationStack(path: $model.path) {
             List {
-                Section {
-                    AsyncCardView(result: model.allQueryableDataTypes, failureTitle: "Failed to load settings") { types in
-                        if types.isEmpty {
-                            Text("No queryable data types available for this project.")
-                                .foregroundColor(.secondary)
-                        } else {
-                            ForEach(Array(types)) { item in
-                                NavigationLink(value: DataNavigationPath.browseDeviceData(item)) {
-                                    VStack(alignment: .leading) {
-                                        Text(item.type)
-                                        Text(item.namespace.rawValue)
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } header: {
-                    Text("All Data")
-                } footer: {
-                    Text("Explore all data available for the participant based on the project's data collection settings.")
-                }
+                ProjectDeviceDataSectionView(projectDataModel: model.projectDataModel)
+                
+                SensorDataSectionView(allQueryableDataTypes: model.allQueryableDataTypes)
             }
-            .listStyle(.insetGrouped)
+            .listStyle(.sidebar)
             .navigationTitle(Self.tabTitle)
             .navigationDestination(for: DataNavigationPath.self) { destination in
                 switch destination {
@@ -58,12 +38,14 @@ struct DataView: View {
                             }
                         }
                     }
-                    
+                
                 case let .editDeviceData(point):
                     PersistDeviceDataView(model: PersistDeviceDataViewModel(existing: point))
-                    
+                        .navigationBarTitleDisplayMode(.inline)
+                
                 case .addDeviceData:
                     PersistDeviceDataView(model: PersistDeviceDataViewModel(session: model.session))
+                        .navigationBarTitleDisplayMode(.inline)
                 }
             }
             .onAppear { model.loadData() }
