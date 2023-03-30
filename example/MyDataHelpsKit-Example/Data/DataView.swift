@@ -11,15 +11,6 @@ import MyDataHelpsKit
 struct DataView: View {
     static let tabTitle = "My Data"
     
-    static func summaryText(query: DeviceDataQuery) -> String {
-        if let types = query.types,
-           !types.isEmpty {
-            return "\(query.namespace.rawValue): \(types.joined(separator: ", "))"
-        } else {
-            return query.namespace.rawValue;
-        }
-    }
-    
     @StateObject var model: DataViewModel
     
     var body: some View {
@@ -37,30 +28,17 @@ struct DataView: View {
                 
                 ProjectDeviceDataSectionView(projectDataModel: model.projectDataModel)
                 
-                SensorDataSectionView(allQueryableDataTypes: model.allQueryableDataTypes)
+                SensorDataSectionView(allDataCategories: model.allDataCategories)
             }
             .listStyle(.sidebar)
             .navigationTitle(Self.tabTitle)
             .navigationDestination(for: DataNavigationPath.self) { destination in
                 switch destination {
-                case let .browseDeviceData(query):
-                    PagedListView(model: query.pagedListViewModel(model.session)) { item in
-                        DeviceDataPointView(model: item)
-                    }
-                    .navigationTitle(Self.summaryText(query: query))
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        if query.namespace.isEditable {
-                            ToolbarItemGroup(placement: .primaryAction) {
-                                Button("Add Data") {
-                                    model.path.append(DataNavigationPath.addDeviceData)
-                                }
-                            }
-                        }
-                    }
+                case let .browseDeviceData(category):
+                    browseDeviceDataView(category: category)
                 
                 case let .editDeviceData(point):
-                    PersistDeviceDataView(model: PersistDeviceDataViewModel(existing: point))
+                    PersistDeviceDataView(model: PersistDeviceDataViewModel(session: model.session, existing: point))
                         .navigationBarTitleDisplayMode(.inline)
                 
                 case .addDeviceData:
@@ -69,6 +47,23 @@ struct DataView: View {
                 }
             }
             .onAppear { model.loadData() }
+        }
+    }
+    
+    private func browseDeviceDataView(category: DeviceDataBrowseCategory) -> some View {
+        PagedListView(model: category.query.pagedListViewModel(model.session)) { item in
+            DeviceDataPointView(model: item)
+        }
+        .navigationTitle(category.title)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if category.namespace.isEditable {
+                ToolbarItemGroup(placement: .primaryAction) {
+                    Button("Add Data") {
+                        model.path.append(DataNavigationPath.addDeviceData)
+                    }
+                }
+            }
         }
     }
 }

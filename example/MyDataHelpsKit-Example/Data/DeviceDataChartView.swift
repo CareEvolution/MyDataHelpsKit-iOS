@@ -20,17 +20,17 @@ struct DeviceDataChartModel {
     let xAxisLabel: String
     let yAxisLabel: String
     let accentColor: Color
-    let allDataQuery: DeviceDataQuery
+    let allDataPath: DataNavigationPath
     let dataPoints: [Point]
 }
 
 extension DeviceDataChartModel {
-    init(title: String, xAxisLabel: String, yAxisLabel: String, accentColor: Color, allDataQuery: DeviceDataQuery, deviceDataResult: DeviceDataResultPage) {
+    init(title: String, xAxisLabel: String, yAxisLabel: String, accentColor: Color, allDataPath: DataNavigationPath, deviceDataResult: DeviceDataResultPage) {
         self.title = title
         self.xAxisLabel = xAxisLabel
         self.yAxisLabel = xAxisLabel
         self.accentColor = accentColor
-        self.allDataQuery = allDataQuery
+        self.allDataPath = allDataPath
         self.dataPoints = deviceDataResult.deviceDataPoints.enumerated().compactMap { index, dataPoint in
             guard let date = dataPoint.observationDate,
                   let value = Double(dataPoint.value) else {
@@ -66,7 +66,7 @@ struct DeviceDataChartView: View {
             .cornerRadius(4)
         }
         
-        NavigationLink(value: DataNavigationPath.browseDeviceData(model.allDataQuery)) {
+        NavigationLink(value: model.allDataPath) {
             Text("Show All Data")
         }
     }
@@ -94,7 +94,7 @@ struct DeviceDataChartSectionView_Previews: PreviewProvider {
             xAxisLabel: "Date",
             yAxisLabel: "bpm",
             accentColor: .red,
-            allDataQuery: DeviceDataQuery(namespace: .appleHealth, types: Set(["RestingHeartRate"])),
+            allDataPath: .browseDeviceData(DeviceDataBrowseCategory(namespace: .appleHealth, type: "RestingHeartRate")),
             dataPoints: heartRates.enumerated().map { index, bpm in
                 .init(index: index, date: calendar.date(byAdding: .day, value: index, to: startDate) ?? .now, value: bpm)
         })

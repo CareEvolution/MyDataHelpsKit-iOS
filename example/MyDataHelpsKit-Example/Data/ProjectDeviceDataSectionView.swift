@@ -22,7 +22,7 @@ struct ProjectDeviceDataSectionView: View {
                 PagedContentItemsView(model: projectDataModel, inlineProgressView: true) { item in
                     DeviceDataPointView(model: item)
                 }
-                NavigationLink(value: DataNavigationPath.browseDeviceData(DataViewModel.projectDeviceDataQuery(summaryView: false))) {
+                NavigationLink(value: DataNavigationPath.browseDeviceData(DeviceDataBrowseCategory(namespace: .project, type: nil))) {
                     Text("All Project Data")
                 }
             }

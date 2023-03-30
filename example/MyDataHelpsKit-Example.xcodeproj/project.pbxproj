@@ -11,6 +11,7 @@
 		AC3C8BA329D4C76C0014C545 /* ExternalAccountProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3C8BA229D4C76C0014C545 /* ExternalAccountProviderView.swift */; };
 		AC3C8BA529D4C8380014C545 /* ExternalAccountProvidersSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3C8BA429D4C8380014C545 /* ExternalAccountProvidersSource.swift */; };
 		AC3C8BA729D5BEE20014C545 /* RemoteResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3C8BA629D5BEE20014C545 /* RemoteResult.swift */; };
+		AC3C8BA929D5EA600014C545 /* DeviceDataBrowseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3C8BA829D5EA600014C545 /* DeviceDataBrowseCategory.swift */; };
 		AC44F53E261375EE0065075C /* MyDataHelpsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */; };
 		AC44F561261610A10065075C /* PersistDeviceDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44F560261610A10065075C /* PersistDeviceDataView.swift */; };
 		AC9DC9E2260E374E00C5D9E4 /* MyDataHelpsKit_ExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DC9E1260E374E00C5D9E4 /* MyDataHelpsKit_ExampleApp.swift */; };
@@ -58,6 +59,7 @@
 		AC3C8BA229D4C76C0014C545 /* ExternalAccountProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountProviderView.swift; sourceTree = "<group>"; };
 		AC3C8BA429D4C8380014C545 /* ExternalAccountProvidersSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalAccountProvidersSource.swift; sourceTree = "<group>"; };
 		AC3C8BA629D5BEE20014C545 /* RemoteResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteResult.swift; sourceTree = "<group>"; };
+		AC3C8BA829D5EA600014C545 /* DeviceDataBrowseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDataBrowseCategory.swift; sourceTree = "<group>"; };
 		AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MyDataHelpsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC44F54126137CBE0065075C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AC44F560261610A10065075C /* PersistDeviceDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistDeviceDataView.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 			children = (
 				ACD1688829D38070002709EE /* DataView.swift */,
 				ACD1688A29D3807F002709EE /* DataViewModel.swift */,
+				AC3C8BA829D5EA600014C545 /* DeviceDataBrowseCategory.swift */,
 				ACD1689029D3C646002709EE /* DeviceDataChartView.swift */,
 				AC44F560261610A10065075C /* PersistDeviceDataView.swift */,
 				ACD1688C29D3BB86002709EE /* ProjectDeviceDataSectionView.swift */,
@@ -339,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACD1687929CCE76C002709EE /* TasksViewModel.swift in Sources */,
+				AC3C8BA929D5EA600014C545 /* DeviceDataBrowseCategory.swift in Sources */,
 				ACCD97F0260E5A8600FF7438 /* PagedViewModel.swift in Sources */,
 				ACD1688029D351E1002709EE /* AsyncCardView.swift in Sources */,
 				AC9DCA07260E3BAC00C5D9E4 /* ParticipantInfoView.swift in Sources */,

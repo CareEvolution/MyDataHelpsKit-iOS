@@ -9,20 +9,22 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct SensorDataSectionView: View {
-    let allQueryableDataTypes: RemoteResult<[QueryableDeviceDataType]>
+    let allDataCategories: RemoteResult<[DeviceDataBrowseCategory]>
     
     var body: some View {
         Section {
-            AsyncCardView(result: allQueryableDataTypes, failureTitle: "Failed to load settings") { types in
-                if types.isEmpty {
+            AsyncCardView(result: allDataCategories, failureTitle: "Failed to load settings") { categories in
+                if categories.isEmpty {
                     Text("No queryable data types available for this project.")
                         .foregroundColor(.secondary)
                 } else {
-                    ForEach(Array(types)) { item in
-                        NavigationLink(value: DataNavigationPath.browsing(dataType: item)) {
+                    ForEach(categories) { category in
+                        NavigationLink(value: DataNavigationPath.browseDeviceData(category)) {
                             VStack(alignment: .leading) {
-                                Text(item.type)
-                                Text(item.namespace.rawValue)
+                                if let type = category.type {
+                                    Text(type)
+                                }
+                                Text(category.namespace.rawValue)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -42,10 +44,14 @@ struct SensorDataSectionView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             List {
-                SensorDataSectionView(allQueryableDataTypes: .success(Array(ProjectInfoView_Previews.projectDataCollectionSettings.queryableDeviceDataTypes)))
-                SensorDataSectionView(allQueryableDataTypes: .success([]))
-                SensorDataSectionView(allQueryableDataTypes: .loading)
-                SensorDataSectionView(allQueryableDataTypes: .failure(.timedOut(nil)))
+                SensorDataSectionView(allDataCategories: .success([
+                    .init(namespace: .appleHealth, type: "HeartRate"),
+                    .init(namespace: .fitbit, type: "Sleep"),
+                    .init(namespace: .googleFit, type: "HeartRate")
+                ]))
+                SensorDataSectionView(allDataCategories: .success([]))
+                SensorDataSectionView(allDataCategories: .loading)
+                SensorDataSectionView(allDataCategories: .failure(.timedOut(nil)))
             }
         }
     }

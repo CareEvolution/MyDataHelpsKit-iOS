@@ -9,8 +9,7 @@ import Foundation
 import MyDataHelpsKit
 
 class DeviceDataSource: PagedModelSource {
-    struct ItemModel: Identifiable {
-        let session: ParticipantSessionType
+    struct ItemModel: Identifiable, Codable {
         let namespace: DeviceDataNamespace
         let id: DeviceDataPoint.ID
         let identifier: String?
@@ -49,13 +48,12 @@ class DeviceDataSource: PagedModelSource {
 
 extension DeviceDataResultPage: PageModelType {
     func pageItems(session: ParticipantSessionType) -> [DeviceDataSource.ItemModel] {
-        deviceDataPoints.map { .init(dataPoint: $0, session: session) }
+        deviceDataPoints.map { .init(dataPoint: $0) }
     }
 }
 
 extension DeviceDataSource.ItemModel {
-    init(dataPoint: DeviceDataPoint, session: ParticipantSessionType) {
-        self.session = session
+    init(dataPoint: DeviceDataPoint) {
         self.namespace = dataPoint.namespace
         self.id = dataPoint.id
         self.identifier = dataPoint.identifier

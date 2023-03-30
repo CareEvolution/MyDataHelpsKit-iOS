@@ -8,19 +8,19 @@
 import SwiftUI
 import MyDataHelpsKit
 
-enum DataNavigationPath {
-    case browseDeviceData(DeviceDataQuery)
+enum DataNavigationPath: Codable {
+    case browseDeviceData(DeviceDataBrowseCategory)
     case editDeviceData(DeviceDataSource.ItemModel)
     case addDeviceData
-    
-    static func browsing(dataType: QueryableDeviceDataType) -> DataNavigationPath {
-        .browseDeviceData(DeviceDataQuery(namespace: dataType.namespace, types: Set([dataType.type])))
-    }
 }
 
 @MainActor class DataViewModel: ObservableObject {
-    static func projectDeviceDataQuery(summaryView: Bool) -> DeviceDataQuery {
-        DeviceDataQuery(namespace: .project, limit: summaryView ? 5 : DeviceDataQuery.defaultLimit)
+    static func browseDeviceDataQuery(namespace: DeviceDataNamespace, type: String?) -> DeviceDataQuery {
+        if let type {
+            return DeviceDataQuery(namespace: namespace, types: Set([type]))
+        } else {
+            return DeviceDataQuery(namespace: namespace)
+        }
     }
     
     let session: ParticipantSessionType
@@ -28,12 +28,12 @@ enum DataNavigationPath {
     @Published var path = NavigationPath()
     @Published var chartModel: RemoteResult<DeviceDataChartModel> = .loading
     @Published var projectDataModel: PagedViewModel<DeviceDataSource>
-    @Published var allQueryableDataTypes: RemoteResult<[QueryableDeviceDataType]> = .loading
+    @Published var allDataCategories: RemoteResult<[DeviceDataBrowseCategory]> = .loading
     
     init(session: ParticipantSessionType) {
         self.session = session
         /// EXERCISE: projectDataModel will show any custom project-scoped device data found for the participant. Try customizing the DeviceDataQuery to filter this data.
-        self.projectDataModel = Self.projectDeviceDataQuery(summaryView: true)
+        self.projectDataModel = DeviceDataQuery(namespace: .project, limit: 5)
             .pagedListViewModel(session)
     }
     
@@ -41,15 +41,16 @@ enum DataNavigationPath {
         Task {
             if case .success = chartModel { return }
             /// EXERCISE: customize the query and chartModel to explore using the SDK to visualize device data. To find `DeviceDataNamespace` + `type` values available for querying in your project, use the `getDataCollectionSettings` API or browse the `SensorDataSectionView`.
-            let query = DeviceDataQuery(namespace: .appleHealth, types: Set(["RestingHeartRate"]), limit: 15)
+            let namespace = DeviceDataNamespace.appleHealth
+            let dataType = "RestingHeartRate"
             do {
-                let result = try await session.queryDeviceData(query)
+                let result = try await session.queryDeviceData(DeviceDataQuery(namespace: namespace, types: Set([dataType]), limit: 15))
                 chartModel = .success(DeviceDataChartModel(
                     title: "Resting Heart Rate",
                     xAxisLabel: "Date",
                     yAxisLabel: "bpm",
                     accentColor: .red,
-                    allDataQuery: DeviceDataQuery(namespace: query.namespace, types: query.types),
+                    allDataPath: .browseDeviceData(DeviceDataBrowseCategory(namespace: namespace, type: dataType)),
                     deviceDataResult: result))
             } catch {
                 chartModel = .failure(MyDataHelpsError(error))
@@ -57,46 +58,45 @@ enum DataNavigationPath {
         }
         
         Task {
-            if case .success = allQueryableDataTypes { return }
+            if case .success = allDataCategories { return }
             do {
                 let types = try await session.getDataCollectionSettings().queryableDeviceDataTypes
-                allQueryableDataTypes = .success(Array(types).sorted { a, b in
-                    if a.namespace == b.namespace {
-                        return a.type < b.type
-                    } else {
-                        return a.namespace.rawValue < b.namespace.rawValue
-                    }
-                })
+                allDataCategories = .success(types
+                    .map { DeviceDataBrowseCategory(namespace: $0.namespace, type: $0.type) }
+                    .sorted())
             } catch {
-                allQueryableDataTypes = .failure(MyDataHelpsError(error))
+                allDataCategories = .failure(MyDataHelpsError(error))
             }
         }
     }
 }
 
-// Protocol conformances required for use in a NavigationStack's NavigationPath.
-extension DataNavigationPath: Codable, Hashable, RawRepresentable {
-    typealias RawValue = String // for Encodable
-    
-    init?(rawValue: String) {
-        return nil
-    }
-    
-    var rawValue: String {
+// MARK: Protocol conformances required for use in a NavigationStack's NavigationPath.
+
+extension DataNavigationPath: Hashable {
+    func hash(into hasher: inout Hasher) {
         switch self {
-        case let .browseDeviceData(query):
-            return "browseDeviceData \(DataView.summaryText(query: query))"
-        case let .editDeviceData(point):
-            return "editDeviceData \(point.id)"
+        case let .browseDeviceData(category):
+            hasher.combine(0)
+            hasher.combine(category)
+        case let .editDeviceData(model):
+            hasher.combine(1)
+            hasher.combine(model.id)
         case .addDeviceData:
-            return "addDeviceData"
+            hasher.combine(2)
         }
     }
-}
-
-// Identifiable conformance used for SwiftUI List/ForEach constructs.
-extension QueryableDeviceDataType: Identifiable {
-    public var id: String {
-        "\(namespace.rawValue)|\(type)"
+    
+    static func == (lhs: DataNavigationPath, rhs: DataNavigationPath) -> Bool {
+        switch (lhs, rhs) {
+        case let (.browseDeviceData(category1), .browseDeviceData(category2)):
+            return category1 == category2
+        case let (.editDeviceData(model1), .editDeviceData(model2)):
+            return model1.id == model2.id
+        case (.addDeviceData, .addDeviceData):
+            return true
+        default:
+            return false
+        }
     }
 }

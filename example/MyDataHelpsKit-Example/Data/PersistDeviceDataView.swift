@@ -42,8 +42,8 @@ extension DeviceDataNamespace {
         self.observationDate = nil
     }
     
-    init(existing model: DeviceDataSource.ItemModel) {
-        self.session = model.session
+    init(session: ParticipantSessionType, existing model: DeviceDataSource.ItemModel) {
+        self.session = session
         self.isNew = false
         self.identifier = model.identifier ?? ""
         self.type = model.type
@@ -141,7 +141,7 @@ struct PersistDeviceDataView_Previews: PreviewProvider {
             PersistDeviceDataView(model: .init(session: ParticipantSessionPreview()))
         }
         NavigationStack {
-            PersistDeviceDataView(model: .init(existing: .init(session: ParticipantSessionPreview(), namespace: .project, id: .init(UUID().uuidString), identifier: nil, type: "DataType1", value: "ExistingValue", units: nil, source: nil, startDate: nil, observationDate: Date())))
+            PersistDeviceDataView(model: .init(session: ParticipantSessionPreview(), existing: .init(namespace: .project, id: .init(UUID().uuidString), identifier: nil, type: "DataType1", value: "ExistingValue", units: nil, source: nil, startDate: nil, observationDate: Date())))
         }
     }
 }

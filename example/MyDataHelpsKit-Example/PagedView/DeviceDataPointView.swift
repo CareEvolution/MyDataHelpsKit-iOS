@@ -53,8 +53,8 @@ struct DeviceDataPointView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             List {
-                DeviceDataPointView(model: .init(session: ParticipantSessionPreview(), namespace: .appleHealth, id: .init("1"), identifier: "1", type: "HeartRate", value: "62", units: nil, source: .init(identifier: "", properties: [:]), startDate: Date(), observationDate: Date()))
-                DeviceDataPointView(model: .init(session: ParticipantSessionPreview(), namespace: .project, id: .init("1"), identifier: "1", type: "PersistType1", value: "62", units: nil, source: .init(identifier: "", properties: [:]), startDate: Date(), observationDate: Date()))
+                DeviceDataPointView(model: .init(namespace: .appleHealth, id: .init("1"), identifier: "1", type: "HeartRate", value: "62", units: nil, source: nil, startDate: Date(), observationDate: Date()))
+                DeviceDataPointView(model: .init(namespace: .project, id: .init("2"), identifier: "2", type: "PersistType1", value: "ABC", units: nil, source: nil, startDate: Date(), observationDate: Date()))
             }
         }
     }
