@@ -107,13 +107,10 @@ struct SurveyAnswerView: View {
 
 struct SurveyAnswerView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
+        List {
             SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .notDeleted))
-                .padding()
             SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .deleted))
-                .padding()
             SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .failure(.unknown(nil))), showSurveyDisplayName: false)
-                .padding()
         }
     }
 }

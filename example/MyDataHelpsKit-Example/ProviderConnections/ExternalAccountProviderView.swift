@@ -39,7 +39,8 @@ struct ExternalAccountProviderView: View {
 
 struct ExternalAccountProviderView_Previews: PreviewProvider {
     static var previews: some View {
-        ExternalAccountProviderView(provider: PreviewData.externalAccountProvider)
-            .padding()
+        List {
+            ExternalAccountProviderView(provider: PreviewData.externalAccountProvider)
+        }
     }
 }

@@ -132,13 +132,6 @@ struct ExternalAccountView: View {
     let account: ExternalAccount
     let listModel: ExternalAccountsListViewModel
     
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .short
-        df.timeStyle = .short
-        return df
-    }()
-    
     var body: some View {
         HStack(alignment: .center) {
             if let logoURL = account.provider.logoURL {
@@ -157,7 +150,7 @@ struct ExternalAccountView: View {
                 Text(account.status.rawValue)
                     .font(.caption)
                 if let lastRefreshDate = account.lastRefreshDate {
-                    Text(Self.dateFormatter.string(from: lastRefreshDate))
+                    Text(lastRefreshDate.formatted())
                         .font(.caption)
                 }
             }

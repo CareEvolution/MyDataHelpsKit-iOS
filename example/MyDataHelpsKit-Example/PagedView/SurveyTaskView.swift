@@ -29,13 +29,6 @@ struct SurveyTaskView: View {
     let model: Model
     var presentedSurvey: Binding<SurveyPresentation?>
     
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .short
-        df.timeStyle = .medium
-        return df
-    }()
-    
     var body: some View {
         Group {
             if model.status == .complete {
@@ -64,10 +57,10 @@ struct SurveyTaskView: View {
                 Image(systemName: "questionmark.square.dashed")
             }
             VStack(alignment: .leading) {
+                /// EXERCISE: Add or modify subviews here to see the values of other `SurveyTask` properties.
                 Text(model.surveyDisplayName)
-                /// EXERCISE: Add or modify `Text` views here to see the values of other `SurveyTask` properties.
                 if let dueDate = model.dueDate {
-                    Text(Self.dateFormatter.string(from: dueDate))
+                    Text(dueDate.formatted())
                         .font(.footnote)
                         .foregroundColor(Color.gray)
                 }

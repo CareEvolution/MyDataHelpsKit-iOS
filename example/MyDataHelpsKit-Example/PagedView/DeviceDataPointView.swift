@@ -17,13 +17,6 @@ extension DeviceDataQuery {
 struct DeviceDataPointView: View {
     let model: DeviceDataSource.ItemModel
     
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .short
-        df.timeStyle = .medium
-        return df
-    }()
-    
     var body: some View {
         if model.namespace.isEditable {
             NavigationLink(value: DataNavigationPath.editDeviceData(model)) {
@@ -38,7 +31,7 @@ struct DeviceDataPointView: View {
         VStack(alignment: .leading) {
             /// EXERCISE: Add or modify views here to see the values of other `DeviceDataPoint` properties.
             if let date = model.observationDate {
-                Text("\(model.value) at \(Self.dateFormatter.string(from: date))")
+                Text("\(model.value) at \(date.formatted(date: .numeric, time: .standard))")
             } else {
                 Text(model.value)
             }

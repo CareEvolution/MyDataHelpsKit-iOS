@@ -45,7 +45,7 @@ struct TokenView: View {
 
 struct TokenView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             TokenView()
                 .navigationTitle("Example App")
                 .environmentObject(SessionModel())

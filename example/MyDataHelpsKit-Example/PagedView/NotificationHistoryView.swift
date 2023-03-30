@@ -23,13 +23,6 @@ struct NotificationHistoryView: View {
         let content: String?
     }
     
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .short
-        df.timeStyle = .medium
-        return df
-    }()
-    
     let model: Model
     
     var body: some View {
@@ -40,7 +33,7 @@ struct NotificationHistoryView: View {
             HStack {
                 Text(model.statusCode.rawValue)
                 Text("•")
-                Text(Self.dateFormatter.string(from: model.sentDate))
+                Text(model.sentDate.formatted())
             }.font(.footnote)
             .foregroundColor(Color(.systemGray))
         }
@@ -75,7 +68,8 @@ extension NotificationHistoryView.Model {
 
 struct NotificationHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        NotificationHistoryView(model: .init(id: .init("n1"), identifier: "NOTIFICATION_A", sentDate: Date(), statusCode: .succeeded, content: "Title Text"))
-            .padding()
+        List {
+            NotificationHistoryView(model: .init(id: .init("n1"), identifier: "NOTIFICATION_A", sentDate: Date(), statusCode: .succeeded, content: "Title Text"))
+        }
     }
 }

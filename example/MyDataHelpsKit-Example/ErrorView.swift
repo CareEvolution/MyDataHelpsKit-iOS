@@ -74,7 +74,7 @@ struct ErrorView: View {
 
 struct ErrorView_Previews: PreviewProvider {
     static var previews: some View {
-        ErrorView(model: .init(title: "Error Doing X", error: .unknown(nil)))
+        ErrorView(model: .init(title: "Error Performing X", error: .timedOut(nil)))
             .padding()
     }
 }
