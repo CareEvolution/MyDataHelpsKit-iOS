@@ -37,7 +37,7 @@ public struct ParticipantInfo: Decodable {
 }
 
 /// Participant's gender.
-public struct ParticipantGender: RawRepresentable, Equatable, Decodable {
+public struct ParticipantGender: RawRepresentable, Equatable, Codable {
     public typealias RawValue = String
     /// The raw string encoding the gender value in MyDataHelps.
     public let rawValue: String

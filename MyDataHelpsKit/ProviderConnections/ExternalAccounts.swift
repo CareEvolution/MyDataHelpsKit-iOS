@@ -34,7 +34,7 @@ public extension ParticipantSession {
 }
 
 /// Describes the status of fetching data for a connected external account.
-public struct ExternalAccountStatus: RawRepresentable, Equatable, Hashable, Decodable {
+public struct ExternalAccountStatus: RawRepresentable, Equatable, Hashable, Codable {
     public typealias RawValue = String
     
     /// An error occurred while fetching data.

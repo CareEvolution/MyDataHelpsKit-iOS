@@ -40,7 +40,7 @@ public struct ProjectInfo: Identifiable, Decodable {
 }
 
 /// Describes the type of a MyDataHelps project.
-public struct ProjectType: RawRepresentable, Equatable, Decodable {
+public struct ProjectType: RawRepresentable, Equatable, Codable {
     /// The raw value for the project type as stored in MyDataHelps.
     public let rawValue: String
     

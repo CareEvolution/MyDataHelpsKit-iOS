@@ -110,7 +110,7 @@ public struct ExternalAccountProvidersResultPage {
 }
 
 /// The type of external account provider.
-public struct ExternalAccountProviderCategory: RawRepresentable, Equatable, Hashable, Decodable {
+public struct ExternalAccountProviderCategory: RawRepresentable, Equatable, Hashable, Codable {
     public typealias RawValue = String
     
     /// A generic provider type.

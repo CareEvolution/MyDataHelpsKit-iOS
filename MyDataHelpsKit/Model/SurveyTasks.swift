@@ -93,7 +93,7 @@ public struct SurveyTaskResultPage: PagedResult, Decodable {
 }
 
 /// Describes the status of a survey task assigned to a participant.
-public struct SurveyTaskStatus: RawRepresentable, Equatable, Hashable, Decodable {
+public struct SurveyTaskStatus: RawRepresentable, Equatable, Hashable, Codable {
     public typealias RawValue = String
     
     /// Task is open and incomplete.

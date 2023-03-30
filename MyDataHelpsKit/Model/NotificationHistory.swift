@@ -79,7 +79,7 @@ public enum NotificationType: String, Decodable {
 }
 
 /// Describes whether a notification was sent to a participant.
-public struct NotificationSendStatusCode: RawRepresentable, Equatable, Decodable {
+public struct NotificationSendStatusCode: RawRepresentable, Equatable, Codable {
     public typealias RawValue = String
     
     /// The notification was sent. This does not guarantee it was received nor read.
