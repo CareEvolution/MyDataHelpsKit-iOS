@@ -26,9 +26,9 @@ enum DataNavigationPath {
     let session: ParticipantSessionType
     
     @Published var path = NavigationPath()
-    @Published var chartModel: Result<DeviceDataChartModel, MyDataHelpsError>? = nil
+    @Published var chartModel: RemoteResult<DeviceDataChartModel> = .loading
     @Published var projectDataModel: PagedViewModel<DeviceDataSource>
-    @Published var allQueryableDataTypes: Result<[QueryableDeviceDataType], MyDataHelpsError>? = nil
+    @Published var allQueryableDataTypes: RemoteResult<[QueryableDeviceDataType]> = .loading
     
     init(session: ParticipantSessionType) {
         self.session = session
@@ -39,7 +39,7 @@ enum DataNavigationPath {
     
     func loadData() {
         Task {
-            if case .some(.success) = chartModel { return }
+            if case .success = chartModel { return }
             /// EXERCISE: customize the query and chartModel to explore using the SDK to visualize device data. To find `DeviceDataNamespace` + `type` values available for querying in your project, use the `getDataCollectionSettings` API or browse the `SensorDataSectionView`.
             let query = DeviceDataQuery(namespace: .appleHealth, types: Set(["RestingHeartRate"]), limit: 15)
             do {
@@ -57,7 +57,7 @@ enum DataNavigationPath {
         }
         
         Task {
-            if case .some(.success) = allQueryableDataTypes { return }
+            if case .success = allQueryableDataTypes { return }
             do {
                 let types = try await session.getDataCollectionSettings().queryableDeviceDataTypes
                 allQueryableDataTypes = .success(Array(types).sorted { a, b in

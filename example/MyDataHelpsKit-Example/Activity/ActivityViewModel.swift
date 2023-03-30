@@ -17,8 +17,8 @@ enum ActivityNavigationPath: Codable, Hashable {
     let session: ParticipantSessionType
     
     @Published var path = NavigationPath()
-    @Published var recentNotifications: Result<NotificationHistoryPage, MyDataHelpsError>? = nil
-    @Published var recentSurveyAnswers: Result<SurveyAnswersPage, MyDataHelpsError>? = nil
+    @Published var recentNotifications: RemoteResult<NotificationHistoryPage> = .loading
+    @Published var recentSurveyAnswers: RemoteResult<SurveyAnswersPage> = .loading
     
     init(session: ParticipantSessionType) {
         self.session = session
@@ -26,15 +26,15 @@ enum ActivityNavigationPath: Codable, Hashable {
     
     func loadData() {
         Task {
-            if case .some(.success) = recentNotifications { return }
+            if case .success = recentNotifications { return }
             /// EXERCISE: An example of using the MyDataHelpsKit paged-result pattern to load and display a single batch of recent data, rather than an entire infinite-scrolling list. Try customizing the NotificationHistoryQuery here.
-            recentNotifications = await Result(wrapping: try await session.queryNotifications(NotificationHistoryQuery(statusCode: .succeeded, limit: 3)))
+            recentNotifications = await RemoteResult(wrapping: try await session.queryNotifications(NotificationHistoryQuery(statusCode: .succeeded, limit: 3)))
         }
         
         Task {
-            if case .some(.success) = recentSurveyAnswers { return }
+            if case .success = recentSurveyAnswers { return }
             /// EXERCISE: An example of using the MyDataHelpsKit paged-result pattern to load and displaying a single batch of recent data, rather than an entire infinite-scrolling list. Try customizing the NotificationHistoryQuery here.
-            recentSurveyAnswers = await Result(wrapping: try await session.querySurveyAnswers(SurveyAnswersQuery(limit: 5)))
+            recentSurveyAnswers = await RemoteResult(wrapping: try await session.querySurveyAnswers(SurveyAnswersQuery(limit: 5)))
         }
     }
 }

@@ -16,7 +16,7 @@ extension ExternalAccount {
 
 @MainActor class ExternalAccountsListViewModel: ObservableObject {
     let session: ParticipantSessionType
-    @Published var accounts: Result<[ExternalAccount], MyDataHelpsError>?
+    @Published var accounts: RemoteResult<[ExternalAccount]>
     @Published var accountChangeResult: String? {
         didSet {
             Task {
@@ -29,14 +29,14 @@ extension ExternalAccount {
     
     init(session: ParticipantSessionType) {
         self.session = session
-        self.accounts = nil
+        self.accounts = .loading
         self.accountChangeResult = nil
         self.reload()
     }
     
     #if DEBUG
     // For SwiftUI previews.
-    init(session: ParticipantSessionType, result: Result<[ExternalAccount], MyDataHelpsError>, accountChangeResult: String?) {
+    init(session: ParticipantSessionType, result: RemoteResult<[ExternalAccount]>, accountChangeResult: String?) {
         self.session = session
         self.accounts = result
         self.accountChangeResult = accountChangeResult
@@ -45,7 +45,7 @@ extension ExternalAccount {
     
     func reload() {
         Task {
-            accounts = await Result(wrapping: try await session.listExternalAccounts())
+            accounts = await RemoteResult(wrapping: try await session.listExternalAccounts())
         }
     }
     

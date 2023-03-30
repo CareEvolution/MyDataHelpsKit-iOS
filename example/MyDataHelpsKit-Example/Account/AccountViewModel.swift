@@ -21,8 +21,8 @@ enum AccountNavigationPath: Codable, Hashable {
     
     let session: ParticipantSessionType
     @Published var path = NavigationPath()
-    @Published var participantInfo: Result<ParticipantInfo, MyDataHelpsError>? = nil
-    @Published var projectModel: Result<ProjectAndDataCollectionModel, MyDataHelpsError>? = nil
+    @Published var participantInfo: RemoteResult<ParticipantInfo> = .loading
+    @Published var projectModel: RemoteResult<ProjectAndDataCollectionModel> = .loading
     @Published var ehrConnectionsEnabled: Bool? = nil
     
     init(session: ParticipantSessionType) {
@@ -31,12 +31,12 @@ enum AccountNavigationPath: Codable, Hashable {
     
     func loadData() {
         Task {
-            if case .some(.success) = participantInfo { return }
-            participantInfo = await Result(wrapping: try await session.getParticipantInfo())
+            if case .success = participantInfo { return }
+            participantInfo = await RemoteResult(wrapping: try await session.getParticipantInfo())
         }
         
         Task {
-            if case .some(.success) = projectModel { return }
+            if case .success = projectModel { return }
             do {
                 let info = try await session.getProjectInfo()
                 let dataCollectionSettings = try await session.getDataCollectionSettings()

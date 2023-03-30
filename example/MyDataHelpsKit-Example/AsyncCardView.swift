@@ -9,17 +9,17 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct AsyncCardView<Model, Content>: View where Content: View {
-    let result: Result<Model, MyDataHelpsError>?
+    let result: RemoteResult<Model>
     let failureTitle: String
     @ViewBuilder var content: (Model) -> Content
     
     var body: some View {
         switch result {
-        case .none:
+        case .loading:
             ProgressView()
-        case let .some(.success(model)):
+        case let .success(model):
             content(model)
-        case let .some(.failure(error)):
+        case let .failure(error):
             ErrorView(model: .init(title: failureTitle, error: error))
         }
     }
@@ -40,14 +40,14 @@ struct AsyncCardView_Previews: PreviewProvider {
                 }
             }
             Section {
-                AsyncCardView(result: makeResult(nil), failureTitle: "Failure") { text in
+                AsyncCardView(result: makeResult(.loading), failureTitle: "Failure") { text in
                     Text(text)
                 }
             }
         }
     }
     
-    static func makeResult(_ value: Result<String, MyDataHelpsError>?) -> Result<String, MyDataHelpsError>? {
-        value
+    private static func makeResult(_ result: RemoteResult<String>) -> RemoteResult<String> {
+        result
     }
 }

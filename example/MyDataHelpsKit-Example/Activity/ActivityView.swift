@@ -45,7 +45,7 @@ struct ActivityView: View {
                 } header: {
                     Text("Recent Survey Answers")
                 } footer: {
-                    if case let .some(.success(page)) = model.recentSurveyAnswers,
+                    if case let .success(page) = model.recentSurveyAnswers,
                        !page.surveyAnswers.isEmpty {
                         Text("Thanks for participating!")
                     } else {

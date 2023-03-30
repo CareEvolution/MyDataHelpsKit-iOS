@@ -9,7 +9,7 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct SensorDataSectionView: View {
-    let allQueryableDataTypes: Result<[QueryableDeviceDataType], MyDataHelpsError>?
+    let allQueryableDataTypes: RemoteResult<[QueryableDeviceDataType]>
     
     var body: some View {
         Section {
@@ -44,7 +44,7 @@ struct SensorDataSectionView_Previews: PreviewProvider {
             List {
                 SensorDataSectionView(allQueryableDataTypes: .success(Array(ProjectInfoView_Previews.projectDataCollectionSettings.queryableDeviceDataTypes)))
                 SensorDataSectionView(allQueryableDataTypes: .success([]))
-                SensorDataSectionView(allQueryableDataTypes: nil)
+                SensorDataSectionView(allQueryableDataTypes: .loading)
                 SensorDataSectionView(allQueryableDataTypes: .failure(.timedOut(nil)))
             }
         }
