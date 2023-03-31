@@ -28,6 +28,8 @@ struct SurveyAnswerView: View {
         let value: String
         let date: Date?
         let surveyDisplayName: String
+        
+        // TODO: Binding to a parent view instead.
         @Published var deletionState = DeletionState.notDeleted
         
         init(session: ParticipantSessionType, id: SurveyAnswer.ID, surveyResultID: SurveyResult.ID, value: String, date: Date?, surveyDisplayName: String, deletionState: DeletionState = .notDeleted) {
@@ -56,6 +58,7 @@ struct SurveyAnswerView: View {
                 do {
                     try await session.deleteSurveyResult(surveyResultID)
                     deletionState = .deleted
+                    NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
                 } catch {
                     deletionState = .failure(MyDataHelpsError(error))
                 }

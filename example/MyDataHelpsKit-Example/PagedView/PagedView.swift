@@ -27,20 +27,24 @@ struct PagedListView<SourceType, Content>: View where SourceType: PagedModelSour
                 case let .failure(error):
                     PagedFailureContentView(error: error)
                 case .normal:
-                    PagedContentItemsView(model: model, inlineProgressView: false, rowContent: rowContent)
+                    PagedContentItemsView(model: model, inlineProgressViewVisibility: .never, rowContent: rowContent)
                 }
             } footer: {
                 PagedLoadingView(model: model)
                     .padding(.vertical)
             }
         }
+        .refreshable {
+            await model.reset()
+        }
     }
 }
 
 /// Renders the items of a list view using a `PagedViewModel`. Use when the model's state is `.normal`. Place this inside a List or Section.
 struct PagedContentItemsView<SourceType, Content>: View where SourceType: PagedModelSource, Content: View {
+    
     @ObservedObject var model: PagedViewModel<SourceType>
-    let inlineProgressView: Bool
+    let inlineProgressViewVisibility: PagedLoadingViewVisibility
     @ViewBuilder var rowContent: (SourceType.PageModel.ItemType) -> Content
     
     var body: some View {
@@ -49,23 +53,39 @@ struct PagedContentItemsView<SourceType, Content>: View where SourceType: PagedM
                 .onTapGesture { model.selectedItem = item }
                 .onAppear(perform: {
                     if model.isLastItem(item) {
-                        model.loadNextPage()
+                        Task {
+                            await model.loadNextPage()
+                        }
                     }
                 })
         }
-        if inlineProgressView {
-            PagedLoadingView(model: model)
-        }
+        PagedLoadingView(model: model, visibility: inlineProgressViewVisibility)
     }
+}
+
+enum PagedLoadingViewVisibility {
+    case allFetches
+    case initialFetch
+    case never
 }
 
 /// A loading indicator for a paged view that displays itself only when appropriate.
 struct PagedLoadingView<SourceType>: View where SourceType: PagedModelSource {
+    
     @ObservedObject var model: PagedViewModel<SourceType>
+    let visibility: PagedLoadingViewVisibility
+    
+    init(model: PagedViewModel<SourceType>, visibility: PagedLoadingViewVisibility = .allFetches) {
+        self.model = model
+        self.visibility = visibility
+    }
     
     var body: some View {
-        switch model.state {
-        case .normal(loadMore: true):
+        switch (visibility, model.state) {
+        case (.allFetches, .normal(loadMore: true)):
+            ProgressView()
+        case (.initialFetch, .normal(loadMore: true))
+            where model.items.isEmpty:
             ProgressView()
         default:
             EmptyView()
@@ -111,7 +131,7 @@ struct PagedView_Previews: PreviewProvider {
                     PagedFailureContentView(error: .unknown(nil))
                 }
                 Section("Items") {
-                    PagedContentItemsView(model: .init(source: PreviewSource(empty: false)), inlineProgressView: true) { item in
+                    PagedContentItemsView(model: .init(source: PreviewSource(empty: false)), inlineProgressViewVisibility: .allFetches) { item in
                         Self.viewProvider(item)
                     }
                 }

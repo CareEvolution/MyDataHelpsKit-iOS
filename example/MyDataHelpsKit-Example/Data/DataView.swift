@@ -30,7 +30,16 @@ struct DataView: View {
                 
                 SensorDataSectionView(allDataCategories: model.allDataCategories)
             }
-            .listStyle(.sidebar)
+            .listStyle(.sidebar) // Enables collapsible sections
+            .refreshable {
+                await model.refresh()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: ParticipantSession.participantDidUpdateNotification)) { _ in
+                Task {
+                    await model.refresh()
+                }
+            }
+            .onAppear { model.loadData() }
             .navigationTitle(Self.tabTitle)
             .navigationDestination(for: DataNavigationPath.self) { destination in
                 switch destination {
@@ -46,7 +55,6 @@ struct DataView: View {
                         .navigationBarTitleDisplayMode(.inline)
                 }
             }
-            .onAppear { model.loadData() }
         }
     }
     

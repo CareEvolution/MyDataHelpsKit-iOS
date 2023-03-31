@@ -31,7 +31,9 @@ extension ExternalAccount {
         self.session = session
         self.accounts = .loading
         self.accountChangeResult = nil
-        self.reload()
+        Task {
+            await reload()
+        }
     }
     
     #if DEBUG
@@ -43,10 +45,8 @@ extension ExternalAccount {
     }
     #endif
     
-    func reload() {
-        Task {
-            accounts = await RemoteResult(wrapping: try await session.listExternalAccounts())
-        }
+    func reload() async {
+        accounts = await RemoteResult(wrapping: try await session.listExternalAccounts())
     }
     
     func refresh(account: ExternalAccount) {
@@ -58,7 +58,7 @@ extension ExternalAccount {
             } catch {
                 accountChangeResult = error.localizedDescription
             }
-            reload()
+            NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
         }
     }
     
@@ -70,7 +70,7 @@ extension ExternalAccount {
             } catch {
                 accountChangeResult = error.localizedDescription
             }
-            reload()
+            NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
         }
     }
 }
@@ -99,10 +99,19 @@ struct ExternalAccountsListView: View {
                 }
             } header: {
                 if let accountChangeResult = model.accountChangeResult {
+                    // TODO: show pill shaped banner instead
                     Text(accountChangeResult)
                 } else {
                     EmptyView()
                 }
+            }
+        }
+        .refreshable {
+            await model.reload()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: ParticipantSession.participantDidUpdateNotification)) { _ in
+            Task {
+                await model.reload()
             }
         }
         .toolbar {

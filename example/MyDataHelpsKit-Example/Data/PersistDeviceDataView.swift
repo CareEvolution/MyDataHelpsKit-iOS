@@ -128,6 +128,7 @@ struct PersistDeviceDataView: View {
             do {
                 try await model.session.persistDeviceData([persistModel])
                 result = .persisted
+                NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
             } catch {
                 result = .failure(MyDataHelpsError(error))
             }

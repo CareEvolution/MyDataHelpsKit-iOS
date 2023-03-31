@@ -10,36 +10,44 @@ import MyDataHelpsKit
 
 struct TokenView: View {
     @EnvironmentObject var sessionModel: SessionModel
-    @Environment(\.openURL) private var urlOpener
+    
+    private let documentationURL = URL(string: "https://developer.mydatahelps.org/embeddables/participant_tokens.html")!
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("MyDataHelpsKit v\(MyDataHelpsClient.SDKVersion)")
-                .font(.headline)
+        VStack {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    Text("MyDataHelpsKit v\(MyDataHelpsClient.SDKVersion)")
+                        .font(.headline)
+                        .padding(.bottom)
+                    Text("To get started with this example app, you need a participant access token. Paste a participant access token below to initialize the app with a ParticipantSession and access views that demonstrate the functionality provided by MyDataHelpsKit.\n\nSee MyDataHelpsKit documentation for more information.")
+                        .font(.subheadline)
+                    Link(destination: documentationURL) {
+                        Label("Participant Token Documentation", systemImage: "safari")
+                    }
+                    .font(.subheadline)
+                    .padding(.top)
+                }
                 .padding(.bottom)
-            Text("To get started with this example app, you need a participant access token. Paste a participant access token below to initialize the app with a ParticipantSession and access views that demonstrate the functionality provided by MyDataHelpsKit.\n\nSee MyDataHelpsKit documentation for more information.")
-                .font(.subheadline)
-            Button(action: openDocumentation) {
-                Label("Participant Token Documentation", systemImage: "safari")
-            }.padding(.top)
-            Spacer()
-            Text("Participant access token:")
-                .font(.headline)
-            HStack {
-                TextField("Token", text: $sessionModel.token)
-                Button(action: useToken, label: {
-                    Image(systemName: "person.crop.circle.badge.checkmark")
-                })
             }
-        }.padding()
+            
+            Spacer()
+            
+            GroupBox("Participant access token:") {
+                HStack {
+                    TextField("Token", text: $sessionModel.token)
+                        .textFieldStyle(.roundedBorder)
+                    Button(action: useToken, label: {
+                        Image(systemName: "person.crop.circle.badge.checkmark")
+                    })
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+        }.padding(.horizontal)
     }
     
     private func useToken() {
         sessionModel.authenticate()
-    }
-    
-    private func openDocumentation() {
-        urlOpener(URL(string: "https://developer.mydatahelps.org/embeddables/participant_tokens.html")!)
     }
 }
 

@@ -8,7 +8,12 @@
 import Foundation
 import MyDataHelpsKit
 
-/// Protocol wrapping MyDataHelpsKit.ParticipantSession, to allow substituting stub implementations for SwiftUI Previews.
+extension ParticipantSession {
+    /// Used in the example app to trigger reloading views after making changes to participant data.
+    static let participantDidUpdateNotification = Notification.Name("com.example.participantDidUpdateNotification")
+}
+
+/// Protocol wrapping `MyDataHelpsKit.ParticipantSession`, to allow substituting stub implementations for SwiftUI Previews.
 protocol ParticipantSessionType {
     func getParticipantInfo() async throws -> ParticipantInfo
     func getProjectInfo() async throws -> ProjectInfo
@@ -31,7 +36,7 @@ extension ParticipantSession: ParticipantSessionType {
 
 #if DEBUG
 
-/// Stub implementation of ParticipantSession/ParticipantSessionType, for SwiftUI previews.
+/// Stub implementation of `ParticipantSession`, for SwiftUI previews.
 class ParticipantSessionPreview: ParticipantSessionType {
     private let empty: Bool
     

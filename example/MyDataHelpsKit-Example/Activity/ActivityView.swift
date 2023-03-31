@@ -53,6 +53,16 @@ struct ActivityView: View {
                     }
                 }
             }
+            .listStyle(.sidebar) // Enables collapsible sections
+            .refreshable {
+                await model.refresh()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: ParticipantSession.participantDidUpdateNotification)) { _ in
+                Task {
+                    await model.refresh()
+                }
+            }
+            .onAppear { model.loadData() }
             .navigationTitle(Self.tabTitle)
             .navigationDestination(for: ActivityNavigationPath.self) { destination in
                 switch destination {
@@ -71,7 +81,6 @@ struct ActivityView: View {
                     .navigationTitle("All Survey Answers")
                 }
             }
-            .onAppear { model.loadData() }
         }
     }
 }

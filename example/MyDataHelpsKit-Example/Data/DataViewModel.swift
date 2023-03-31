@@ -69,6 +69,10 @@ enum DataNavigationPath: Codable {
             }
         }
     }
+    
+    func refresh() async {
+        await projectDataModel.reset()
+    }
 }
 
 // MARK: Protocol conformances required for use in a NavigationStack's NavigationPath.

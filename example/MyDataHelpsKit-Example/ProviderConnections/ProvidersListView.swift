@@ -50,12 +50,15 @@ struct ExternalAccountProviderPagedView: View {
                url.path == newConnection?.finalRedirectURL.path {
                 newConnection = nil
                 model.selectedItem = nil
+                NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
             }
         }
     }
     
     private func applySearchText() {
-        model.reset(newSource: model.source.withSearchText(searchText))
+        Task {
+            await model.reset(newSource: model.source.withSearchText(searchText))
+        }
     }
     
     private func beginConnection(_ provider: ExternalAccountProvider?) {

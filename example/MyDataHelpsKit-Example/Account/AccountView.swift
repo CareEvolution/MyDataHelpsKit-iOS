@@ -42,13 +42,21 @@ struct AccountView: View {
                     }
                 }
             }
+            .refreshable {
+                await model.refresh()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: ParticipantSession.participantDidUpdateNotification)) { _ in
+                Task {
+                    await model.refresh()
+                }
+            }
+            .onAppear { model.loadData() }
             .navigationTitle(Self.tabTitle)
             .toolbar {
                 ToolbarItemGroup(placement: .destructiveAction) {
                     Button("Log Out", role: .destructive, action: logOut)
                 }
             }
-            .onAppear { model.loadData() }
             .navigationDestination(for: AccountNavigationPath.self) { destination in
                 switch destination {
                 case .externalAccounts:

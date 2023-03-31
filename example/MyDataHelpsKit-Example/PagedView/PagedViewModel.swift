@@ -43,10 +43,12 @@ protocol PagedModelSource {
         self.state = .normal(loadMore: true)
         self.items = []
         self.loading = false
-        loadNextPage()
+        Task {
+            await loadNextPage()
+        }
     }
     
-    func reset(newSource: SourceType? = nil) {
+    func reset(newSource: SourceType? = nil) async {
         // TODO: wait if loading == true
         lastPage = nil
         state = .normal(loadMore: true)
@@ -55,22 +57,20 @@ protocol PagedModelSource {
         if let newSource {
             source = newSource
         }
-        loadNextPage()
+        await loadNextPage()
     }
     
-    func loadNextPage() {
+    func loadNextPage() async {
         guard case .normal(true) = state, !loading else { return }
         
         loading = true
-        Task {
-            do {
-                let nextPage = try await source.loadPage(after: lastPage)
-                loaded(nextPage)
-            } catch {
-                state = .failure(MyDataHelpsError(error))
-            }
-            loading = false
+        do {
+            let nextPage = try await source.loadPage(after: lastPage)
+            loaded(nextPage)
+        } catch {
+            state = .failure(MyDataHelpsError(error))
         }
+        loading = false
     }
     
     func isLastItem(_ item: ItemType) -> Bool {

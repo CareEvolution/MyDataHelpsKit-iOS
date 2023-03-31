@@ -39,4 +39,8 @@ struct PersistentSurvey: Identifiable {
             PersistentSurvey(surveyName: "EMA2", surveyDisplayName: "Daily Medication Survey")
         ]
     }
+    
+    func refresh() async {
+        await tasksModel.reset()
+    }
 }

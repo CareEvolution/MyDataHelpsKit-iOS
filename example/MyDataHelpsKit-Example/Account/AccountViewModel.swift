@@ -31,21 +31,38 @@ enum AccountNavigationPath: Codable, Hashable {
     
     func loadData() {
         Task {
-            if case .success = participantInfo { return }
-            participantInfo = await RemoteResult(wrapping: try await session.getParticipantInfo())
+            await loadParticipantInfo(force: false)
         }
         
         Task {
-            if case .success = projectModel { return }
-            do {
-                let info = try await session.getProjectInfo()
-                let dataCollectionSettings = try await session.getDataCollectionSettings()
-                projectModel = .success(.init(info: info, dataCollectionSettings: dataCollectionSettings))
-                ehrConnectionsEnabled = dataCollectionSettings.ehrEnabled
-            } catch {
-                projectModel = .failure(MyDataHelpsError(error))
-                ehrConnectionsEnabled = nil
-            }
+            await loadProjectModel(force: false)
+        }
+    }
+    
+    func refresh() async {
+        await loadParticipantInfo(force: true)
+        await loadProjectModel(force: true)
+    }
+    
+    private func loadParticipantInfo(force: Bool) async {
+        if case .success = participantInfo {
+            guard force else { return }
+        }
+        participantInfo = await RemoteResult(wrapping: try await session.getParticipantInfo())
+    }
+    
+    private func loadProjectModel(force: Bool) async {
+        if case .success = projectModel {
+            guard force else { return }
+        }
+        do {
+            let info = try await session.getProjectInfo()
+            let dataCollectionSettings = try await session.getDataCollectionSettings()
+            projectModel = .success(.init(info: info, dataCollectionSettings: dataCollectionSettings))
+            ehrConnectionsEnabled = dataCollectionSettings.ehrEnabled
+        } catch {
+            projectModel = .failure(MyDataHelpsError(error))
+            ehrConnectionsEnabled = nil
         }
     }
 }

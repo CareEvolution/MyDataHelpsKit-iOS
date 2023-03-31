@@ -26,15 +26,32 @@ enum ActivityNavigationPath: Codable, Hashable {
     
     func loadData() {
         Task {
-            if case .success = recentNotifications { return }
-            /// EXERCISE: An example of using the MyDataHelpsKit paged-result pattern to load and display a single batch of recent data, rather than an entire infinite-scrolling list. Try customizing the NotificationHistoryQuery here.
-            recentNotifications = await RemoteResult(wrapping: try await session.queryNotifications(NotificationHistoryQuery(statusCode: .succeeded, limit: 3)))
+            await loadRecentNotifications(force: false)
         }
         
         Task {
-            if case .success = recentSurveyAnswers { return }
-            /// EXERCISE: An example of using the MyDataHelpsKit paged-result pattern to load and displaying a single batch of recent data, rather than an entire infinite-scrolling list. Try customizing the NotificationHistoryQuery here.
-            recentSurveyAnswers = await RemoteResult(wrapping: try await session.querySurveyAnswers(SurveyAnswersQuery(limit: 5)))
+            await loadRecentSurveyAnswers(force: false)
         }
+    }
+    
+    func refresh() async {
+        await loadRecentNotifications(force: true)
+        await loadRecentSurveyAnswers(force: true)
+    }
+    
+    private func loadRecentNotifications(force: Bool) async {
+        if case .success = recentNotifications {
+            guard force else { return }
+        }
+        /// EXERCISE: An example of using the MyDataHelpsKit paged-result pattern to load and display a single batch of recent data, rather than an entire infinite-scrolling list. Try customizing the NotificationHistoryQuery here.
+        recentNotifications = await RemoteResult(wrapping: try await session.queryNotifications(NotificationHistoryQuery(statusCode: .succeeded, limit: 3)))
+    }
+    
+    private func loadRecentSurveyAnswers(force: Bool) async {
+        if case .success = recentSurveyAnswers {
+            guard force else { return }
+        }
+        /// EXERCISE: An example of using the MyDataHelpsKit paged-result pattern to load and displaying a single batch of recent data, rather than an entire infinite-scrolling list. Try customizing the NotificationHistoryQuery here.
+        recentSurveyAnswers = await RemoteResult(wrapping: try await session.querySurveyAnswers(SurveyAnswersQuery(limit: 5)))
     }
 }

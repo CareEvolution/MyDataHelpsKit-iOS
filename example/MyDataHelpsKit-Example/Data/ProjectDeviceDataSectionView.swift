@@ -19,7 +19,7 @@ struct ProjectDeviceDataSectionView: View {
             case let .failure(error):
                 PagedFailureContentView(error: error)
             case .normal:
-                PagedContentItemsView(model: projectDataModel, inlineProgressView: true) { item in
+                PagedContentItemsView(model: projectDataModel, inlineProgressViewVisibility: .initialFetch) { item in
                     DeviceDataPointView(model: item)
                 }
                 NavigationLink(value: DataNavigationPath.browseDeviceData(DeviceDataBrowseCategory(namespace: .project, type: nil))) {
