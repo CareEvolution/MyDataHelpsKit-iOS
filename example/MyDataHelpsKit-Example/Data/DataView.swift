@@ -25,6 +25,7 @@ struct DataView: View {
                         }
                     }
                 }
+                .listRowSeparator(.hidden)
                 
                 ProjectDeviceDataSectionView(projectDataModel: model.projectDataModel)
                 

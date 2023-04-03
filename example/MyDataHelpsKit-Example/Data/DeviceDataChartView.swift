@@ -19,16 +19,18 @@ struct DeviceDataChartModel {
     let title: String
     let xAxisLabel: String
     let yAxisLabel: String
+    let yAxisIncludesZero: Bool
     let accentColor: Color
     let allDataPath: DataNavigationPath
     let dataPoints: [Point]
 }
 
 extension DeviceDataChartModel {
-    init(title: String, xAxisLabel: String, yAxisLabel: String, accentColor: Color, allDataPath: DataNavigationPath, deviceDataResult: DeviceDataResultPage) {
+    init(title: String, xAxisLabel: String, yAxisLabel: String, yAxisIncludesZero: Bool, accentColor: Color, allDataPath: DataNavigationPath, deviceDataResult: DeviceDataResultPage) {
         self.title = title
         self.xAxisLabel = xAxisLabel
         self.yAxisLabel = xAxisLabel
+        self.yAxisIncludesZero = yAxisIncludesZero
         self.accentColor = accentColor
         self.allDataPath = allDataPath
         self.dataPoints = deviceDataResult.deviceDataPoints.enumerated().compactMap { index, dataPoint in
@@ -49,11 +51,13 @@ struct DeviceDataChartView: View {
             .font(.headline)
             .padding(.bottom, 4)
         Chart(model.dataPoints, id: \.index) {
-            BarMark(
+            LineMark(
                 x: .value(model.xAxisLabel, $0.date, unit: .day),
                 y: .value(model.yAxisLabel, $0.value)
             )
+            .symbol(.circle)
         }
+        .chartYScale(domain: .automatic(includesZero: model.yAxisIncludesZero))
         .accentColor(model.accentColor)
         .padding(8)
         .chartBackground { _ in
@@ -93,6 +97,7 @@ struct DeviceDataChartSectionView_Previews: PreviewProvider {
             title: "Resting Heart Rate",
             xAxisLabel: "Date",
             yAxisLabel: "bpm",
+            yAxisIncludesZero: false,
             accentColor: .red,
             allDataPath: .browseDeviceData(DeviceDataBrowseCategory(namespace: .appleHealth, type: "RestingHeartRate")),
             dataPoints: heartRates.enumerated().map { index, bpm in

@@ -48,20 +48,23 @@ struct ParticipantInfoView: View {
                 Label(phone, systemImage: "phone")
             }
             if let enrollmentDate = model.enrollmentDate {
-                Label("Enrolled \(enrollmentDate.formatted())", systemImage: "person.crop.circle.badge.checkmark")
+                Label("Enrolled \(enrollmentDate.formatted(date: .numeric, time: .omitted))", systemImage: "person.crop.circle.badge.checkmark")
             }
         }
+        .labelStyle(.titleAndIcon)
         .font(.caption)
     }
 }
 
 struct ParticipantInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        ParticipantInfoView(model: .init(
-            name: "FirstName LastName",
-            email: nil,
-            phone: "555-555-1212",
-            enrollmentDate: Date().addingTimeInterval(-86400),
-            isUnsubscribedFromEmails: true))
+        List {
+            ParticipantInfoView(model: .init(
+                name: "FirstName LastName",
+                email: nil,
+                phone: "555-555-1212",
+                enrollmentDate: Date().addingTimeInterval(-86400),
+                isUnsubscribedFromEmails: true))
+        }
     }
 }

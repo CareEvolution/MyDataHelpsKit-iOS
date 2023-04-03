@@ -99,6 +99,8 @@ struct ProjectInfoView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        ProjectInfoView(project: project, dataCollectionSettings: projectDataCollectionSettings)
+        List {
+            ProjectInfoView(project: project, dataCollectionSettings: projectDataCollectionSettings)
+        }
     }
 }

@@ -49,6 +49,7 @@ enum DataNavigationPath: Codable {
                     title: "Resting Heart Rate",
                     xAxisLabel: "Date",
                     yAxisLabel: "bpm",
+                    yAxisIncludesZero: false,
                     accentColor: .red,
                     allDataPath: .browseDeviceData(DeviceDataBrowseCategory(namespace: namespace, type: dataType)),
                     deviceDataResult: result))
