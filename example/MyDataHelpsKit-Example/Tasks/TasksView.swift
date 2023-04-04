@@ -17,33 +17,9 @@ struct TasksView: View {
     var body: some View {
         NavigationStack(path: $model.path) {
             List {
-                Section {
-                    ForEach(model.persistentSurveys) { survey in
-                        Button(survey.surveyDisplayName) {
-                            launchSurvey(surveyName: survey.surveyName)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    if model.persistentSurveys.isEmpty {
-                        Text("EXERCISE: populate var persistentSurveys")
-                    }
-                    NavigationLink("Launch Another Survey", value: TasksNavigationPath.surveyLauncher)
-                } footer: {
-                    Text("These surveys are presented by name, with no assigned task necessary.")
-                }
+                PersistentSurveysSectionView(session: model.session, persistentSurveys: model.persistentSurveys, presentedSurvey: $presentedSurvey)
                 
-                Section("Incomplete Tasks") {
-                    switch model.tasksModel.state {
-                    case .empty:
-                        PagedEmptyContentView(text: "No assigned tasks")
-                    case let .failure(error):
-                        PagedFailureContentView(error: error)
-                    case .normal:
-                        PagedContentItemsView(model: model.tasksModel, inlineProgressViewVisibility: .allFetches) { task in
-                            SurveyTaskView(model: task, presentedSurvey: $presentedSurvey)
-                        }
-                    }
-                }
+                AssignedTasksSectionView(tasksModel: model.tasksModel, presentedSurvey: $presentedSurvey)
                 
                 Section("Completed Tasks") {
                     NavigationLink("View Completed Tasks", value: TasksNavigationPath.completedTasks)
@@ -82,11 +58,6 @@ struct TasksView: View {
                 }
             }
         }
-    }
-    
-    private func launchSurvey(surveyName: String) {
-        guard let session = model.session as? ParticipantSession else { return }
-        presentedSurvey = session.surveyPresentation(surveyName: surveyName)
     }
 }
 

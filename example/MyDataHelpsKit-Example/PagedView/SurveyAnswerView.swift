@@ -25,16 +25,20 @@ struct SurveyAnswerView: View {
         let session: ParticipantSessionType
         let id: SurveyAnswer.ID
         let surveyResultID: SurveyResult.ID
+        let stepIdentifier: String
+        let resultIdentifier: String
         let value: String
         let date: Date?
         let surveyDisplayName: String
         
         @Published var deletionState = DeletionState.notDeleted
         
-        init(session: ParticipantSessionType, id: SurveyAnswer.ID, surveyResultID: SurveyResult.ID, value: String, date: Date?, surveyDisplayName: String, deletionState: DeletionState = .notDeleted) {
+        init(session: ParticipantSessionType, id: SurveyAnswer.ID, surveyResultID: SurveyResult.ID, stepIdentifier: String, resultIdentifier: String, value: String, date: Date?, surveyDisplayName: String, deletionState: DeletionState = .notDeleted) {
             self.session = session
             self.id = id
             self.surveyResultID = surveyResultID
+            self.stepIdentifier = stepIdentifier
+            self.resultIdentifier = resultIdentifier
             self.value = value
             self.date = date
             self.surveyDisplayName = surveyDisplayName
@@ -45,6 +49,8 @@ struct SurveyAnswerView: View {
             self.session = session
             self.id = answer.id
             self.surveyResultID = answer.surveyResultID
+            self.stepIdentifier = answer.stepIdentifier
+            self.resultIdentifier = answer.resultIdentifier
             self.value = answer.answers.joined(separator: ", ")
             self.date = answer.date
             self.surveyDisplayName = answer.surveyDisplayName
@@ -74,11 +80,11 @@ struct SurveyAnswerView: View {
             VStack(alignment: .leading) {
                 /// EXERCISE: Add or modify views here to see the values of other `SurveyAnswer` properties.
                 Text(model.value)
-                if showSurveyDisplayName {
-                    Text(model.surveyDisplayName)
-                        .font(.footnote)
-                        .foregroundColor(Color.gray)
-                }
+                    .lineLimit(nil)
+                Text(context(surveyDisplayName: model.surveyDisplayName, stepIdentifier: model.stepIdentifier, resultIdentifier: model.resultIdentifier))
+                    .font(.footnote)
+                    .foregroundColor(Color.gray)
+                    .lineLimit(nil)
             }
             Spacer()
             switch model.deletionState {
@@ -93,6 +99,21 @@ struct SurveyAnswerView: View {
                     .foregroundColor(Color(.systemRed))
             }
         }.foregroundColor(deletionStateColor)
+    }
+    
+    private func context(surveyDisplayName: String, stepIdentifier: String, resultIdentifier: String) -> String {
+        var tokens: [String] = []
+        if showSurveyDisplayName {
+            tokens.append(surveyDisplayName)
+        }
+        
+        tokens.append(stepIdentifier)
+        
+        // Only some steps, such as form steps, have a resultIdentifier != stepIdentifier, to identify multiple results on a single step.
+        if resultIdentifier != stepIdentifier {
+            tokens.append(resultIdentifier)
+        }
+        return tokens.joined(separator: " > ")
     }
     
     var deletionStateColor: Color? {
@@ -117,9 +138,9 @@ struct SurveyAnswerView: View {
 struct SurveyAnswerView_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .notDeleted), showSurveyDisplayName: true)
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .deleted), showSurveyDisplayName: true)
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .failure(.unknown(nil))), showSurveyDisplayName: false)
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), stepIdentifier: "Step1", resultIdentifier: "Step1", value: "Answer Value 1", date: Date(), surveyDisplayName: "Survey Name", deletionState: .notDeleted), showSurveyDisplayName: true)
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), stepIdentifier: "Step2", resultIdentifier: "FormItem1", value: "Answer Value 2", date: Date(), surveyDisplayName: "Survey Name", deletionState: .deleted), showSurveyDisplayName: true)
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), stepIdentifier: "Step2", resultIdentifier: "FormItem2", value: "Answer Value 3", date: Date(), surveyDisplayName: "Survey Name", deletionState: .failure(.unknown(nil))), showSurveyDisplayName: false)
         }
         .banner()
     }

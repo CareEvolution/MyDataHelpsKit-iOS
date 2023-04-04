@@ -14,6 +14,8 @@
 		AC3C8BA929D5EA600014C545 /* DeviceDataBrowseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3C8BA829D5EA600014C545 /* DeviceDataBrowseCategory.swift */; };
 		AC3C8BAD29DC812E0014C545 /* MessageBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3C8BAC29DC812E0014C545 /* MessageBannerView.swift */; };
 		AC3C8BAF29DC8D9F0014C545 /* ParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3C8BAE29DC8D9F0014C545 /* ParticipantModel.swift */; };
+		AC3C8BB129DCB3660014C545 /* AssignedTasksSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3C8BB029DCB3660014C545 /* AssignedTasksSectionView.swift */; };
+		AC3C8BB329DCB3E90014C545 /* PersistentSurveysSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3C8BB229DCB3E90014C545 /* PersistentSurveysSectionView.swift */; };
 		AC44F53E261375EE0065075C /* MyDataHelpsKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */; };
 		AC44F561261610A10065075C /* PersistDeviceDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44F560261610A10065075C /* PersistDeviceDataView.swift */; };
 		AC9DC9E2260E374E00C5D9E4 /* MyDataHelpsKit_ExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9DC9E1260E374E00C5D9E4 /* MyDataHelpsKit_ExampleApp.swift */; };
@@ -64,6 +66,8 @@
 		AC3C8BA829D5EA600014C545 /* DeviceDataBrowseCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDataBrowseCategory.swift; sourceTree = "<group>"; };
 		AC3C8BAC29DC812E0014C545 /* MessageBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBannerView.swift; sourceTree = "<group>"; };
 		AC3C8BAE29DC8D9F0014C545 /* ParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantModel.swift; sourceTree = "<group>"; };
+		AC3C8BB029DCB3660014C545 /* AssignedTasksSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignedTasksSectionView.swift; sourceTree = "<group>"; };
+		AC3C8BB229DCB3E90014C545 /* PersistentSurveysSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentSurveysSectionView.swift; sourceTree = "<group>"; };
 		AC44F53D261375EE0065075C /* MyDataHelpsKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MyDataHelpsKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC44F54126137CBE0065075C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AC44F560261610A10065075C /* PersistDeviceDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistDeviceDataView.swift; sourceTree = "<group>"; };
@@ -235,6 +239,8 @@
 		ACD1686729C3B502002709EE /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
+				AC3C8BB029DCB3660014C545 /* AssignedTasksSectionView.swift */,
+				AC3C8BB229DCB3E90014C545 /* PersistentSurveysSectionView.swift */,
 				ACD1686829C3B510002709EE /* TasksView.swift */,
 				ACD1687829CCE76C002709EE /* TasksViewModel.swift */,
 			);
@@ -348,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACD1687929CCE76C002709EE /* TasksViewModel.swift in Sources */,
+				AC3C8BB129DCB3660014C545 /* AssignedTasksSectionView.swift in Sources */,
 				AC3C8BA929D5EA600014C545 /* DeviceDataBrowseCategory.swift in Sources */,
 				ACCD97F0260E5A8600FF7438 /* PagedViewModel.swift in Sources */,
 				ACD1688029D351E1002709EE /* AsyncCardView.swift in Sources */,
@@ -385,6 +392,7 @@
 				AC9DC9F7260E37C700C5D9E4 /* TokenView.swift in Sources */,
 				ACD1689129D3C646002709EE /* DeviceDataChartView.swift in Sources */,
 				ACCD97ED260E58AF00FF7438 /* DeviceDataPointView.swift in Sources */,
+				AC3C8BB329DCB3E90014C545 /* PersistentSurveysSectionView.swift in Sources */,
 				AC3C8BAF29DC8D9F0014C545 /* ParticipantModel.swift in Sources */,
 				ACD1686429BF74D4002709EE /* SurveyLauncherView.swift in Sources */,
 				ACCD97FE260E667E00FF7438 /* SurveyAnswersSource.swift in Sources */,
