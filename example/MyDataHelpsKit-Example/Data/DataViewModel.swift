@@ -15,14 +15,6 @@ enum DataNavigationPath: Codable {
 }
 
 @MainActor class DataViewModel: ObservableObject {
-    static func browseDeviceDataQuery(namespace: DeviceDataNamespace, type: String?) -> DeviceDataQuery {
-        if let type {
-            return DeviceDataQuery(namespace: namespace, types: Set([type]))
-        } else {
-            return DeviceDataQuery(namespace: namespace)
-        }
-    }
-    
     let session: ParticipantSessionType
     
     @Published var path = NavigationPath()
@@ -40,7 +32,7 @@ enum DataNavigationPath: Codable {
     func loadData() {
         Task {
             if case .success = chartModel { return }
-            /// EXERCISE: customize the query and chartModel to explore using the SDK to visualize device data. To find `DeviceDataNamespace` + `type` values available for querying in your project, use the `getDataCollectionSettings` API or browse the `SensorDataSectionView`.
+            /// EXERCISE: customize the query and chartModel to explore using the SDK to visualize device data. To find `DeviceDataNamespace` + `type` values available for querying in your project, use the `getDataCollectionSettings` API, or browse the `SensorDataSectionView` within the example app.
             let namespace = DeviceDataNamespace.appleHealth
             let dataType = "RestingHeartRate"
             do {

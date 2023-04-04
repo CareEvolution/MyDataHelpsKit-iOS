@@ -57,7 +57,7 @@ struct SurveyTaskView: View {
                 Image(systemName: "questionmark.square.dashed")
             }
             VStack(alignment: .leading) {
-                /// EXERCISE: Add or modify subviews here to see the values of other `SurveyTask` properties.
+                /// EXERCISE: Add or modify views here to see the values of other `SurveyTask` properties.
                 Text(model.surveyDisplayName)
                 if let dueDate = model.dueDate {
                     Text(dueDate.formatted())

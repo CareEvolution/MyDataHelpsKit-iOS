@@ -47,6 +47,10 @@ struct TasksView: View {
                             }
                         }
                     }
+                    
+                    Section("Completed Tasks") {
+                        NavigationLink("View Completed Tasks", value: TasksNavigationPath.completedTasks)
+                    }
                 }
                 .refreshable {
                     await model.refresh()
@@ -83,12 +87,19 @@ struct TasksView: View {
                 case .surveyLauncher:
                     SurveyLauncherView(session: model.session)
                         .navigationTitle("Launch a Survey")
+                
                 case let .surveyAnswers(surveyID, surveyDisplayName):
                     PagedListView(model: SurveyAnswersQuery(surveyID: surveyID).pagedListViewModel(model.session)) { item in
                         SurveyAnswerView(model: item, showSurveyDisplayName: false)
                     }
                     .navigationTitle("Answers for \(surveyDisplayName)")
                     .navigationBarTitleDisplayMode(.inline)
+                
+                case .completedTasks:
+                    PagedListView(model: SurveyTaskQuery(statuses: Set([.complete])).pagedListViewModel(model.session)) { task in
+                        SurveyTaskView(model: task, presentedSurvey: $presentedSurvey)
+                    }
+                    .navigationTitle("Completed Tasks")
                 }
             }
         }

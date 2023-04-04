@@ -21,7 +21,7 @@ extension ExternalAccount {
         didSet {
             Task {
                 // Dismiss the result after a few seconds.
-                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                try? await Task.sleep(for: .seconds(3))
                 accountChangeResult = nil
             }
         }

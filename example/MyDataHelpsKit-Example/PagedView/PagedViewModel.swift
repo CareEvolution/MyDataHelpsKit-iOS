@@ -43,6 +43,7 @@ protocol PagedModelSource {
         self.state = .normal(loadMore: true)
         self.items = []
         self.loading = false
+        
         Task {
             await loadNextPage()
         }
@@ -64,13 +65,18 @@ protocol PagedModelSource {
         guard case .normal(true) = state, !loading else { return }
         
         loading = true
+        defer {
+            loading = false
+        }
+        
         do {
             let nextPage = try await source.loadPage(after: lastPage)
             loaded(nextPage)
         } catch {
+            lastPage = nil
+            items.removeAll()
             state = .failure(MyDataHelpsError(error))
         }
-        loading = false
     }
     
     func isLastItem(_ item: ItemType) -> Bool {
@@ -79,7 +85,7 @@ protocol PagedModelSource {
     
     private func loaded(_ page: SourceType.PageModel?) {
         lastPage = page
-        if let page = page {
+        if let page {
             items.append(contentsOf: page.pageItems(session: source.session))
         }
         if items.isEmpty {

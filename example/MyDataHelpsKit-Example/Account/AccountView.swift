@@ -64,7 +64,7 @@ struct AccountView: View {
                         .navigationTitle("External Accounts")
                     
                 case .providerSearch:
-                    /// EXERCISE: Modify the ExternalAccountProvidersQuery parameters to customize filtering providers.
+                    /// EXERCISE: Modify the query parameters to customize filtering providers.
                     ExternalAccountProviderPagedView(model: ExternalAccountProvidersQuery(limit: 25).pagedListViewModel(model.session))
                         .navigationTitle("Connect to a Provider")
                         .navigationBarTitleDisplayMode(.inline)

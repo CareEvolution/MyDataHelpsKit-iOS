@@ -28,7 +28,7 @@ struct NotificationHistoryView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(model.content ?? "(no content)")
-            /// EXERCISE: Add or modify `Text` views here to see the values of other `NotificationHistoryModel` properties.
+            /// EXERCISE: Add or modify views here to see the values of other `NotificationHistoryModel` properties.
             Text(model.identifier).font(.footnote)
             HStack {
                 Text(model.statusCode.rawValue)
@@ -47,21 +47,25 @@ extension NotificationHistoryView.Model {
         self.sentDate = item.sentDate
         self.statusCode = item.statusCode
         
-        /// Demonstrating various ways to access the type and content of the notification model. Each switch case is written differently to show different Swift idioms for working with the NotificationContent enum. Your app can use whatever level of complexity is appropriate.
-        /// EXERCISE: modify this switch statement to customize `self.content` with the NotificationContent details your project uses.
+        /// EXERCISE: This demonstrates various ways to access the type and content of the notification model. Each switch case is written differently to show different Swift idioms for working with the `NotificationContent` enum. Your app can use whatever level of complexity is appropriate. Modify this switch statement to customize `self.content` with a summary of the NotificationContent details you are interested in.
         switch item.content {
+        
         /// The simplest option if you just need to know the type of notification.
         case .sms:
             self.content = "Text notification"
-        /// Handle inner `content` var may or may not be nil, depending on whether the notification sent successfully.
+        
+        /// The inner `content` value may or may not be nil, depending on whether the notification sent successfully.
         case let .push(content):
             self.content = "\(item.content.type.rawValue): \(content?.title ?? "(no title)")"
-        /// This pattern requires a specific notification type, _and_ a successfully sent notification (non-nil content).
+        
+        /// This pattern matches a specific notification type, _and_ a successfully sent notification (non-nil content).
         case let .email(.some(content)):
             self.content = "Email: \(content.subject ?? "(no subject)")"
-        /// Matches a specific type with _nil_ content (notification not sent).
+        
+        /// Matches a specific type with _nil_ content (notification not successfully sent).
         case .email(.none):
             self.content = "Email (unsent)"
+        
         }
     }
 }

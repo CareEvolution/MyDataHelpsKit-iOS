@@ -8,6 +8,7 @@
 import SwiftUI
 import MyDataHelpsKit
 
+/// AsyncCardView, combined with `RemoteResult`, demonstrates a reusable UI component for data fetched asynchronously, as with most of the APIs of MyDataHelpsKit.
 struct AsyncCardView<Model, Content>: View where Content: View {
     let result: RemoteResult<Model>
     let failureTitle: String

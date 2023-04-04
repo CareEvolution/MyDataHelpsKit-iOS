@@ -51,7 +51,7 @@ enum ActivityNavigationPath: Codable, Hashable {
         if case .success = recentSurveyAnswers {
             guard force else { return }
         }
-        /// EXERCISE: An example of using the MyDataHelpsKit paged-result pattern to load and displaying a single batch of recent data, rather than an entire infinite-scrolling list. Try customizing the NotificationHistoryQuery here.
+        /// EXERCISE: An example of using the MyDataHelpsKit paged-result pattern to load and displaying a single batch of recent data, rather than an entire infinite-scrolling list. Try customizing the SurveyAnswersQuery here.
         recentSurveyAnswers = await RemoteResult(wrapping: try await session.querySurveyAnswers(SurveyAnswersQuery(limit: 5)))
     }
 }

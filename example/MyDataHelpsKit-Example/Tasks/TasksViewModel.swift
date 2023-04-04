@@ -11,6 +11,7 @@ import MyDataHelpsKit
 enum TasksNavigationPath: Codable, Hashable {
     case surveyLauncher
     case surveyAnswers(Survey.ID, String)
+    case completedTasks
 }
 
 struct PersistentSurvey: Identifiable {
