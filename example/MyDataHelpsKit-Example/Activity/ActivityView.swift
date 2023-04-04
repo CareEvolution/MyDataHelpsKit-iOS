@@ -37,7 +37,7 @@ struct ActivityView: View {
                                 .foregroundColor(.secondary)
                         } else {
                             ForEach(page.surveyAnswers) { item in
-                                SurveyAnswerView(model: .init(session: model.session, answer: item))
+                                SurveyAnswerView(model: .init(session: model.session, answer: item), showSurveyDisplayName: true)
                             }
                         }
                     }
@@ -76,7 +76,7 @@ struct ActivityView: View {
                 case .allSurveyAnswers:
                     /// EXERCISE: this presents an infinite-scrolling list of all of the survey answers submitted by the participant. Try customizing the SurveyAnswersQuery's optional parameters, or modify SurveyAnswerView.swift to explore and display other data available for each survey answer.
                     PagedListView(model: SurveyAnswersQuery().pagedListViewModel(model.session)) { item in
-                        SurveyAnswerView(model: item)
+                        SurveyAnswerView(model: item, showSurveyDisplayName: true)
                     }
                     .navigationTitle("All Survey Answers")
                 }
@@ -88,6 +88,8 @@ struct ActivityView: View {
 struct ActivityView_Previews: PreviewProvider {
     static var previews: some View {
         ActivityView(model: .init(session: ParticipantSessionPreview()))
+            .banner()
         ActivityView(model: .init(session: ParticipantSessionPreview(empty: true)))
+            .banner()
     }
 }

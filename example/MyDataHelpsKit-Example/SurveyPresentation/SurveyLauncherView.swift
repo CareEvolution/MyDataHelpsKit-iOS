@@ -19,9 +19,11 @@ struct SurveyLauncherView: View {
     let session: ParticipantSessionType
     @FocusState private var surveyNameFocus: Bool
     
+    // Override the global MessageBannerModel environment object to capture results into a list of messages shown on this view.
+    @StateObject private var resultCollector = MessageBannerModel()
+    
     @State private var surveyName = ""
     @State private var presentedSurvey: SurveyPresentation? = nil
-    @State private var presentedSurveyResult: String? = nil
     @State private var log: [SurveyLauncherLogItem] = []
     
     var body: some View {
@@ -60,15 +62,17 @@ struct SurveyLauncherView: View {
         .onAppear {
             surveyNameFocus = true
         }
-        .sheet(item: $presentedSurvey, onDismiss: {
-            if let presentedSurveyResult {
-                log.append(SurveyLauncherLogItem(date: Date(), surveyName: surveyName, message: presentedSurveyResult))
-            }
-            presentedSurveyResult = nil
-        }, content: { presentation in
-            PresentedSurveyView(presentation: $presentedSurvey, resultMessage: $presentedSurveyResult)
+        .sheet(item: $presentedSurvey) { presentation in
+            PresentedSurveyView(presentation: $presentedSurvey)
+                .environmentObject(resultCollector)
                 .interactiveDismissDisabled()
-        })
+        }
+        .onChange(of: resultCollector.message) { newMessage in
+            if let newMessage {
+                log.append(SurveyLauncherLogItem(date: Date(), surveyName: surveyName, message: newMessage))
+                resultCollector.message = nil
+            }
+        }
     }
     
     private func launchSurvey() {
@@ -86,5 +90,6 @@ struct SurveyLauncherView_Previews: PreviewProvider {
         NavigationStack {
             SurveyLauncherView(session: ParticipantSessionPreview())
         }
+        .banner()
     }
 }

@@ -12,20 +12,25 @@ import MyDataHelpsKit
 @MainActor class SessionModel: ObservableObject {
     let client: MyDataHelpsClient
     @Published var token: String = ""
-    @Published var session: ParticipantSession? = nil
+    
+    /// Non-nil once successfully authenticated with a valid token.
+    @Published var participant: ParticipantModel? = nil
     
     init() {
         self.client = MyDataHelpsClient()
         if !token.isEmpty {
-            authenticate()
+            Task {
+                try? await authenticate()
+            }
         }
     }
     
-    func authenticate() {
-        session = ParticipantSession(client: client, accessToken: .init(token: token))
+    func authenticate() async throws {
+        let session = ParticipantSession(client: client, accessToken: .init(token: token))
+        participant = ParticipantModel(session: session, info: try await session.getParticipantInfo())
     }
     
     func logOut() {
-        session = nil
+        participant = nil
     }
 }

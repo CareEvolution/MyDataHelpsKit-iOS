@@ -16,6 +16,8 @@ extension ExternalAccountAuthorization: Identifiable {
 struct ExternalAccountProviderPagedView: View {
     @AppStorage("settings_redirectURL") private var finalRedirectURLPreference: String = "linkprovideraccounts://sandbox"
     
+    @EnvironmentObject private var messageBanner: MessageBannerModel
+    
     @StateObject var model: PagedViewModel<ExternalAccountProvidersSource>
     
     @State private var searchText = ""
@@ -47,9 +49,11 @@ struct ExternalAccountProviderPagedView: View {
         // In a UIKit app, implement this in AppDelegate as part of `application(_:open:options:)` (for custom scheme URLs) or `application(_:continue:restorationHandler:)` (for Universal Links).
         .onOpenURL { url in
             if url.scheme == newConnection?.finalRedirectURL.scheme,
-               url.path == newConnection?.finalRedirectURL.path {
+               let connection = newConnection,
+               url.path == connection.finalRedirectURL.path {
                 newConnection = nil
                 model.selectedItem = nil
+                messageBanner("Completed connection to \(connection.provider.name)")
                 NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
             }
         }
@@ -93,10 +97,12 @@ struct ProvidersListView_Previews: PreviewProvider {
             ExternalAccountProviderPagedView(model: ExternalAccountProvidersQuery(limit: 25).pagedListViewModel(ParticipantSessionPreview()))
             .navigationTitle("External Providers")
         }
+        .banner()
         
         NavigationStack {
             ExternalAccountProviderPagedView(model: ExternalAccountProvidersQuery(limit: 25).pagedListViewModel(ParticipantSessionPreview(empty: true)))
             .navigationTitle("External Providers")
         }
+        .banner()
     }
 }

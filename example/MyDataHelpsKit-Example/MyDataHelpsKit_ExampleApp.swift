@@ -13,17 +13,18 @@ struct MyDataHelpsKit_ExampleApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if let session = sessionModel.session {
-                ContentView(session: session)
-                    .environmentObject(sessionModel)
-            } else {
-                NavigationStack {
-                    TokenView()
-                        .navigationTitle("Example App")
-                        .navigationBarTitleDisplayMode(.inline)
+            MessageBannerView {
+                if let participant = sessionModel.participant {
+                    ContentView(participant: participant)
+                } else {
+                    NavigationStack {
+                        TokenView()
+                            .navigationTitle("Example App")
+                            .navigationBarTitleDisplayMode(.inline)
+                    }
                 }
-                .environmentObject(sessionModel)
             }
+            .environmentObject(sessionModel)
         }
     }
 }

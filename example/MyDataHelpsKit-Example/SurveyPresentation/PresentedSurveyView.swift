@@ -16,8 +16,9 @@ extension SurveyPresentation: Identifiable {
 
 /// SwiftUI wrapper for MyDataHelpsKit.SurveyViewController.
 struct PresentedSurveyView: UIViewControllerRepresentable {
+    @EnvironmentObject private var messageBanner: MessageBannerModel
+    
     let presentation: Binding<SurveyPresentation?>
-    let resultMessage: Binding<String?>
     
     func makeUIViewController(context: Context) -> UIViewController {
         return makeSurveyViewController()
@@ -52,9 +53,7 @@ struct PresentedSurveyView: UIViewControllerRepresentable {
             case let .failure(error):
                 message = error.localizedDescription
             }
-            withAnimation {
-                resultMessage.wrappedValue = "\(model.surveyName): \(message)"
-            }
+            messageBanner(message)
         }
         return viewController
     }

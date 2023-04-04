@@ -19,14 +19,17 @@ enum AccountNavigationPath: Codable, Hashable {
         let dataCollectionSettings: ProjectDataCollectionSettings
     }
     
-    let session: ParticipantSessionType
+    let participant: ParticipantModel
     @Published var path = NavigationPath()
     @Published var participantInfo: RemoteResult<ParticipantInfo> = .loading
     @Published var projectModel: RemoteResult<ProjectAndDataCollectionModel> = .loading
     @Published var ehrConnectionsEnabled: Bool? = nil
     
-    init(session: ParticipantSessionType) {
-        self.session = session
+    var session: ParticipantSessionType { participant.session }
+    
+    init(participant: ParticipantModel) {
+        self.participant = participant
+        self.participantInfo = .success(participant.info)
     }
     
     func loadData() {

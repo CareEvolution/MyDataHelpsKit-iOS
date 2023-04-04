@@ -9,7 +9,8 @@ import SwiftUI
 import MyDataHelpsKit
 
 struct TokenView: View {
-    @EnvironmentObject var sessionModel: SessionModel
+    @EnvironmentObject private var sessionModel: SessionModel
+    @EnvironmentObject private var messageBanner: MessageBannerModel
     
     private let documentationURL = URL(string: "https://developer.mydatahelps.org/embeddables/participant_tokens.html")!
     
@@ -40,6 +41,7 @@ struct TokenView: View {
                     Button(action: useToken, label: {
                         Image(systemName: "person.crop.circle.badge.checkmark")
                     })
+                    .disabled(sessionModel.token.isEmpty)
                     .buttonStyle(.borderedProminent)
                 }
             }
@@ -47,7 +49,13 @@ struct TokenView: View {
     }
     
     private func useToken() {
-        sessionModel.authenticate()
+        Task {
+            do {
+                try await sessionModel.authenticate()
+            } catch {
+                messageBanner(MyDataHelpsError(error).localizedDescription)
+            }
+        }
     }
 }
 
@@ -58,5 +66,6 @@ struct TokenView_Previews: PreviewProvider {
                 .navigationTitle("Example App")
                 .environmentObject(SessionModel())
         }
+        .banner()
     }
 }

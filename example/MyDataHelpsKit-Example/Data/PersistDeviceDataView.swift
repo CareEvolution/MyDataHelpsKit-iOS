@@ -65,14 +65,9 @@ extension DeviceDataNamespace {
 }
 
 struct PersistDeviceDataView: View {
-    enum PersistResult {
-        case notPersisted
-        case persisted
-        case failure(MyDataHelpsError)
-    }
+    @EnvironmentObject private var messageBanner: MessageBannerModel
     
     @StateObject var model: PersistDeviceDataViewModel
-    @State private var result = PersistResult.notPersisted
     @FocusState private var typeFocus: Bool
     @FocusState private var valueFocus: Bool
     
@@ -89,17 +84,6 @@ struct PersistDeviceDataView: View {
             Section("Value") {
                 TextField("Value", text: $model.value)
                     .focused($valueFocus)
-            }
-            
-            Section {
-                switch result {
-                case .persisted:
-                    Text("Saved!")
-                case let .failure(error):
-                    ErrorView(model: .init(title: "Failed to save data point", error: error))
-                case .notPersisted:
-                    EmptyView()
-                }
             }
         }
         .navigationTitle(title)
@@ -127,10 +111,10 @@ struct PersistDeviceDataView: View {
         Task {
             do {
                 try await model.session.persistDeviceData([persistModel])
-                result = .persisted
+                messageBanner("Saved!")
                 NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
             } catch {
-                result = .failure(MyDataHelpsError(error))
+                messageBanner(MyDataHelpsError(error).localizedDescription)
             }
         }
     }
@@ -141,8 +125,11 @@ struct PersistDeviceDataView_Previews: PreviewProvider {
         NavigationStack {
             PersistDeviceDataView(model: .init(session: ParticipantSessionPreview()))
         }
+        .banner()
+        
         NavigationStack {
             PersistDeviceDataView(model: .init(session: ParticipantSessionPreview(), existing: .init(namespace: .project, id: .init(UUID().uuidString), identifier: nil, type: "DataType1", value: "ExistingValue", units: nil, source: nil, startDate: nil, observationDate: Date())))
         }
+        .banner()
     }
 }

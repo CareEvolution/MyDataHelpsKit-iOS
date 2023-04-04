@@ -80,7 +80,8 @@ struct AccountView: View {
 
 struct AccountView_Previews: PreviewProvider {
     static var previews: some View {
-        AccountView(model: AccountViewModel(session: ParticipantSessionPreview()))
+        AccountView(model: AccountViewModel(participant: ParticipantModel(session: ParticipantSessionPreview(), info: PreviewData.participantInfo)))
             .environmentObject(SessionModel())
+            .banner()
     }
 }

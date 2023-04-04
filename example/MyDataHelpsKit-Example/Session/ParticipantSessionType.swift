@@ -158,6 +158,10 @@ enum PreviewData {
         """.data(using: .utf8)!
     }
     
+    static var participantInfo: ParticipantInfo {
+        try! JSONDecoder.myDataHelpsDecoder.decode(ParticipantInfo.self, from: participantInfoJSON)
+    }
+    
     static let participantInfoJSON = """
     {
       "participantID": "\(UUID().uuidString)",

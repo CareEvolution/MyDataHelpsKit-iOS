@@ -29,7 +29,6 @@ struct SurveyAnswerView: View {
         let date: Date?
         let surveyDisplayName: String
         
-        // TODO: Binding to a parent view instead.
         @Published var deletionState = DeletionState.notDeleted
         
         init(session: ParticipantSessionType, id: SurveyAnswer.ID, surveyResultID: SurveyResult.ID, value: String, date: Date?, surveyDisplayName: String, deletionState: DeletionState = .notDeleted) {
@@ -52,27 +51,23 @@ struct SurveyAnswerView: View {
             self.deletionState = .notDeleted
         }
         
-        func delete() {
-            Task {
-                guard case .notDeleted = deletionState else { return }
-                do {
-                    try await session.deleteSurveyResult(surveyResultID)
-                    deletionState = .deleted
-                    NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
-                } catch {
-                    deletionState = .failure(MyDataHelpsError(error))
-                }
+        func delete() async throws {
+            guard case .notDeleted = deletionState else { return }
+            do {
+                try await session.deleteSurveyResult(surveyResultID)
+                deletionState = .deleted
+                NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
+            } catch {
+                deletionState = .failure(MyDataHelpsError(error))
+                throw error
             }
         }
     }
     
+    @EnvironmentObject private var messageBanner: MessageBannerModel
+    
     @ObservedObject var model: Model
     let showSurveyDisplayName: Bool
-    
-    init(model: SurveyAnswerView.Model, showSurveyDisplayName: Bool = true) {
-        self.model = model
-        self.showSurveyDisplayName = showSurveyDisplayName
-    }
     
     var body: some View {
         HStack {
@@ -88,7 +83,7 @@ struct SurveyAnswerView: View {
             Spacer()
             switch model.deletionState {
             case .notDeleted:
-                Button(action: { model.delete() }, label: {
+                Button(action: deleteAnswer, label: {
                     Image(systemName: "trash")
                 })
             case .deleted:
@@ -106,14 +101,26 @@ struct SurveyAnswerView: View {
         }
         return nil
     }
+    
+    private func deleteAnswer() {
+        Task {
+            do {
+                try await model.delete()
+                messageBanner("Deleted Answer")
+            } catch {
+                messageBanner(MyDataHelpsError(error).localizedDescription)
+            }
+        }
+    }
 }
 
 struct SurveyAnswerView_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .notDeleted))
-            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .deleted))
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .notDeleted), showSurveyDisplayName: true)
+            SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .deleted), showSurveyDisplayName: true)
             SurveyAnswerView(model: .init(session: ParticipantSessionPreview(), id: .init("sa1"), surveyResultID: .init("sr1"), value: "Answer Value", date: Date(), surveyDisplayName: "Survey Name", deletionState: .failure(.unknown(nil))), showSurveyDisplayName: false)
         }
+        .banner()
     }
 }
