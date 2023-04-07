@@ -52,11 +52,10 @@ class URLRequestsTests: XCTestCase {
     
     func testDateQueryStringEncoding() {
         let date = DateComponents(calendar: .current, timeZone: .current, year: 2021, month: 2, day: 17, hour: 9, minute: 41, second: 0, nanosecond: 123000000).date!
-        
+        let offsetFormatter = DateFormatter()
         // e.g. "-0600" or "Z". Matches ISO8601DateFormatter's behavior
-        let timeZoneOffset = date.formatted(.dateTime.timeZone(.iso8601(.short)))
-        
-        XCTAssertEqual(date.queryStringEncoded, "2021-02-17T09:41:00.123\(timeZoneOffset)")
+        offsetFormatter.dateFormat = "XX"
+        XCTAssertEqual(date.queryStringEncoded, "2021-02-17T09:41:00.123\(offsetFormatter.string(from: date))")
     }
 }
 
