@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 
 import PackageDescription
 
@@ -6,7 +6,7 @@ let package = Package(
     name: "MyDataHelpsKit",
     platforms: [
         .iOS(.v11),
-        .macOS(.v10_15)
+        .macOS(.v12)
     ],
     products: [
         .library(
