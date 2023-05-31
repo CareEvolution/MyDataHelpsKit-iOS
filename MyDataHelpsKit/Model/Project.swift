@@ -8,9 +8,12 @@
 import Foundation
 
 /// Information about the project and its settings.
-public struct ProjectInfo: Decodable {
+public struct ProjectInfo: Identifiable, Decodable {
     /// Unique project identifier.
-    public let id: String
+    public typealias ID = ScopedIdentifier<ProjectInfo, String>
+    
+    /// Unique project identifier.
+    public let id: ID
     /// Project's display name, localized based on participant's language settings.
     public let name: String
     /// Project's display description, localized based on participant's language settings.
@@ -37,7 +40,7 @@ public struct ProjectInfo: Decodable {
 }
 
 /// Describes the type of a MyDataHelps project.
-public struct ProjectType: RawRepresentable, Equatable, Decodable {
+public struct ProjectType: RawRepresentable, Equatable, Codable {
     /// The raw value for the project type as stored in MyDataHelps.
     public let rawValue: String
     
@@ -56,7 +59,7 @@ public struct ProjectType: RawRepresentable, Equatable, Decodable {
 }
 
 /// Information about an organization.
-public struct Organization: Decodable {
+public struct Organization: Identifiable, Decodable {
     enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -66,7 +69,10 @@ public struct Organization: Decodable {
     }
     
     /// Unique organization identifier.
-    public let id: String
+    public typealias ID = ScopedIdentifier<Organization, String>
+    
+    /// Unique organization identifier.
+    public let id: ID
     /// Organization name.
     public let name: String
     /// Organization description.
@@ -79,6 +85,7 @@ public struct Organization: Decodable {
     public let color: String
 }
 
+/// Settings related to data collection for a participant and their project.
 public struct ProjectDataCollectionSettings: Decodable {
     /// Indicates whether Fitbit data collection is enabled for this project.
     public let fitbitEnabled: Bool
@@ -89,6 +96,8 @@ public struct ProjectDataCollectionSettings: Decodable {
     /// Indicates whether Weather data collection is enabled for this project.
     public let weatherEnabled: Bool
     /// A collection of device data types that are supported by the current project configuration and can be queried using `ParticipantSession.queryDeviceData`. A participant may not have data available for all data types.
+    ///
+    /// This includes data types for all DeviceDataNamespaces, except for the `project` namespace: although project-scoped device data can also be fetched using `queryDeviceData`, SDK developers manage which data types exist within their project’s namespace.
     public let queryableDeviceDataTypes: Set<QueryableDeviceDataType>
     /// Date when sensor data collection ended or will end for this participant.
     ///

@@ -9,35 +9,32 @@ import Foundation
 
 public extension ParticipantSession {
     /// Fetches a list of all of the participant's connected external accounts.
-    /// - Parameters:
-    ///   - completion: Called when the request is complete, with a list of connected accounts on success or an error on failure.
-    func listExternalAccounts(completion: @escaping (Result<[ExternalAccount], MyDataHelpsError>) -> Void) {
-        load(resource: ExternalAccountsResource(), completion: completion)
+    /// - Returns: An asynchronously-delivered list of connected counts, if successful. Throws a `MyDataHelpsError` if unsuccessful.
+    func listExternalAccounts() async throws -> [ExternalAccount] {
+        try await load(resource: ExternalAccountsResource())
     }
     
     /// Requests the refresh of data from a connected external account.
     ///
     /// This API only begins the process of refreshing an account; the process may take additional time to complete. To track the status of a refresh, use `ParticipantSession.listExternalAccounts` to poll the `status` value of an account, checking for `fetchingData` or `fetchComplete` status values.
     /// - Parameters:
-    ///   - account: The external account to refresh.
-    ///   - completion: Called when the request is complete, with an empty `.success` on success or an error on failure.
-    func refreshExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        load(resource: RefreshExternalAccountResource(account: account), completion: completion)
+    ///   - id: The ID of the external account to refresh.
+    func refreshExternalAccount(_ id: ExternalAccount.ID) async throws {
+        try await load(resource: RefreshExternalAccountResource(id: id))
     }
     
     /// Deletes an external account.
     ///
     /// This API is idempotent: the result will indicate success even if the account was already disconnected, or the participant had no such account.
     /// - Parameters:
-    ///   - account: The external account to disconnect.
-    ///   - completion: Called when the request is complete, with an empty `.success` on success or an error on failure.
-    func deleteExternalAccount(_ account: ExternalAccount, completion: @escaping (Result<Void, MyDataHelpsError>) -> Void) {
-        load(resource: DeleteExternalAccountResource(account: account), completion: completion)
+    ///   - account: The ID of the external account to disconnect.
+    func deleteExternalAccount(_ id: ExternalAccount.ID) async throws {
+        try await load(resource: DeleteExternalAccountResource(id: id))
     }
 }
 
 /// Describes the status of fetching data for a connected external account.
-public struct ExternalAccountStatus: RawRepresentable, Equatable, Hashable, Decodable {
+public struct ExternalAccountStatus: RawRepresentable, Equatable, Hashable, Codable {
     public typealias RawValue = String
     
     /// An error occurred while fetching data.
@@ -52,17 +49,20 @@ public struct ExternalAccountStatus: RawRepresentable, Equatable, Hashable, Deco
     /// The raw value for the provider category as stored in MyDataHelps.
     public let rawValue: String
     
-    /// Initializes an `ExternalAccountProviderCategory` with an arbitrary value. Consider using static members such as `ExternalAccountProviderCategory.provider` instead for known values.
-    /// - Parameter rawValue: The raw value for the provider category as stored in MyDataHelps.
+    /// Initializes an `ExternalAccountStatus` with an arbitrary value. Consider using static members such as `ExternalAccountStatus.fetchComplete` instead for known values.
+    /// - Parameter rawValue: The raw value for the account status as stored in MyDataHelps.
     public init(rawValue: String) {
         self.rawValue = rawValue
     }
 }
 
 /// An external account that the participant is currently connected to.
-public struct ExternalAccount: Decodable {
+public struct ExternalAccount: Identifiable, Decodable {
+    /// Assigned identifier for an ExternalAccount.
+    public typealias ID = ScopedIdentifier<ExternalAccount, Int>
+    
     /// Assigned identifier for this connected external account.
-    public let id: Int
+    public let id: ID
     /// The current status for this connected external account.
     public let status: ExternalAccountStatus
     /// The provider for this external account.

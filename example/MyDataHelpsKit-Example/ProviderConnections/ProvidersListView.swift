@@ -6,129 +6,107 @@
 //
 
 import SwiftUI
+import Combine
 import MyDataHelpsKit
 
-extension ExternalAccountProvider: Identifiable {
+struct ProviderConnectionSession: Identifiable {
+    var id: ExternalAccountProvider.ID { authorization.providerID }
+    let providerName: String
+    let authorization: ExternalAccountAuthorization
 }
 
-extension ExternalAccountAuthorization: Identifiable {
-    public var id: Int { provider.id }
-}
-
-class ProvidersListViewModel: ObservableObject {
-    private let session: ParticipantSessionType
-    let query: ExternalAccountProvidersQuery
-    @Published var providers: Result<[ExternalAccountProvider], MyDataHelpsError>?
+struct ExternalAccountProviderPagedView: View {
     
     @AppStorage("settings_redirectURL") private var finalRedirectURLPreference: String = "linkprovideraccounts://sandbox"
     
-    init(session: ParticipantSessionType) {
-        self.session = session
-        /// EXERCISE: Set non-nil `search` and `category` values to customize filtering providers.
-        self.query = ExternalAccountProvidersQuery(search: nil, category: nil)
-        self.providers = nil
-        session.queryExternalAccountProviders(query) {
-            self.providers = $0
-        }
-    }
+    @EnvironmentObject private var messageBanner: MessageBannerModel
     
-    func connect(_ provider: ExternalAccountProvider, completion: @escaping (Result<ExternalAccountAuthorization, MyDataHelpsError>) -> Void) {
-        guard let finalRedirectURL = URL(string: finalRedirectURLPreference) else {
-            return
-        }
-        session.connectExternalAccount(provider: provider, finalRedirectURL: finalRedirectURL, completion: completion)
-    }
-}
-
-struct ProvidersListView: View {
-    @StateObject var model: ProvidersListViewModel
-    @State private var newConnection: ExternalAccountAuthorization?
-    @State private var errorModel: ErrorView.Model?
+    @StateObject var model: PagedViewModel<ExternalAccountProvidersSource>
+    
+    @State private var searchText = ""
+    @State private var newConnection: ProviderConnectionSession? = nil
+    @State private var errorModel: ErrorView.Model? = nil
+    private let searchTextPublisher = PassthroughSubject<String, Never>()
     
     var body: some View {
-        Group {
-            switch model.providers {
-            case .none:
-                ProgressView()
-            case let .some(.failure(error)):
-                List {
-                    ErrorView(model: .init(title: "Failed to load providers", error: error))
-                }
-            case let .some(.success(providers)) where providers.isEmpty:
-                List {
-                    Text("No providers found")
-                }
-            case let .some(.success(providers)):
-                List(providers) { provider in
-                    ExternalAccountProviderView(provider: provider)
-                        .onTapGesture { connect(provider) }
-                }
-            }
+        PagedListView(model: model) { item in
+            ExternalAccountProviderView(provider: item)
         }
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .always))
+        .onSubmit(of: .search) {
+            searchTextPublisher.send(searchText)
+        }
+        .onChange(of: searchText, perform: searchTextPublisher.send)
+        .onReceive(searchTextPublisher.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)) { _ in
+            applySearchText()
+        }
+        .onChange(of: model.selectedItem, perform: beginConnection)
         .sheet(item: $newConnection) { connection in
-            ProviderConnectionAuthViewRepresentable(url: connection.authorizationURL, presentation: $newConnection)
+            ProviderConnectionAuthViewRepresentable(url: connection.authorization.authorizationURL, presentation: $newConnection)
         }
         .alert(item: $errorModel, content: {
-            Alert(title: Text($0.errorDescription))
+            Alert(title: Text($0.error.localizedDescription))
         })
         // In a UIKit app, implement this in AppDelegate as part of `application(_:open:options:)` (for custom scheme URLs) or `application(_:continue:restorationHandler:)` (for Universal Links).
         .onOpenURL { url in
-            if url.scheme == newConnection?.finalRedirectURL.scheme,
-               url.path == newConnection?.finalRedirectURL.path {
+            if url.scheme == newConnection?.authorization.finalRedirectURL.scheme,
+               let connection = newConnection,
+               url.path() == connection.authorization.finalRedirectURL.path() {
                 newConnection = nil
+                model.selectedItem = nil
+                messageBanner("Completed connection to \(connection.providerName)")
+                NotificationCenter.default.post(name: ParticipantSession.participantDidUpdateNotification, object: nil)
             }
         }
     }
     
-    private func connect(_ provider: ExternalAccountProvider) {
-        guard newConnection == nil else { return }
+    private func applySearchText() {
+        Task {
+            await model.reset(newSource: model.source.withSearchText(searchText))
+        }
+    }
+    
+    private func beginConnection(_ provider: ExternalAccountProvider?) {
+        guard let provider = provider, newConnection == nil else { return }
         errorModel = nil
-        model.connect(provider) {
-            switch $0 {
-            case let .success(connection):
-                newConnection = connection
-            case let .failure(error):
-                errorModel = .init(title: "Error", error: error)
+        guard let finalRedirectURL = URL(string: finalRedirectURLPreference) else {
+            return
+        }
+        
+        Task {
+            do {
+                let authorization = try await model.source.session.connectExternalAccount(providerID: provider.id, finalRedirectURL: finalRedirectURL)
+                newConnection = ProviderConnectionSession(providerName: provider.name, authorization: authorization)
+            } catch {
+                errorModel = .init(title: "Error", error: MyDataHelpsError(error))
+                newConnection = nil
+                model.selectedItem = nil
             }
         }
     }
 }
 
-struct ExternalAccountProviderView: View {
-    let provider: ExternalAccountProvider
-    
-    var body: some View {
-        HStack(alignment: .center) {
-            if let logoURL = provider.logoURL {
-                RemoteImageView(url: logoURL, placeholderImageName: "providerLogoPlaceholder")
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 45, height: 45)
-            }
-            VStack(alignment: .leading) {
-                Text(provider.name)
-                    .font(.body)
-                    .fontWeight(.semibold)
-                Text(provider.category.rawValue)
-                    .font(.caption)
-            }
-            Spacer()
-            Image(systemName: "plus")
-                .font(.subheadline)
-                .foregroundColor(.accentColor)
-        }
+// Equatable conformance required for `.onChange(of: model.selectedItem)` above.
+extension ExternalAccountProvider: Equatable {
+    public static func == (lhs: ExternalAccountProvider, rhs: ExternalAccountProvider) -> Bool {
+        lhs.id == rhs.id
     }
 }
 
 struct ProvidersListView_Previews: PreviewProvider {
-    private static var model: ProvidersListViewModel {
-        ProvidersListViewModel(session: ParticipantSessionPreview())
-    }
-    
     static var previews: some View {
-        NavigationView {
-            ProvidersListView(model: Self.model)
-                .navigationTitle("External Providers")
-                .environmentObject(RemoteImageCache())
+        NavigationStack {
+            ExternalAccountProviderPagedView(model: ExternalAccountProvidersQuery(limit: 25).pagedListViewModel(ParticipantSessionPreview()))
+            .navigationTitle("External Providers")
         }
+        .banner()
+        
+        NavigationStack {
+            ExternalAccountProviderPagedView(model: ExternalAccountProvidersQuery(limit: 25).pagedListViewModel(ParticipantSessionPreview(empty: true)))
+            .navigationTitle("External Providers")
+        }
+        .banner()
     }
 }

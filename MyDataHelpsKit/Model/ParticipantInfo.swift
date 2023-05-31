@@ -7,18 +7,27 @@
 
 import Foundation
 
+/// Container for the `Project.ID` identifier type, which identifies a project in MyDataHelps.
+///
+/// The ``Project`` struct itself is empty and no instances are returned by any APIs.
+public struct Project {
+    /// Auto-generated internal ID for a project in MyDataHelps.
+    public typealias ID = ScopedIdentifier<Project, String>
+}
+
 /// Information about a participant.
 public struct ParticipantInfo: Decodable {
+    /// Auto-generated internal ID for a participant.
+    public typealias ID = ScopedIdentifier<ParticipantInfo, String>
+    
     /// Auto-generated internal ID for the participant.
-    public let participantID: String
+    public let participantID: ID
     /// Auto-generated internal ID for the project.
-    public let projectID: String
+    public let projectID: Project.ID
     /// Project-specific participant identifier.
     public let participantIdentifier: String
     /// Project-specific secondary identifier.
     public let secondaryIdentifier: String?
-    /// Auto-generated identifier used to complete surveys via link, if that feature is enabled for the project.
-    public let linkIdentifier: String?
     /// All demographic fields populated for the participant. Unpopulated values are `nil`.
     public let demographics: ParticipantDemographics
     /// Key/value pairs representing project-specific custom fields.
@@ -28,7 +37,7 @@ public struct ParticipantInfo: Decodable {
 }
 
 /// Participant's gender.
-public struct ParticipantGender: RawRepresentable, Equatable, Decodable {
+public struct ParticipantGender: RawRepresentable, Equatable, Codable {
     public typealias RawValue = String
     /// The raw string encoding the gender value in MyDataHelps.
     public let rawValue: String
@@ -83,8 +92,16 @@ public struct ParticipantDemographics: Decodable {
     /// The raw decodable value: "true" or "false".
     private let unsubscribedFromEmails: String?
     
+    /// The raw decodable value: "true" or "false".
+    private let unsubscribedFromSms: String?
+    
     /// Indicates that the participant has unsubscribed from MyDataHelps email notifications.
     public var isUnsubscribedFromEmails: Bool {
         unsubscribedFromEmails == "true"
+    }
+    
+    /// Indicates that the participant has unsubscribed from MyDataHelps SMS notifications.
+    public var isUnsubscribedFromSMS: Bool {
+        unsubscribedFromSms == "true"
     }
 }

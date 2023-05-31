@@ -18,20 +18,20 @@ struct ExternalAccountsResource: ParticipantResource {
 struct RefreshExternalAccountResource: ParticipantResource {
     typealias ResponseType = Void
     
-    let account: ExternalAccount
+    let id: ExternalAccount.ID
     
     func urlRequest(session: ParticipantSession) throws -> URLRequest {
-        session.authenticatedRequest(.POST, url: session.client.endpoint(path: "/api/v1/delegated/externalaccounts/refresh/\(account.id)"))
+        session.authenticatedRequest(.POST, url: session.client.endpoint(path: "/api/v1/delegated/externalaccounts/refresh/\(id)"))
     }
 }
 
 struct DeleteExternalAccountResource: ParticipantResource {
     typealias ResponseType = Void
     
-    let account: ExternalAccount
+    let id: ExternalAccount.ID
     
     func urlRequest(session: ParticipantSession) throws -> URLRequest {
         let queryItems = [URLQueryItem(name: "deleteData", value: "true")]
-        return session.authenticatedRequest(.DELETE, url: try session.client.endpoint(path: "/api/cfhrprovideraccounts/account/\(account.id)", queryItems: queryItems))
+        return session.authenticatedRequest(.DELETE, url: try session.client.endpoint(path: "/api/cfhrprovideraccounts/account/\(id)", queryItems: queryItems))
     }
 }

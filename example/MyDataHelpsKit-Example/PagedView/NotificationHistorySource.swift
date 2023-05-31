@@ -10,24 +10,26 @@ import MyDataHelpsKit
 
 class NotificationHistorySource: PagedModelSource {
     let session: ParticipantSessionType
-    private let query: NotificationHistoryQuery
+    private let criteria: NotificationHistoryQuery
     
-    init(session: ParticipantSessionType, query: NotificationHistoryQuery) {
+    init(session: ParticipantSessionType, criteria: NotificationHistoryQuery) {
         self.session = session
-        self.query = query
+        self.criteria = criteria
     }
     
-    func loadPage(after page: NotificationHistoryPage?, completion: @escaping (Result<NotificationHistoryPage, MyDataHelpsError>) -> Void) {
+    func loadPage(after page: NotificationHistoryPage?) async throws -> NotificationHistoryPage? {
         if let query = query(after: page) {
-            session.queryNotifications(query, completion: completion)
+            return try await session.queryNotifications(query)
+        } else {
+            return nil
         }
     }
     
     private func query(after page: NotificationHistoryPage?) -> NotificationHistoryQuery? {
         if let page = page {
-            return query.page(after: page)
+            return criteria.page(after: page)
         } else {
-            return query
+            return criteria
         }
     }
 }

@@ -10,7 +10,6 @@ import MyDataHelpsKit
 
 struct ParticipantInfoViewModel {
     let name: String
-    let linkIdentifier: String?
     let email: String?
     let phone: String?
     let enrollmentDate: Date?
@@ -19,10 +18,14 @@ struct ParticipantInfoViewModel {
 
 extension ParticipantInfoViewModel {
     init(info: ParticipantInfo) {
-        var tokens = [info.demographics.firstName, info.demographics.lastName]
-        if tokens.isEmpty { tokens = ["(no name)"] }
-        self.name = tokens.compactMap { $0 }.joined(separator: " ")
-        self.linkIdentifier = info.linkIdentifier
+        let tokens = [info.demographics.firstName, info.demographics.lastName]
+            .compactMap { $0 }
+            .filter { !$0.isEmpty }
+        if tokens.isEmpty {
+            self.name = "(no name)"
+        } else {
+            self.name = tokens.joined(separator: " ")
+        }
         self.email = info.demographics.email
         self.phone = info.demographics.mobilePhone
         self.enrollmentDate = info.enrollmentDate
@@ -33,40 +36,35 @@ extension ParticipantInfoViewModel {
 struct ParticipantInfoView: View {
     let model: ParticipantInfoViewModel
     
-    private static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .medium
-        df.timeStyle = .short
-        return df
-    }()
-    
     var body: some View {
         VStack(alignment: .leading) {
             Text(model.name)
                 .font(.headline)
+                .padding(.bottom, 2)
             if let email = model.email {
                 Label(email, systemImage: model.isUnsubscribedFromEmails ? "slash.circle" : "checkmark.circle")
             }
             if let phone = model.phone {
-                Text(phone)
+                Label(phone, systemImage: "phone")
             }
             if let enrollmentDate = model.enrollmentDate {
-                Text("Enrolled \(Self.dateFormatter.string(from: enrollmentDate))")
+                Label("Enrolled \(enrollmentDate.formatted(date: .numeric, time: .omitted))", systemImage: "person.crop.circle.badge.checkmark")
             }
         }
+        .labelStyle(.titleAndIcon)
         .font(.caption)
     }
 }
 
 struct ParticipantInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        ParticipantInfoView(
-            model: .init(
+        List {
+            ParticipantInfoView(model: .init(
                 name: "FirstName LastName",
-                linkIdentifier: nil,
                 email: nil,
                 phone: "555-555-1212",
                 enrollmentDate: Date().addingTimeInterval(-86400),
                 isUnsubscribedFromEmails: true))
+        }
     }
 }

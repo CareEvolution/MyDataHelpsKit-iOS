@@ -8,26 +8,28 @@
 import Foundation
 import MyDataHelpsKit
 
-class SurveyTaskSource: PagedModelSource, ObservableObject {
+class SurveyTaskSource: PagedModelSource {
     let session: ParticipantSessionType
-    private let query: SurveyTaskQuery
+    private let criteria: SurveyTaskQuery
     
-    init(session: ParticipantSessionType, query: SurveyTaskQuery) {
+    init(session: ParticipantSessionType, criteria: SurveyTaskQuery) {
         self.session = session
-        self.query = query
+        self.criteria = criteria
     }
     
-    func loadPage(after page: SurveyTaskResultPage?, completion: @escaping (Result<SurveyTaskResultPage, MyDataHelpsError>) -> Void) {
+    func loadPage(after page: SurveyTaskResultPage?) async throws -> SurveyTaskResultPage? {
         if let query = query(after: page) {
-            session.querySurveyTasks(query, completion: completion)
+            return try await session.querySurveyTasks(query)
+        } else {
+            return nil
         }
     }
     
     private func query(after page: SurveyTaskResultPage?) -> SurveyTaskQuery? {
         if let page = page {
-            return query.page(after: page)
+            return criteria.page(after: page)
         } else {
-            return query
+            return criteria
         }
     }
 }

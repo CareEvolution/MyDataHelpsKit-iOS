@@ -8,12 +8,15 @@
 import Foundation
 
 struct ExternalAccountProvidersQueryResource: ParticipantResource {
-    typealias ResponseType = [ExternalAccountProvider]
+    typealias ResponseType = ExternalAccountProvidersResultPage.APIResponse
     
     let query: ExternalAccountProvidersQuery
     
     func urlRequest(session: ParticipantSession) throws -> URLRequest {
-        var queryItems: [URLQueryItem] = []
+        var queryItems: [URLQueryItem] = [
+            .init(name: "pageSize", value: String(query.limit)),
+            .init(name: "pageNumber", value: String(query.pageNumber))
+        ]
         
         if let search = query.search {
             queryItems.append(.init(name: "search", value: search))

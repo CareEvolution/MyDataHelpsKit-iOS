@@ -27,8 +27,8 @@ public struct NotificationHistoryQuery: PagedQuery {
     
     /// Maximum number of results per page. Default and maximum value is 100.
     public let limit: Int
-    /// Identifies a specific page of survey answers to fetch. Use `nil` to fetch the first page of results. To fetch the page following a given `SurveyAnswersPage` use its `nextPageID`; the other parameters should be the same as the original `SurveyAnswersQuery`.
-    public let pageID: String?
+    /// Identifies a specific page of notifications to fetch. Use `nil` to fetch the first page of results. To fetch the page following a given `NotificationHistoryPage` use its `nextPageID`; the other parameters should be the same as the original `NotificationHistoryQuery`.
+    public let pageID: NotificationHistoryPage.PageID?
     
     /// Initializes a new query for a page of notifications with various filters.
     /// - Parameters:
@@ -38,8 +38,8 @@ public struct NotificationHistoryQuery: PagedQuery {
     ///   - type: Type of notification.
     ///   - statusCode: Describes whether the notification was sent.
     ///   - limit: Maximum number of results per page.
-    ///   - pageID: Identifies a specific page of survey answers to fetch.
-    public init(identifier: String? = nil, sentAfter: Date? = nil, sentBefore: Date? = nil, type: NotificationType? = nil, statusCode: NotificationSendStatusCode? = nil, limit: Int = defaultLimit, pageID: String? = nil) {
+    ///   - pageID: Identifies a specific page of notifications to fetch.
+    public init(identifier: String? = nil, sentAfter: Date? = nil, sentBefore: Date? = nil, type: NotificationType? = nil, statusCode: NotificationSendStatusCode? = nil, limit: Int = defaultLimit, pageID: NotificationHistoryPage.PageID? = nil) {
         self.identifier = identifier
         self.sentAfter = sentAfter
         self.sentBefore = sentBefore
@@ -49,9 +49,9 @@ public struct NotificationHistoryQuery: PagedQuery {
         self.pageID = pageID
     }
     
-    /// Initializes a new query for a page of results following the given page, with the same filters as the original query.
+    /// Creates a copy of this query for a page of results following the given page, with the same filters as the original query.
     /// - Parameter page: The previous page of results, which should have been produced with this query.
-    /// - Returns: A query for results following `page`, if page has a `nextPageID`. If there are no additional pages of results available, returns `nil`. The query returned, if any, has the same filters as the original.
+    /// - Returns: A copy of this query for fetching results following `page`, if page has a `nextPageID`. If there are no additional pages of results available, returns `nil`. The query returned, if any, has the same filters as the original.
     public func page(after page: NotificationHistoryPage) -> NotificationHistoryQuery? {
         guard let nextPageID = page.nextPageID else { return nil }
         return NotificationHistoryQuery(identifier: identifier, sentAfter: sentAfter, sentBefore: sentBefore, type: type, statusCode: statusCode, limit: limit, pageID: nextPageID)
@@ -60,10 +60,12 @@ public struct NotificationHistoryQuery: PagedQuery {
 
 /// A page of notifications.
 public struct NotificationHistoryPage: PagedResult, Decodable {
-    /// A list of notifications filtered by the query criteria.
+    /// Identifies a specific page of notifications.
+    public typealias PageID = ScopedIdentifier<NotificationHistoryPage, String>
+    /// A list of notifications filtered by the query criteria, ordered by date, most recent first.
     public let notifications: [NotificationHistoryModel]
     /// An ID to be used with subsequent `NotificationHistoryQuery` requests. Results from queries using this ID as the `pageID` parameter will show the next page of results. `nil` if there isn't a next page.
-    public let nextPageID: String?
+    public let nextPageID: PageID?
 }
 
 /// The type of notification sent to a participant.
@@ -77,7 +79,7 @@ public enum NotificationType: String, Decodable {
 }
 
 /// Describes whether a notification was sent to a participant.
-public struct NotificationSendStatusCode: RawRepresentable, Equatable, Decodable {
+public struct NotificationSendStatusCode: RawRepresentable, Equatable, Codable {
     public typealias RawValue = String
     
     /// The notification was sent. This does not guarantee it was received nor read.
@@ -156,7 +158,9 @@ public enum NotificationContent {
 }
 
 /// Information about a notification for a participant.
-public struct NotificationHistoryModel: Decodable {
+public struct NotificationHistoryModel: Identifiable, Decodable {
+    /// Auto-generated, globally-unique identifier for a NotificationHistoryModel.
+    public typealias ID = ScopedIdentifier<NotificationHistoryModel, String>
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -168,7 +172,7 @@ public struct NotificationHistoryModel: Decodable {
     }
     
     /// Auto-generated, globally-unique identifier for this notification.
-    public let id: String
+    public let id: ID
     /// Identifier for the notification configuration.
     public let identifier: String
     /// If the notification was sent, the date at which the notification was sent.
@@ -186,7 +190,7 @@ public struct NotificationHistoryModel: Decodable {
     /// - Throws: DecodingError on failure to decode.
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(String.self, forKey: .id)
+        self.id = try container.decode(ID.self, forKey: .id)
         self.identifier = try container.decode(String.self, forKey: .identifier)
         self.sentDate = try container.decode(Date.self, forKey: .sentDate)
         self.statusCode = try container.decode(NotificationSendStatusCode.self, forKey: .statusCode)

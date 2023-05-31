@@ -7,33 +7,38 @@
 
 import SwiftUI
 
+/// Root level of the app when the participant is logged in with a valid access token.
 struct ContentView: View {
-    @EnvironmentObject var sessionModel: SessionModel
+    let participant: ParticipantModel
     
     var body: some View {
-        NavigationView {
-            if let session = sessionModel.session {
-                RootMenuView(participant: .init(session: session))
-                    .navigationTitle("Example App")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .navigationBarItems(trailing: Button("Log Out", action: logOut))
-            } else {
-                TokenView()
-                    .navigationTitle("Example App")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .navigationBarItems(trailing: EmptyView())
-            }
+        TabView {
+            TasksView(model: TasksViewModel(session: participant.session))
+                .tabItem {
+                    Label(TasksView.tabTitle, systemImage: "checklist")
+                }
+
+            DataView(model: DataViewModel(session: participant.session))
+                .tabItem {
+                    Label(DataView.tabTitle, systemImage: "heart.text.square")
+                }
+            
+            ActivityView(model: ActivityViewModel(session: participant.session))
+                .tabItem {
+                    Label(ActivityView.tabTitle, systemImage: "clock")
+                }
+            
+            AccountView(model: AccountViewModel(participant: participant))
+                .tabItem {
+                    Label(AccountView.tabTitle, systemImage: "gear")
+                }
         }
-    }
-    
-    private func logOut() {
-        sessionModel.logOut()
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(participant: ParticipantModel(session: ParticipantSessionPreview(), info: PreviewData.participantInfo))
             .environmentObject(SessionModel())
     }
 }

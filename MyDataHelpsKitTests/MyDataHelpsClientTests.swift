@@ -33,16 +33,4 @@ class MyDataHelpsClientTests: XCTestCase {
         url = try? sut.endpoint(path: "example/path", queryItems: [.init(name: "a", value: "b")])
         XCTAssertEqual(url?.absoluteString, "https://mydatahelps.org/example/path?a=b")
     }
-    
-    func testEmbeddableURLs() {
-        let sut = MyDataHelpsClient()
-        let participantLinkID = UUID().uuidString
-        let surveyName = UUID().uuidString
-        let taskLinkID = UUID().uuidString
-        let languageTag = sut.languageTag
-        var url = try? sut.embeddableSurveyURL(surveyName: surveyName, participantLinkIdentifier: participantLinkID).get()
-        XCTAssertEqual(url?.absoluteString, "https://mydatahelps.org/mydatahelps/\(participantLinkID)/surveylink/\(surveyName)?lang=\(languageTag)")
-        url = try? sut.embeddableSurveyURL(taskLinkIdentifier: taskLinkID, participantLinkIdentifier: participantLinkID).get()
-        XCTAssertEqual(url?.absoluteString, "https://mydatahelps.org/mydatahelps/\(participantLinkID)/tasklink/\(taskLinkID)?lang=\(languageTag)")
-    }
 }

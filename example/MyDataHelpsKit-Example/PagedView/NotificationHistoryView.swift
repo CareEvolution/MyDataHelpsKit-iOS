@@ -8,41 +8,32 @@
 import SwiftUI
 import MyDataHelpsKit
 
-struct NotificationHistoryView: View {
-    static func pageView(session: ParticipantSessionType) -> PagedView<NotificationHistorySource, NotificationHistoryView> {
-        /// EXERCISE: add parameters to the query passed to NotificationHistorySource to filter by a specific notification identifier from your project's Notification Library, or try other filtering criteria.
-        let source = NotificationHistorySource(session: session, query: .init())
-        return PagedView(model: .init(source: source) { item in
-            NotificationHistoryView(model: item)
-        })
+extension NotificationHistoryQuery {
+    @MainActor func pagedListViewModel(_ session: ParticipantSessionType) -> PagedViewModel<NotificationHistorySource> {
+        PagedViewModel(source: NotificationHistorySource(session: session, criteria: self))
     }
-    
+}
+
+struct NotificationHistoryView: View {
     struct Model: Identifiable {
-        let id: String
+        let id: NotificationHistoryModel.ID
         let identifier: String
         let sentDate: Date
         let statusCode: NotificationSendStatusCode
         let content: String?
     }
     
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .short
-        df.timeStyle = .medium
-        return df
-    }()
-    
     let model: Model
     
     var body: some View {
         VStack(alignment: .leading) {
             Text(model.content ?? "(no content)")
-            /// EXERCISE: Add or modify `Text` views here to see the values of other `NotificationHistoryModel` properties.
+            /// EXERCISE: Add or modify views here to see the values of other `NotificationHistoryModel` properties.
             Text(model.identifier).font(.footnote)
             HStack {
                 Text(model.statusCode.rawValue)
                 Text("•")
-                Text(Self.dateFormatter.string(from: model.sentDate))
+                Text(model.sentDate.formatted())
             }.font(.footnote)
             .foregroundColor(Color(.systemGray))
         }
@@ -56,28 +47,33 @@ extension NotificationHistoryView.Model {
         self.sentDate = item.sentDate
         self.statusCode = item.statusCode
         
-        /// Demonstrating various ways to access the type and content of the notification model. Each switch case is written differently to show different Swift idioms for working with the NotificationContent enum. Your app can use whatever level of complexity is appropriate.
-        /// EXERCISE: modify this switch statement to customize `self.content` with the NotificationContent details your project uses.
+        /// EXERCISE: This demonstrates various ways to access the type and content of the notification model. Each switch case is written differently to show different Swift idioms for working with the `NotificationContent` enum. Your app can use whatever level of complexity is appropriate. Modify this switch statement to customize `self.content` with a summary of the NotificationContent details you are interested in.
         switch item.content {
+        
         /// The simplest option if you just need to know the type of notification.
         case .sms:
             self.content = "Text notification"
-        /// Handle inner `content` var may or may not be nil, depending on whether the notification sent successfully.
+        
+        /// The inner `content` value may or may not be nil, depending on whether the notification sent successfully.
         case let .push(content):
             self.content = "\(item.content.type.rawValue): \(content?.title ?? "(no title)")"
-        /// This pattern requires a specific notification type, _and_ a successfully sent notification (non-nil content).
+        
+        /// This pattern matches a specific notification type, _and_ a successfully sent notification (non-nil content).
         case let .email(.some(content)):
             self.content = "Email: \(content.subject ?? "(no subject)")"
-        /// Matches a specific type with _nil_ content (notification not sent).
+        
+        /// Matches a specific type with _nil_ content (notification not successfully sent).
         case .email(.none):
             self.content = "Email (unsent)"
+        
         }
     }
 }
 
 struct NotificationHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        NotificationHistoryView(model: .init(id: "1", identifier: "NOTIFICATION_A", sentDate: Date(), statusCode: .succeeded, content: "Title Text"))
-            .padding()
+        List {
+            NotificationHistoryView(model: .init(id: .init("n1"), identifier: "NOTIFICATION_A", sentDate: Date(), statusCode: .succeeded, content: "Title Text"))
+        }
     }
 }

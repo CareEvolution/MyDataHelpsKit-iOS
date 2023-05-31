@@ -2,41 +2,13 @@
 //  ParticipantModel.swift
 //  MyDataHelpsKit-Example
 //
-//  Created by CareEvolution on 3/26/21.
+//  Created by CareEvolution on 4/4/23.
 //
 
 import Foundation
 import MyDataHelpsKit
 
-class ParticipantModel: ObservableObject {
+struct ParticipantModel {
     let session: ParticipantSessionType
-    
-    @Published var info: Result<ParticipantInfoViewModel, MyDataHelpsError>? = nil
-    @Published var project: Result<ProjectInfo, MyDataHelpsError>? = nil
-    @Published var dataCollectionSettings: Result<ProjectDataCollectionSettings, MyDataHelpsError>? = nil
-    
-    init(session: ParticipantSessionType) {
-        self.session = session
-    }
-    
-    func loadInfo() {
-        if case .some(.success(_)) = info { return }
-        session.getParticipantInfoViewModel { [weak self] result in
-            self?.info = result
-        }
-    }
-    
-    func loadProject() {
-        if case .some(.success) = project { return }
-        session.getProjectInfo { [weak self] in
-            self?.project = $0
-        }
-    }
-    
-    func loadDataCollectionSettings() {
-        if case .some(.success) = project { return }
-        session.getDataCollectionSettings { [weak self] in
-            self?.dataCollectionSettings = $0
-        }
-    }
+    let info: ParticipantInfo
 }

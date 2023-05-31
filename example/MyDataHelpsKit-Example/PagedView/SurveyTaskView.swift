@@ -8,41 +8,41 @@
 import SwiftUI
 import MyDataHelpsKit
 
-struct SurveyTaskView: View {
-    static func pageView(session: ParticipantSessionType, participantInfo: ParticipantInfoViewModel, embeddableSurveySelection: Binding<EmbeddableSurveySelection?>) -> PagedView<SurveyTaskSource, SurveyTaskView> {
-        /// EXERCISE: Add parameters to this `SurveyTaskQuery` to customize filtering.
-        let query = SurveyTaskQuery()
-        let source = SurveyTaskSource(session: session, query: query)
-        return PagedView(model: .init(source: source) { item in
-            SurveyTaskView(model: item, participantLinkIdentifier: participantInfo.linkIdentifier, embeddableSurveySelection: embeddableSurveySelection)
-        })
+extension SurveyTaskQuery {
+    @MainActor func pagedListViewModel(_ session: ParticipantSessionType) -> PagedViewModel<SurveyTaskSource> {
+        PagedViewModel(source: SurveyTaskSource(session: session, criteria: self))
     }
-    
+}
+
+struct SurveyTaskView: View {
     struct Model: Identifiable {
         let session: ParticipantSessionType
-        let id: String
-        let surveyID: String
+        let id: SurveyTask.ID
+        let surveyID: Survey.ID
         let surveyDisplayName: String
         let dueDate: Date?
         let hasSavedProgress: Bool
         let status: SurveyTaskStatus
         let surveyName: String
-        let linkIdentifier: String?
     }
     
     let model: Model
-    let participantLinkIdentifier: String?
-    @State var showingAnswers = false
-    @State var embeddableSurveySelection: Binding<EmbeddableSurveySelection?>
-    
-    static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .short
-        df.timeStyle = .medium
-        return df
-    }()
+    var presentedSurvey: Binding<SurveyPresentation?>
     
     var body: some View {
+        Group {
+            if model.status == .complete {
+                NavigationLink(value: TasksNavigationPath.surveyAnswers(model.surveyID, model.surveyDisplayName)) {
+                    content
+                }
+            } else {
+                content
+                    .onTapGesture(perform: launchSurvey)
+            }
+        }
+    }
+    
+    private var content: some View {
         HStack {
             switch (model.status, model.hasSavedProgress) {
             case (.incomplete, false):
@@ -57,44 +57,25 @@ struct SurveyTaskView: View {
                 Image(systemName: "questionmark.square.dashed")
             }
             VStack(alignment: .leading) {
+                /// EXERCISE: Add or modify views here to see the values of other `SurveyTask` properties.
                 Text(model.surveyDisplayName)
-                /// EXERCISE: Add or modify `Text` views here to see the values of other `SurveyTask` properties.
                 if let dueDate = model.dueDate {
-                    Text(Self.dateFormatter.string(from: dueDate))
+                    Text(dueDate.formatted())
                         .font(.footnote)
                         .foregroundColor(Color.gray)
                 }
             }
             Spacer()
-            
-            if model.status == .complete {
-                NavigationLink(
-                    "",
-                    destination: SurveyAnswerView.pageView(session: model.session, surveyID: model.surveyID)
-                        .navigationTitle("Answers for \(model.surveyDisplayName)"),
-                    isActive: $showingAnswers
-                )
-            }
-            Spacer()
         }
-        .onTapGesture(perform: self.selected)
-    }
-    
-    private var embeddableSurveyContext: EmbeddableSurveySelection? {
-        guard model.status == .incomplete,
-              let participantLinkIdentifier = participantLinkIdentifier else {
-            return nil
-        }
-        return .init(survey: model.embeddableSurveyID, participantLinkIdentifier: participantLinkIdentifier)
     }
 
-    /// For completed surveys, shows a SurveyAnswerView (via the NavigationLink bound to `$showingAnswers`) filtered to the selected survey task. For incomplete tasks, presents an `EmbeddableSurveyViewController` (via a binding in RootView) if the task is configured to support it.
-    private func selected() {
-        if model.status == .complete {
-            showingAnswers = true
-        } else if let embeddableSurveyContext = embeddableSurveyContext {
-            embeddableSurveySelection.wrappedValue = embeddableSurveyContext
+    private func launchSurvey() {
+        // Ignore if using a stubbed session from a preview provider.
+        guard model.status == .incomplete,
+              let session = model.session as? ParticipantSession else {
+            return
         }
+        presentedSurvey.wrappedValue = session.surveyPresentation(surveyName: model.surveyName)
     }
 }
 
@@ -108,34 +89,20 @@ extension SurveyTaskView.Model {
         self.hasSavedProgress = task.hasSavedProgress
         self.status = task.status
         self.surveyName = task.surveyName
-        self.linkIdentifier = task.linkIdentifier
-    }
-    
-    var embeddableSurveyID: EmbeddableSurveyID {
-        if let linkIdentifier = linkIdentifier {
-            return .taskLinkIdentifier(linkIdentifier)
-        } else {
-            return .surveyName(surveyName)
-        }
     }
 }
 
 struct SurveyTaskView_Previews: PreviewProvider {
-    struct ContainerView: View {
-        let model: SurveyTaskView.Model
-        let participantLinkIdentifier: String?
-        @State var embeddableSurvey: EmbeddableSurveySelection? = nil
-        var body: some View {
-            SurveyTaskView(model: model, participantLinkIdentifier: participantLinkIdentifier, embeddableSurveySelection: $embeddableSurvey)
-                .padding()
-        }
-    }
+    @State private static var presentedSurvey: SurveyPresentation? = nil
     
     static var previews: some View {
-        NavigationView {
-            VStack {
-                ContainerView(model: .init(session: ParticipantSessionPreview(), id: "1", surveyID: "1", surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .incomplete, surveyName: "name", linkIdentifier: nil), participantLinkIdentifier: nil)
-                ContainerView(model: .init(session: ParticipantSessionPreview(), id: "1", surveyID: "1", surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .complete, surveyName: "name", linkIdentifier: nil), participantLinkIdentifier: nil)
+        NavigationStack {
+            List {
+                SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .incomplete, surveyName: "name"), presentedSurvey: $presentedSurvey)
+                SurveyTaskView(model: .init(session: ParticipantSessionPreview(), id: .init("t1"), surveyID: .init("s1"), surveyDisplayName: "Preview Survey", dueDate: Date(), hasSavedProgress: true, status: .complete, surveyName: "name"), presentedSurvey: $presentedSurvey)
+            }
+            .sheet(item: $presentedSurvey) { presented in
+                Text("Present survey: \(presented.surveyName)")
             }
         }
     }

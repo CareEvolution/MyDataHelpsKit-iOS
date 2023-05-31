@@ -11,16 +11,16 @@ import MyDataHelpsKit
 protocol PageModelType {
     associatedtype ItemType: Identifiable
     func pageItems(session: ParticipantSessionType) -> [ItemType]
-    var nextPageID: String? { get }
+    var nextPageID: ScopedIdentifier<Self, String>? { get }
 }
 
 protocol PagedModelSource {
     associatedtype PageModel: PageModelType
     var session: ParticipantSessionType { get }
-    func loadPage(after page: PageModel?, completion: @escaping (Result<PageModel, MyDataHelpsError>) -> Void)
+    func loadPage(after page: PageModel?) async throws -> PageModel?
 }
 
-class PagedViewModel<SourceType: PagedModelSource, ItemViewType: View>: ObservableObject {
+@MainActor class PagedViewModel<SourceType: PagedModelSource>: ObservableObject {
     typealias ItemType = SourceType.PageModel.ItemType
     
     enum State {
@@ -29,36 +29,53 @@ class PagedViewModel<SourceType: PagedModelSource, ItemViewType: View>: Observab
         case failure(MyDataHelpsError)
     }
     
-    let source: SourceType
-    let viewProvider: (ItemType) -> ItemViewType
+    @Published private(set) var source: SourceType
     private var loading: Bool
     private var lastPage: SourceType.PageModel?
     
     @Published var state: State
     @Published var items: [ItemType]
-
-    init(source: SourceType, viewProvider: @escaping (ItemType) -> ItemViewType) {
+    @Published var selectedItem: ItemType?
+    
+    init(source: SourceType) {
         self.source = source
-        self.viewProvider = viewProvider
         self.lastPage = nil
         self.state = .normal(loadMore: true)
         self.items = []
         self.loading = false
-        loadNextPage()
+        
+        Task {
+            await loadNextPage()
+        }
     }
     
-    func loadNextPage() {
+    func reset(newSource: SourceType? = nil) async {
+        // TODO: wait if loading == true
+        lastPage = nil
+        state = .normal(loadMore: true)
+        items = []
+        loading = false
+        if let newSource {
+            source = newSource
+        }
+        await loadNextPage()
+    }
+    
+    func loadNextPage() async {
         guard case .normal(true) = state, !loading else { return }
         
         loading = true
-        source.loadPage(after: lastPage) { [weak self] result in
-            switch result {
-            case let .success(page):
-                self?.loaded(page)
-            case let .failure(error):
-                self?.state = .failure(error)
-            }
-            self?.loading = false
+        defer {
+            loading = false
+        }
+        
+        do {
+            let nextPage = try await source.loadPage(after: lastPage)
+            loaded(nextPage)
+        } catch {
+            lastPage = nil
+            items.removeAll()
+            state = .failure(MyDataHelpsError(error))
         }
     }
     
@@ -66,13 +83,15 @@ class PagedViewModel<SourceType: PagedModelSource, ItemViewType: View>: Observab
         item.id == items.last?.id
     }
     
-    private func loaded(_ page: SourceType.PageModel) {
+    private func loaded(_ page: SourceType.PageModel?) {
         lastPage = page
-        items.append(contentsOf: page.pageItems(session: source.session))
+        if let page {
+            items.append(contentsOf: page.pageItems(session: source.session))
+        }
         if items.isEmpty {
             state = .empty
         } else {
-            state = .normal(loadMore: page.nextPageID != nil)
+            state = .normal(loadMore: page?.nextPageID != nil)
         }
     }
 }

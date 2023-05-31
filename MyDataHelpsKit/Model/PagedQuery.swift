@@ -12,7 +12,7 @@ internal protocol PagedQuery {
     /// The model type of the result object.
     associatedtype ResultType: PagedResult
     /// Identifies a specific page of data to fetch. Use `nil` to fetch the first page of results.
-    var pageID: String? { get }
+    var pageID: ScopedIdentifier<ResultType, String>? { get }
     /// Should initialize a new request for a page of results following the given page, with the same filters as the original query.
     func page(after page: ResultType) -> Self?
 }
@@ -20,10 +20,10 @@ internal protocol PagedQuery {
 /// API response model that represents a paged collection of results.
 internal protocol PagedResult {
     /// The `pageID` to use to fetch the next page of results.
-    var nextPageID: String? { get }
+    var nextPageID: ScopedIdentifier<Self, String>? { get }
 }
 
-extension PagedQuery {
+internal extension PagedQuery {
     /// Restricts a PagedQuery's maximum number of results per page to a valid range
     /// - Parameters:
     ///   - value: The input to validate

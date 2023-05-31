@@ -31,9 +31,9 @@ struct NotificationHistoryQueryResource: ParticipantResource {
             queryItems.append(.init(name: "statusCode", value: statusCode.rawValue))
         }
         
-        queryItems.append(.init(name: "limit", value: "\(query.limit)"))
+        queryItems.append(.init(name: "limit", value: String(query.limit)))
         if let pageID = query.pageID {
-            queryItems.append(.init(name: "pageID", value: pageID))
+            queryItems.append(.init(name: "pageID", value: pageID.value))
         }
         
         return session.authenticatedRequest(.GET, url: try session.client.endpoint(path: "api/v1/delegated/notifications", queryItems: queryItems))

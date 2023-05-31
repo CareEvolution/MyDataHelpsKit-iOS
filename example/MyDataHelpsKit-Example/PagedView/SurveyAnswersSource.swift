@@ -10,30 +10,32 @@ import MyDataHelpsKit
 
 class SurveyAnswersSource: PagedModelSource {
     let session: ParticipantSessionType
-    private let query: SurveyAnswersQuery
+    private let criteria: SurveyAnswersQuery
     
-    init(session: ParticipantSessionType, query: SurveyAnswersQuery) {
+    init(session: ParticipantSessionType, criteria: SurveyAnswersQuery) {
         self.session = session
-        self.query = query
+        self.criteria = criteria
     }
     
-    func loadPage(after page: SurveyAnswersPage?, completion: @escaping (Result<SurveyAnswersPage, MyDataHelpsError>) -> Void) {
+    func loadPage(after page: SurveyAnswersPage?) async throws -> SurveyAnswersPage? {
         if let query = query(after: page) {
-            session.querySurveyAnswers(query, completion: completion)
+            return try await session.querySurveyAnswers(query)
+        } else {
+            return nil
         }
     }
     
     private func query(after page: SurveyAnswersPage?) -> SurveyAnswersQuery? {
         if let page = page {
-            return query.page(after: page)
+            return criteria.page(after: page)
         } else {
-            return query
+            return criteria
         }
     }
 }
 
 extension SurveyAnswersPage: PageModelType {
-    func pageItems(session: ParticipantSessionType) -> [SurveyAnswerView.Model] {
+    @MainActor func pageItems(session: ParticipantSessionType) -> [SurveyAnswerView.Model] {
         surveyAnswers.map { .init(session: session, answer: $0) }
     }
 }
